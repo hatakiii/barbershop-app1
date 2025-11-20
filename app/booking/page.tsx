@@ -1,9 +1,12 @@
 import prisma from "@/lib/prisma";
+import { Category } from "@/lib/types";
 
 export default async function BookingPage() {
-  const categories = await prisma.category.findMany({
-    include: { services: true, barbers: true },
+  const res = await fetch("http://localhost:3000/api/categories", {
+    cache: "no-cache",
   });
+  const categories: Category[] = await res.json();
+  console.log("categories", categories);
 
   return (
     <div className="p-4">
