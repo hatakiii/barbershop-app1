@@ -1,0 +1,35 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Category {
+  id       Int       @id @default(autoincrement()) @map("id")
+  name     String    @map("name")
+  services Service[]
+  barbers  Barber[]
+  @@map("categories")
+}
+
+model Service {
+  id          Int      @id @default(autoincrement()) @map("id")
+  categoryId  Int      @map("category_id")
+  gender      String?  @map("gender")
+  name        String   @map("name")
+  price       Int      @map("price")
+  category    Category @relation(fields: [categoryId], references: [id])
+  @@map("services")
+}
+
+model Barber {
+  id          Int      @id @default(autoincrement()) @map("id")
+  categoryId  Int      @map("category_id")
+  name        String   @map("name")
+  avatarUrl   String?  @map("avatarUrl")
+  category    Category @relation(fields: [categoryId], references: [id])
+  @@map("barbers")
+}
