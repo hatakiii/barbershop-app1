@@ -158,14 +158,14 @@ export default function BookingPage() {
                 <ul className="text-sm text-yellow-700 space-y-1">
                   <li>• Дансны дугаар: <strong>5555 1234 5678</strong></li>
                   <li>• Гүйлгээний утга: <strong>Утасны дугаар</strong></li>
-                  <li>• Төлбөр шилжүүлсний дараа баталгаажуулна</li>
+                  <li>• Төлбөр шилжүүлсний дараа төлбөр төлсөн товч дээр дарна уу</li>
                 </ul>
               </div>
 
               <Button
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3"
               >
-                Төлбөр төлөх
+                Төлбөр төлсөн
               </Button>
             </div>
           )}
