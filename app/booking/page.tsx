@@ -16,12 +16,18 @@ export default function BookingPage() {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedBarber, setSelectedBarber] = useState<Barber | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
   useEffect(() => {
     fetch("/api/categories", { cache: "no-cache" })
       .then((res) => res.json())
       .then((data) => setCategories(data));
   }, []);
+
+  const handleConfirm = () => {
+    setIsConfirmed(true);
+  };
 
   return (
     <div className="p-4 flex gap-6">
@@ -100,17 +106,69 @@ export default function BookingPage() {
           </div>
 
           <h3 className="text-lg font-medium mb-3">Цаг сонгох</h3>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2 mb-6">
             {AVAILABLE_TIMES.map((time) => (
               <Button
                 key={time}
-                variant="outline"
+                onClick={() => setSelectedTime(time)}
+                variant={selectedTime === time ? "default" : "outline"}
                 className="hover:bg-blue-50"
               >
                 {time}
               </Button>
             ))}
           </div>
+
+          {selectedTime && !isConfirmed && (
+            <Button
+              onClick={handleConfirm}
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3"
+            >
+              Батлах
+            </Button>
+          )}
+
+          {isConfirmed && selectedTime && (
+            <div className="mt-6 border-t pt-6">
+              <h3 className="text-xl font-bold mb-4">Захиалгын дэлгэрэнгүй</h3>
+
+              <div className="bg-blue-50 p-4 rounded-lg mb-6">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Үйлчилгээ:</span>
+                    <span className="font-semibold">{selectedService.name}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Үсчин:</span>
+                    <span className="font-semibold">{selectedBarber.name}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Цаг:</span>
+                    <span className="font-semibold">{selectedTime}</span>
+                  </div>
+                  <div className="flex justify-between border-t pt-2 mt-2">
+                    <span className="text-gray-600">Төлбөр:</span>
+                    <span className="font-bold text-lg text-green-600">{selectedService.price}₮</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-4">
+                <h4 className="font-semibold text-yellow-800 mb-2">⚠️ Анхаар</h4>
+                <ul className="text-sm text-yellow-700 space-y-1">
+                  <li>• Дансны дугаар: <strong>5555 1234 5678</strong></li>
+                  <li>• Гүйлгээний утга: <strong>Утасны дугаар</strong></li>
+                  <li>• Төлбөр шилжүүлсний дараа баталгаажуулна</li>
+                </ul>
+              </div>
+
+              <Button
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3"
+              >
+                Төлбөр төлөх
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </div>
