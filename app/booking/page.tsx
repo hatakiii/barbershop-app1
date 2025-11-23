@@ -32,17 +32,29 @@ export default function BookingPage() {
   return (
     <div className="p-4 flex gap-6">
       <div className="flex-1">
-        <h1 className="text-3xl font-bold mb-6">Цаг Захиалах</h1>
+        <h1 className="text-2xl font-bold mb-6">Салон Сонгох</h1>
         <div className="space-y-4">
           {categories?.map((cat) => (
-            <div key={cat.id} className="border p-4 rounded">
+            <div key={cat.id} className="border p-4 rounded hover:shadow-md transition-shadow">
+              {cat.salon_image && (
+                <img
+                  src={cat.salon_image}
+                  alt={cat.name}
+                  className="w-full h-48 object-cover rounded mb-3"
+                />
+              )}
               <Button
                 onClick={() => setSelectedCategory(cat)}
                 variant={selectedCategory?.id === cat.id ? "default" : "outline"}
-                className="text-xl font-semibold w-full"
+                className="text-xl font-semibold w-full mb-2"
               >
                 {cat.name}
               </Button>
+              {cat.salon_address && (
+                <p className="text-sm text-gray-600 mt-2 flex items-center gap-1">
+                  <span>📍</span> {cat.salon_address}
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -51,9 +63,25 @@ export default function BookingPage() {
       {/* Services хажуу тал */}
       {selectedCategory && (
         <div className="flex-1 border-l pl-6">
-          <h2 className="text-2xl font-bold mb-4">{selectedCategory.name}</h2>
+          <div className="mb-4">
 
-          <h3 className="text-xl mt-4 mb-3 font-medium">Үйлчилгээнүүд</h3>
+            <h2 className="text-2xl font-bold mb-6">{selectedCategory.name}</h2>
+            {selectedCategory.salon_image && (
+              <img
+                src={selectedCategory.salon_image}
+                alt={selectedCategory.name}
+                className="w-full h-40 object-cover rounded mb-3"
+              />
+            )}
+            {selectedCategory.salon_address && (
+              <p className="text-sm text-gray-600 mt-1 flex items-center gap-1">
+                <span>📍</span> {selectedCategory.salon_address}
+              </p>
+            )}
+
+          </div>
+
+          <h3 className="text-xl mt-4 mb-3 font-medium">Үйлчилгээ сонгох</h3>
           <div className="space-y-2">
             {selectedCategory.services.map((srv) => (
               <button
@@ -75,7 +103,7 @@ export default function BookingPage() {
             ))}
           </div>
 
-          <h3 className="text-xl mt-6 mb-3 font-medium">Үсчид</h3>
+          <h3 className="text-xl mt-6 mb-3 font-medium">Үсчин сонгох</h3>
           <div className="space-y-2">
             {selectedCategory.barbers?.map((b) => (
               <button

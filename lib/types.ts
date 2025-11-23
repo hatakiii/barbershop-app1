@@ -13,6 +13,8 @@ export interface Barber {
 export interface Category {
   id: string;
   name: string;
+  salon_image?: string;
+  salon_address?: string;
   services: Service[];
   barbers?: Barber[];
 }
