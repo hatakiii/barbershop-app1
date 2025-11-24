@@ -107,11 +107,10 @@ export default function BookingPage() {
               <button
                 key={srv.id}
                 onClick={() => setSelectedService(srv)}
-                className={`w-full border p-3 rounded text-left transition-all ${
-                  selectedService?.id === srv.id
+                className={`w-full border p-3 rounded text-left transition-all ${selectedService?.id === srv.id
                     ? "bg-blue-100 border-blue-500 ring-2 ring-blue-300"
                     : "hover:bg-gray-50"
-                }`}
+                  }`}
               >
                 <div className="flex justify-between items-center">
                   <span className="font-medium">{srv.name}</span>
@@ -132,11 +131,10 @@ export default function BookingPage() {
               <button
                 key={b.id}
                 onClick={() => setSelectedBarber(b)}
-                className={`w-full border p-3 rounded text-left transition-all ${
-                  selectedBarber?.id === b.id
+                className={`w-full border p-3 rounded text-left transition-all ${selectedBarber?.id === b.id
                     ? "bg-blue-100 border-blue-500 ring-2 ring-blue-300"
                     : "hover:bg-gray-50"
-                }`}
+                  }`}
               >
                 <span className="font-medium">{b.name}</span>
               </button>
@@ -157,6 +155,8 @@ export default function BookingPage() {
             </p>
             <p className="text-sm text-gray-600 mt-2">Сонгосон үсчин:</p>
             <p className="font-semibold">{selectedBarber.name}</p>
+            <p className="text-sm text-gray-600 mt-2">Утасны дугаар:</p>
+            <p className="font-semibold">{selectedBarber.phoneNumber}</p>
           </div>
 
           <h3 className="text-lg font-medium mb-3">Цаг сонгох</h3>

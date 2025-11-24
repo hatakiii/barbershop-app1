@@ -10,14 +10,13 @@ datasource db {
 model Category {
   id           Int       @id @default(autoincrement()) @map("id")
   name         String    @map("name") @db.VarChar(100)
- salonImage String? @map("salon_image") @db.VarChar(500)
- salonAddress String? @map("salon_address") @db.VarChar(500)
+  salonImage   String?   @db.VarChar(500)
+  salonAddress String?   @db.VarChar(500)
   barbers      Barber[]
   services     Service[]
 
   @@map("categories")
 }
-
 
 model Service {
   id         Int       @id @default(autoincrement()) @map("id")
