@@ -30,12 +30,12 @@ model Service {
 }
 
 model Barber {
-  id         Int       @id @default(autoincrement()) @map("id")
-  categoryId Int?      @map("category_id")
-  name       String?   @map("name") @db.VarChar(100)
-  avatar_url String?
-  avatarUrl  String?   @map("avatarUrl")
-  category   Category? @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id          Int       @id @default(autoincrement()) @map("id")
+  categoryId  Int?      @map("category_id")
+  name        String?   @map("name") @db.VarChar(100)
+  phoneNumber String?
+  avatarUrl   String?   @map("avatarUrl")
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("barbers")
 }

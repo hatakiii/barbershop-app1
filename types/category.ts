@@ -8,6 +8,7 @@ export interface Service {
 export interface Barber {
   id: string;
   name: string;
+  phoneNumber: number;
 }
 
 export interface Category {

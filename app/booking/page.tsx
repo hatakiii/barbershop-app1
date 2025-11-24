@@ -131,6 +131,8 @@ export default function BookingPage() {
             <p className="font-semibold">{selectedService.name} - {selectedService.price}₮</p>
             <p className="text-sm text-gray-600 mt-2">Сонгосон үсчин:</p>
             <p className="font-semibold">{selectedBarber.name}</p>
+            <p className="text-sm text-gray-600 mt-2">Утасны дугаар:</p>
+            <p className="font-semibold">{selectedBarber.phoneNumber}</p>
           </div>
 
           <h3 className="text-lg font-medium mb-3">Цаг сонгох</h3>
