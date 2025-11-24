@@ -6,14 +6,31 @@ import { useState, useEffect } from "react";
 
 // Жишээ available times
 const AVAILABLE_TIMES = [
-  "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-  "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-  "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"
+  "09:00",
+  "09:30",
+  "10:00",
+  "10:30",
+  "11:00",
+  "11:30",
+  "12:00",
+  "12:30",
+  "13:00",
+  "13:30",
+  "14:00",
+  "14:30",
+  "15:00",
+  "15:30",
+  "16:00",
+  "16:30",
+  "17:00",
+  "17:30",
 ];
 
 export default function BookingPage() {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedBarber, setSelectedBarber] = useState<Barber | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -35,24 +52,29 @@ export default function BookingPage() {
         <h1 className="text-2xl font-bold mb-6">Салон Сонгох</h1>
         <div className="space-y-4">
           {categories?.map((cat) => (
-            <div key={cat.id} className="border p-4 rounded hover:shadow-md transition-shadow">
-              {cat.salon_image && (
+            <div
+              key={cat.id}
+              className="border p-4 rounded hover:shadow-md transition-shadow"
+            >
+              {cat.salonImage && (
                 <img
-                  src={cat.salon_image}
+                  src={cat.salonImage}
                   alt={cat.name}
                   className="w-full h-48 object-cover rounded mb-3"
                 />
               )}
               <Button
                 onClick={() => setSelectedCategory(cat)}
-                variant={selectedCategory?.id === cat.id ? "default" : "outline"}
+                variant={
+                  selectedCategory?.id === cat.id ? "default" : "outline"
+                }
                 className="text-xl font-semibold w-full mb-2"
               >
                 {cat.name}
               </Button>
-              {cat.salon_address && (
+              {cat.salonAddress && (
                 <p className="text-sm text-gray-600 mt-2 flex items-center gap-1">
-                  <span>📍</span> {cat.salon_address}
+                  <span>📍</span> {cat.salonAddress}
                 </p>
               )}
             </div>
@@ -64,21 +86,19 @@ export default function BookingPage() {
       {selectedCategory && (
         <div className="flex-1 border-l pl-6">
           <div className="mb-4">
-
             <h2 className="text-2xl font-bold mb-6">{selectedCategory.name}</h2>
-            {selectedCategory.salon_image && (
+            {selectedCategory.salonImage && (
               <img
-                src={selectedCategory.salon_image}
+                src={selectedCategory.salonImage}
                 alt={selectedCategory.name}
                 className="w-full h-40 object-cover rounded mb-3"
               />
             )}
-            {selectedCategory.salon_address && (
+            {selectedCategory.salonAddress && (
               <p className="text-sm text-gray-600 mt-1 flex items-center gap-1">
-                <span>📍</span> {selectedCategory.salon_address}
+                <span>📍</span> {selectedCategory.salonAddress}
               </p>
             )}
-
           </div>
 
           <h3 className="text-xl mt-4 mb-3 font-medium">Үйлчилгээ сонгох</h3>
@@ -87,14 +107,17 @@ export default function BookingPage() {
               <button
                 key={srv.id}
                 onClick={() => setSelectedService(srv)}
-                className={`w-full border p-3 rounded text-left transition-all ${selectedService?.id === srv.id
-                  ? "bg-blue-100 border-blue-500 ring-2 ring-blue-300"
-                  : "hover:bg-gray-50"
-                  }`}
+                className={`w-full border p-3 rounded text-left transition-all ${
+                  selectedService?.id === srv.id
+                    ? "bg-blue-100 border-blue-500 ring-2 ring-blue-300"
+                    : "hover:bg-gray-50"
+                }`}
               >
                 <div className="flex justify-between items-center">
                   <span className="font-medium">{srv.name}</span>
-                  <span className="text-green-600 font-semibold">{srv.price}₮</span>
+                  <span className="text-green-600 font-semibold">
+                    {srv.price}₮
+                  </span>
                 </div>
                 {srv.gender && (
                   <span className="text-sm text-gray-500">({srv.gender})</span>
@@ -109,10 +132,11 @@ export default function BookingPage() {
               <button
                 key={b.id}
                 onClick={() => setSelectedBarber(b)}
-                className={`w-full border p-3 rounded text-left transition-all ${selectedBarber?.id === b.id
-                  ? "bg-blue-100 border-blue-500 ring-2 ring-blue-300"
-                  : "hover:bg-gray-50"
-                  }`}
+                className={`w-full border p-3 rounded text-left transition-all ${
+                  selectedBarber?.id === b.id
+                    ? "bg-blue-100 border-blue-500 ring-2 ring-blue-300"
+                    : "hover:bg-gray-50"
+                }`}
               >
                 <span className="font-medium">{b.name}</span>
               </button>
@@ -128,11 +152,11 @@ export default function BookingPage() {
 
           <div className="mb-4 p-4 bg-gray-50 rounded">
             <p className="text-sm text-gray-600">Сонгосон үйлчилгээ:</p>
-            <p className="font-semibold">{selectedService.name} - {selectedService.price}₮</p>
+            <p className="font-semibold">
+              {selectedService.name} - {selectedService.price}₮
+            </p>
             <p className="text-sm text-gray-600 mt-2">Сонгосон үсчин:</p>
             <p className="font-semibold">{selectedBarber.name}</p>
-            <p className="text-sm text-gray-600 mt-2">Утасны дугаар:</p>
-            <p className="font-semibold">{selectedBarber.phoneNumber}</p>
           </div>
 
           <h3 className="text-lg font-medium mb-3">Цаг сонгох</h3>
@@ -166,7 +190,9 @@ export default function BookingPage() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Үйлчилгээ:</span>
-                    <span className="font-semibold">{selectedService.name}</span>
+                    <span className="font-semibold">
+                      {selectedService.name}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Үсчин:</span>
@@ -178,23 +204,31 @@ export default function BookingPage() {
                   </div>
                   <div className="flex justify-between border-t pt-2 mt-2">
                     <span className="text-gray-600">Төлбөр:</span>
-                    <span className="font-bold text-lg text-green-600">{selectedService.price}₮</span>
+                    <span className="font-bold text-lg text-green-600">
+                      {selectedService.price}₮
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-4">
-                <h4 className="font-semibold text-yellow-800 mb-2">⚠️ Анхаар</h4>
+                <h4 className="font-semibold text-yellow-800 mb-2">
+                  ⚠️ Анхаар
+                </h4>
                 <ul className="text-sm text-yellow-700 space-y-1">
-                  <li>• Дансны дугаар: <strong>5555 1234 5678</strong></li>
-                  <li>• Гүйлгээний утга: <strong>Утасны дугаар</strong></li>
-                  <li>• Төлбөр шилжүүлсний дараа төлбөр төлсөн товч дээр дарна уу</li>
+                  <li>
+                    • Дансны дугаар: <strong>5555 1234 5678</strong>
+                  </li>
+                  <li>
+                    • Гүйлгээний утга: <strong>Утасны дугаар</strong>
+                  </li>
+                  <li>
+                    • Төлбөр шилжүүлсний дараа төлбөр төлсөн товч дээр дарна уу
+                  </li>
                 </ul>
               </div>
 
-              <Button
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3"
-              >
+              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3">
                 Төлбөр төлсөн
               </Button>
             </div>
