@@ -9,6 +9,7 @@ export interface Barber {
   id: string;
   name: string;
   phoneNumber: number;
+  blockedTimes?: string[];
 }
 
 export interface Category {

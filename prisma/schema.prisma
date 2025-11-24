@@ -14,6 +14,7 @@ model Category {
   salonAddress String?   @db.VarChar(500)
   barbers      Barber[]
   services     Service[]
+  users        User[]
 
   @@map("categories")
 }
@@ -36,16 +37,21 @@ model Barber {
   phoneNumber String?
   avatarUrl   String?   @map("avatarUrl")
   category    Category? @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users       User[]
 
   @@map("barbers")
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  password String  @unique
-  email    String  @unique @db.VarChar(50)
-  name     String? @db.VarChar(59)
-  role     String? @db.VarChar
+  id         Int       @id @default(autoincrement())
+  password   String    @unique
+  email      String    @unique @db.VarChar(50)
+  name       String?   @db.VarChar(59)
+  role       String?   @db.VarChar
+  categoryid Int?
+  barberid   Int?
+  barbers    Barber?   @relation(fields: [barberid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  categories Category? @relation(fields: [categoryid], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("users")
 }

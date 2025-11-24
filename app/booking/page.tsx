@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Category, Service, Barber } from "@/lib/types";
 import { useState, useEffect } from "react";
+import BarberContainer from "@/components/ui/main/barberContainer";
 
 // Жишээ available times
 const AVAILABLE_TIMES = [
@@ -107,10 +108,11 @@ export default function BookingPage() {
               <button
                 key={srv.id}
                 onClick={() => setSelectedService(srv)}
-                className={`w-full border p-3 rounded text-left transition-all ${selectedService?.id === srv.id
+                className={`w-full border p-3 rounded text-left transition-all ${
+                  selectedService?.id === srv.id
                     ? "bg-blue-100 border-blue-500 ring-2 ring-blue-300"
                     : "hover:bg-gray-50"
-                  }`}
+                }`}
               >
                 <div className="flex justify-between items-center">
                   <span className="font-medium">{srv.name}</span>
@@ -131,10 +133,11 @@ export default function BookingPage() {
               <button
                 key={b.id}
                 onClick={() => setSelectedBarber(b)}
-                className={`w-full border p-3 rounded text-left transition-all ${selectedBarber?.id === b.id
+                className={`w-full border p-3 rounded text-left transition-all ${
+                  selectedBarber?.id === b.id
                     ? "bg-blue-100 border-blue-500 ring-2 ring-blue-300"
                     : "hover:bg-gray-50"
-                  }`}
+                }`}
               >
                 <span className="font-medium">{b.name}</span>
               </button>
@@ -147,7 +150,6 @@ export default function BookingPage() {
       {selectedService && selectedBarber && (
         <div className="flex-1 border-l pl-6">
           <h2 className="text-2xl font-bold mb-4">Боломжит цагууд</h2>
-
           <div className="mb-4 p-4 bg-gray-50 rounded">
             <p className="text-sm text-gray-600">Сонгосон үйлчилгээ:</p>
             <p className="font-semibold">
@@ -158,7 +160,6 @@ export default function BookingPage() {
             <p className="text-sm text-gray-600 mt-2">Утасны дугаар:</p>
             <p className="font-semibold">{selectedBarber.phoneNumber}</p>
           </div>
-
           <h3 className="text-lg font-medium mb-3">Цаг сонгох</h3>
           <div className="grid grid-cols-3 gap-2 mb-6">
             {AVAILABLE_TIMES.map((time) => (
@@ -172,7 +173,19 @@ export default function BookingPage() {
               </Button>
             ))}
           </div>
-
+          //BarberContainer ашиглах хэсэг боловч одоогоор ашиглаагүй байна, учир
+          нь blockedTimes хэсэгтэй холбоотой кодуудыг коммент болгосон. Barber
+          ийг props болгон дамжуулж ашиглана.
+          {/* <BarberContainer
+            barber={selectedBarber}
+            availableTimes={AVAILABLE_TIMES}
+            selectedTime={selectedTime}
+            onSelectTime={(t) => {
+              if (selectedBarber?.blockedTimes?.includes(t)) return;
+              setSelectedTime(t);
+              setIsConfirmed(false);
+            }}
+          /> */}
           {selectedTime && !isConfirmed && (
             <Button
               onClick={handleConfirm}
@@ -181,7 +194,6 @@ export default function BookingPage() {
               Батлах
             </Button>
           )}
-
           {isConfirmed && selectedTime && (
             <div className="mt-6 border-t pt-6">
               <h3 className="text-xl font-bold mb-4">Захиалгын дэлгэрэнгүй</h3>
