@@ -15,6 +15,8 @@ export default function AdminLayout({
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [userRole, setUserRole] = useState<string>("");
+  const [salonId, setSalonId] = useState<number | null>(null);
+  const [barberId, setBarberId] = useState<number | null>(null);
 
   const handleLogin = async () => {
     setError("");
@@ -38,6 +40,8 @@ export default function AdminLayout({
       }
 
       setUserRole(data.role);
+      setSalonId(data.salonId);
+      setBarberId(data.barberId);
       setStep(2);
     } catch (err) {
       setError("Алдаа гарлаа. Дахин оролдоно уу.");
@@ -51,8 +55,8 @@ export default function AdminLayout({
     typeof children === "function"
       ? children
       : children && typeof children === "object"
-      ? (children as any)
-      : children;
+        ? (children as any)
+        : children;
   return (
     <div>
       {step === 1 && (
@@ -95,7 +99,15 @@ export default function AdminLayout({
           </Button>
         </div>
       )}
-      {step === 2 && <div data-user-role={userRole}>{children}</div>}
+      {step === 2 && (
+        <div
+          data-user-role={userRole}
+          data-salon-id={salonId || ""}
+          data-barber-id={barberId || ""}
+        >
+          {children}
+        </div>
+      )}
     </div>
   );
 }

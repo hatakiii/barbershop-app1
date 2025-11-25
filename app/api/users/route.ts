@@ -32,7 +32,9 @@ export async function POST(request: Request) {
         return NextResponse.json({
             role: user.role,
             name: user.name,
-            email: user.email
+            email: user.email,
+            salonId: user.salon_id,
+            barberId: user.barberId
         });
     } catch (error) {
         console.error("POST /users ERROR:", error);
