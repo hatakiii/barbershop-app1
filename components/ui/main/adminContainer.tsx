@@ -18,7 +18,7 @@ export default function AdminContainer() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch("/api/categories", { cache: "no-cache" })
+    fetch("/api/salons", { cache: "no-cache" })
       .then((res) => res.json())
       .then((data) => setCategories(data));
   }, []);
@@ -36,7 +36,7 @@ export default function AdminContainer() {
 
     try {
       setLoading(true);
-      const res = await fetch("/api/categories", {
+      const res = await fetch("/api/salons", {
         method: "POST",
         body: formData,
       });
@@ -64,7 +64,7 @@ export default function AdminContainer() {
     updatedData: { name?: string; salonAddress?: string; salonImage?: string }
   ) => {
     try {
-      const res = await fetch(`/api/categories/${id}`, {
+      const res = await fetch(`/api/salons/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedData),
@@ -88,7 +88,7 @@ export default function AdminContainer() {
     if (!confirm("Та энэ салоныг устгахдаа итгэлтэй байна уу?")) return;
 
     try {
-      const res = await fetch(`/api/categories/${id}`, {
+      const res = await fetch(`/api/salons/${id}`, {
         method: "DELETE",
       });
       if (res.ok) {

@@ -38,7 +38,7 @@ export default function BookingPage() {
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   useEffect(() => {
-    fetch("/api/categories", { cache: "no-cache" })
+    fetch("/api/salons", { cache: "no-cache" })
       .then((res) => res.json())
       .then((data) => setCategories(data));
   }, []);
