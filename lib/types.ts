@@ -12,7 +12,7 @@ export interface Barber {
   blockedTimes?: string[];
 }
 
-export interface Category {
+export interface Salon {
   id: string;
   name: string;
   salonImage?: string;

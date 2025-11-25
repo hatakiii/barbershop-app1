@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Category, Service, Barber } from "@/lib/types";
+import { Service, Barber, Salon } from "@/lib/types";
 import { useState, useEffect } from "react";
 import BarberContainer from "@/components/ui/main/barberContainer";
 
@@ -28,10 +28,8 @@ const AVAILABLE_TIMES = [
 ];
 
 export default function BookingPage() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
-    null
-  );
+  const [salons, setSalons] = useState<Salon[]>([]);
+  const [selectedSalon, setSelectedSalon] = useState<Salon | null>(null);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedBarber, setSelectedBarber] = useState<Barber | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -40,7 +38,7 @@ export default function BookingPage() {
   useEffect(() => {
     fetch("/api/salons", { cache: "no-cache" })
       .then((res) => res.json())
-      .then((data) => setCategories(data));
+      .then((data) => setSalons(data));
   }, []);
 
   const handleConfirm = () => {
@@ -52,30 +50,28 @@ export default function BookingPage() {
       <div className="flex-1">
         <h1 className="text-2xl font-bold mb-6">Салон Сонгох</h1>
         <div className="space-y-4">
-          {categories?.map((cat) => (
+          {salons?.map((sal) => (
             <div
-              key={cat.id}
+              key={sal.id}
               className="border p-4 rounded hover:shadow-md transition-shadow"
             >
-              {cat.salonImage && (
+              {sal.salonImage && (
                 <img
-                  src={cat.salonImage}
-                  alt={cat.name}
+                  src={sal.salonImage}
+                  alt={sal.name}
                   className="w-full h-48 object-cover rounded mb-3"
                 />
               )}
               <Button
-                onClick={() => setSelectedCategory(cat)}
-                variant={
-                  selectedCategory?.id === cat.id ? "default" : "outline"
-                }
+                onClick={() => setSelectedSalon(sal)}
+                variant={selectedSalon?.id === sal.id ? "default" : "outline"}
                 className="text-xl font-semibold w-full mb-2"
               >
-                {cat.name}
+                {sal.name}
               </Button>
-              {cat.salonAddress && (
+              {sal.salonAddress && (
                 <p className="text-sm text-gray-600 mt-2 flex items-center gap-1">
-                  <span>📍</span> {cat.salonAddress}
+                  <span>📍</span> {sal.salonAddress}
                 </p>
               )}
             </div>
@@ -84,27 +80,27 @@ export default function BookingPage() {
       </div>
 
       {/* Services хажуу тал */}
-      {selectedCategory && (
+      {selectedSalon && (
         <div className="flex-1 border-l pl-6">
           <div className="mb-4">
-            <h2 className="text-2xl font-bold mb-6">{selectedCategory.name}</h2>
-            {selectedCategory.salonImage && (
+            <h2 className="text-2xl font-bold mb-6">{selectedSalon.name}</h2>
+            {selectedSalon.salonImage && (
               <img
-                src={selectedCategory.salonImage}
-                alt={selectedCategory.name}
+                src={selectedSalon.salonImage}
+                alt={selectedSalon.name}
                 className="w-full h-40 object-cover rounded mb-3"
               />
             )}
-            {selectedCategory.salonAddress && (
+            {selectedSalon.salonAddress && (
               <p className="text-sm text-gray-600 mt-1 flex items-center gap-1">
-                <span>📍</span> {selectedCategory.salonAddress}
+                <span>📍</span> {selectedSalon.salonAddress}
               </p>
             )}
           </div>
 
           <h3 className="text-xl mt-4 mb-3 font-medium">Үйлчилгээ сонгох</h3>
           <div className="space-y-2">
-            {selectedCategory.services.map((srv) => (
+            {selectedSalon.services.map((srv) => (
               <button
                 key={srv.id}
                 onClick={() => setSelectedService(srv)}
@@ -129,7 +125,7 @@ export default function BookingPage() {
 
           <h3 className="text-xl mt-6 mb-3 font-medium">Үсчин сонгох</h3>
           <div className="space-y-2">
-            {selectedCategory.barbers?.map((b) => (
+            {selectedSalon.barbers?.map((b) => (
               <button
                 key={b.id}
                 onClick={() => setSelectedBarber(b)}

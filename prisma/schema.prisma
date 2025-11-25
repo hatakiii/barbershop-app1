@@ -7,51 +7,52 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Category {
+model Salon {
   id           Int       @id @default(autoincrement()) @map("id")
   name         String    @map("name") @db.VarChar(100)
   salonImage   String?   @db.VarChar(500)
   salonAddress String?   @db.VarChar(500)
+  managerId    String?
   barbers      Barber[]
   services     Service[]
   users        User[]
 
-  @@map("categories")
+  @@map("salons")
 }
 
 model Service {
-  id         Int       @id @default(autoincrement()) @map("id")
-  categoryId Int?      @map("category_id")
-  gender     String?   @map("gender") @db.VarChar(10)
-  name       String?   @map("name") @db.VarChar(100)
-  price      Int?      @map("price")
-  category   Category? @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id       Int     @id @default(autoincrement()) @map("id")
+  salon_id Int?
+  gender   String? @map("gender") @db.VarChar(10)
+  name     String? @map("name") @db.VarChar(100)
+  price    Int?    @map("price")
+  salons   Salon?  @relation(fields: [salon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "services_category_id_fkey")
 
   @@map("services")
 }
 
 model Barber {
-  id          Int       @id @default(autoincrement()) @map("id")
-  categoryId  Int?      @map("category_id")
-  name        String?   @map("name") @db.VarChar(100)
+  id          Int     @id @default(autoincrement()) @map("id")
+  salon_id    Int?
+  name        String? @map("name") @db.VarChar(100)
   phoneNumber String?
-  avatarUrl   String?   @map("avatarUrl")
-  category    Category? @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  avatarUrl   String? @map("avatarUrl")
+  salons      Salon?  @relation(fields: [salon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "barbers_category_id_fkey")
   users       User[]
 
   @@map("barbers")
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  password   String    @unique
-  email      String    @unique @db.VarChar(50)
-  name       String?   @db.VarChar(59)
-  role       String?   @db.VarChar
-  categoryid Int?
-  barberid   Int?
-  barbers    Barber?   @relation(fields: [barberid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  categories Category? @relation(fields: [categoryid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id       Int     @id @default(autoincrement())
+  password String  @unique
+  email    String  @unique @db.VarChar(50)
+  name     String? @db.VarChar(59)
+  role     String? @db.VarChar
+  salon_id Int?
+  barberId Int?    @map("barberid")
+  barber   Barber? @relation(fields: [barberId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  salons   Salon?  @relation(fields: [salon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_categoryid_fkey")
 
   @@map("users")
 }

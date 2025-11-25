@@ -4,9 +4,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../dialog";
 import { Input } from "../input";
 import { Label } from "../label";
 import { Button } from "../button";
-import { Category } from "@/lib/types";
+import { Category, User } from "@/lib/types";
 
 export default function AdminContainer() {
+  const [managers, setManagers] = useState<{ id: string; name: string }[]>([]);
+  const [selectedManagerId, setSelectedManagerId] = useState<string>("");
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [salonImage, setSalonImage] = useState<File | undefined>();
   const [name, setName] = useState<string>("");
@@ -23,6 +26,21 @@ export default function AdminContainer() {
       .then((data) => setCategories(data));
   }, []);
 
+  useEffect(() => {
+    fetch("/api/users")
+      .then((res) => res.json())
+      .then((data: User[]) => {
+        const managerOptions = data
+          .filter((user) => user.role === "Manager")
+          .map((user) => ({
+            id: user.id.toString(), // number -> string
+            name: user.name || "", // undefined бол хоосон string
+          }));
+        setManagers(managerOptions);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
   const addSalonHandler = async () => {
     if (!name || !salonImage || !salonAddress) {
       alert("Бүх талбарыг бөглөнө үү");
@@ -33,6 +51,7 @@ export default function AdminContainer() {
     formData.append("name", name);
     formData.append("salonAddress", salonAddress);
     formData.append("salonImage", salonImage);
+    formData.append("managerId", selectedManagerId);
 
     try {
       setLoading(true);
@@ -159,6 +178,7 @@ export default function AdminContainer() {
           setSalonAddress("");
           setSalonImage(undefined);
           setOpen(true);
+          setSelectedManagerId("");
         }}
       >
         <span className="text-center font-bold">Салон нэмэх</span>
@@ -172,6 +192,20 @@ export default function AdminContainer() {
               {editingSalon ? "Салон засах" : "Салон нэмэх"}
             </DialogTitle>
           </DialogHeader>
+
+          <Label>Салон удирдах менежер</Label>
+          <select
+            value={selectedManagerId}
+            onChange={(e) => setSelectedManagerId(e.target.value)}
+            className="border rounded p-2"
+          >
+            <option value="">Сонгоно уу</option>
+            {managers.map((manager) => (
+              <option key={manager.id} value={manager.id}>
+                {manager.name}
+              </option>
+            ))}
+          </select>
 
           <div className="grid gap-4">
             <Label>Салон нэр</Label>

@@ -4,16 +4,16 @@ import { uploadImageToCloudinary } from "@/lib/utils/uploadImage";
 
 export async function GET() {
   try {
-    const categories = await prisma.category.findMany({
+    const salons = await prisma.salon.findMany({
       include: { services: true, barbers: true },
     });
 
-    return NextResponse.json(categories, { status: 200 });
+    return NextResponse.json(salons, { status: 200 });
   } catch (err) {
     console.error("GET /categories ERROR:", err);
 
     return NextResponse.json(
-      { error: "Failed to load categories" },
+      { error: "Салонууд татахад алдаа гарлаа!" },
       { status: 500 }
     );
   }
@@ -22,12 +22,12 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
-
+    const managerId = formData.get("managerId") as string | null;
     const name = formData.get("name") as string;
     const salonAddress = formData.get("salonAddress") as string;
     const salonImage = formData.get("salonImage") as File;
 
-    if (!name || !salonAddress || !salonImage) {
+    if (!name || !salonAddress || !salonImage || !managerId) {
       return NextResponse.json(
         { error: "Бүх талбарыг бөглөнө үү" },
         { status: 400 }
@@ -38,20 +38,21 @@ export async function POST(req: Request) {
     const imageUrl = await uploadImageToCloudinary(salonImage);
 
     // Prisma ашиглаж Neon database руу хадгална
-    const newCategory = await prisma.category.create({
+    const newSalon = await prisma.salon.create({
       data: {
         name,
         salonAddress,
         salonImage: imageUrl,
+        managerId: managerId.toString(),
       },
     });
 
-    return NextResponse.json(newCategory, { status: 201 });
+    return NextResponse.json(newSalon, { status: 201 });
   } catch (err) {
     console.error("POST /categories ERROR:", err);
 
     return NextResponse.json(
-      { error: "Failed to create category" },
+      { error: "Салон нэмэхэд алдаа гарлаа!" },
       { status: 500 }
     );
   }

@@ -18,7 +18,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
 
-    await prisma.category.delete({
+    await prisma.salon.delete({
       where: { id },
     });
 
@@ -57,7 +57,7 @@ export async function PUT(
       );
     }
 
-    const updatedCategory = await prisma.category.update({
+    const updatedSalon = await prisma.salon.update({
       where: { id },
       data: {
         name,
@@ -66,7 +66,7 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(updatedCategory, { status: 200 });
+    return NextResponse.json(updatedSalon, { status: 200 });
   } catch (err) {
     console.error("PUT /categories/:id ERROR:", err);
     return NextResponse.json(
