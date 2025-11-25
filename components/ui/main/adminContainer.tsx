@@ -4,26 +4,26 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../dialog";
 import { Input } from "../input";
 import { Label } from "../label";
 import { Button } from "../button";
-import { Category, User } from "@/lib/types";
+import { Salon, User } from "@/lib/types";
 
 export default function AdminContainer() {
   const [managers, setManagers] = useState<{ id: string; name: string }[]>([]);
   const [selectedManagerId, setSelectedManagerId] = useState<string>("");
 
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [salons, setSalons] = useState<Salon[]>([]);
   const [salonImage, setSalonImage] = useState<File | undefined>();
   const [name, setName] = useState<string>("");
   const [salonAddress, setSalonAddress] = useState<string>("");
   const [editName, setEditName] = useState<string>("");
   const [editAddress, setEditAddress] = useState<string>("");
-  const [editingSalon, setEditingSalon] = useState<Category | null>(null);
+  const [editingSalon, setEditingSalon] = useState<Salon | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetch("/api/salons", { cache: "no-cache" })
       .then((res) => res.json())
-      .then((data) => setCategories(data));
+      .then((data) => setSalons(data));
   }, []);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function AdminContainer() {
         setName("");
         setSalonAddress("");
         setSalonImage(undefined);
-        setCategories((prev) => [...prev, data]);
+        setSalons((prev) => [...prev, data]);
       } else {
         alert(data.error);
       }
@@ -92,9 +92,7 @@ export default function AdminContainer() {
 
       if (res.ok) {
         alert("Салон амжилттай шинэчлэгдлээ");
-        setCategories((prev) =>
-          prev.map((cat) => (cat.id === id ? data : cat))
-        );
+        setSalons((prev) => prev.map((cat) => (cat.id === id ? data : cat)));
       } else {
         alert(data.error);
       }
@@ -112,7 +110,7 @@ export default function AdminContainer() {
       });
       if (res.ok) {
         alert("Салон амжилттай устлаа");
-        setCategories((prev) => prev.filter((cat) => cat.id !== id));
+        setSalons((prev) => prev.filter((cat) => cat.id !== id));
       } else {
         const data = await res.json();
         alert(data.error || "Салон устгахад алдаа гарлаа!");
@@ -131,27 +129,27 @@ export default function AdminContainer() {
   return (
     <div className="flex flex-wrap gap-4">
       {/* Салоны картууд */}
-      {categories.map((cat) => (
+      {salons.map((sal) => (
         <div
-          key={cat.id}
+          key={sal.id}
           className="w-60 h-95 border-2 rounded-md p-4 flex flex-col"
         >
-          {cat.salonImage && (
+          {sal.salonImage && (
             <img
-              src={cat.salonImage}
-              alt={cat.name}
+              src={sal.salonImage}
+              alt={sal.name}
               className="w-full h-40 object-cover rounded mb-3"
             />
           )}
-          <h3 className="text-lg font-semibold">{cat.name}</h3>
-          <p className="text-sm text-gray-600">{cat.salonAddress}</p>
+          <h3 className="text-lg font-semibold">{sal.name}</h3>
+          <p className="text-sm text-gray-600">{sal.salonAddress}</p>
           <div className="mt-auto flex justify-center flex-col">
             <Button
               className="mt-2 bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
               onClick={() => {
-                setEditingSalon(cat);
-                setEditName(cat.name || "");
-                setEditAddress(cat.salonAddress || "");
+                setEditingSalon(sal);
+                setEditName(sal.name || "");
+                setEditAddress(sal.salonAddress || "");
                 setSalonImage(undefined);
                 setOpen(true);
               }}
@@ -161,7 +159,7 @@ export default function AdminContainer() {
 
             <Button
               className="mt-2 bg-red-400 hover:bg-red-500 text-white cursor-pointer"
-              onClick={() => deleteSalonHandler(cat.id)}
+              onClick={() => deleteSalonHandler(sal.id)}
             >
               Устгах
             </Button>
