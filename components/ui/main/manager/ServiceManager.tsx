@@ -1,16 +1,20 @@
 "use client";
 import { useEffect, useState } from "react";
-
-interface Service {
-  id: number;
-  name: string;
-  price: number;
-}
+import { Button } from "../../button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../dialog";
+import { Label } from "../../label";
+import { Input } from "../../input";
+import { Service } from "@/lib/types";
 
 export default function ServiceManager({ salonId }: { salonId: number }) {
   const [services, setServices] = useState<Service[]>([]);
+
+  const [open, setOpen] = useState(false);
+  const [editingService, setEditingService] = useState<Service | null>(null);
+
   const [name, setName] = useState("");
   const [price, setPrice] = useState<number | "">("");
+  const [gender, setGender] = useState("male");
 
   const fetchServices = async () => {
     const res = await fetch(`/api/services?salonId=${salonId}`);
@@ -22,87 +26,143 @@ export default function ServiceManager({ salonId }: { salonId: number }) {
     fetchServices();
   }, [salonId]);
 
-  const addService = async () => {
-    if (!name || price === "") return;
-    await fetch(`/api/services`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, price: Number(price), salon_id: salonId }),
-    });
-    setName("");
-    setPrice("");
-    fetchServices();
+  const saveService = async () => {
+    if (!name || price === "" || !gender) {
+      alert("Бүх мэдээллийг бөглөнө үү");
+      return;
+    }
+
+    const body = {
+      name,
+      price: Number(price),
+      gender,
+      salon_id: salonId,
+    };
+
+    let res;
+    if (editingService) {
+      // PUT
+      res = await fetch(`/api/services/${Number(editingService.id)}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+    } else {
+      // POST
+      res = await fetch(`/api/services`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+    }
+
+    const data = await res.json();
+    if (res.ok) {
+      setOpen(false);
+      setEditingService(null);
+      setName("");
+      setPrice("");
+      setGender("male");
+      fetchServices();
+    } else {
+      alert(data.error || "Алдаа гарлаа");
+    }
   };
 
-  const updateService = async (
-    id: number,
-    oldName: string,
-    oldPrice: number
-  ) => {
-    const newName = prompt("Шинэ нэр:", oldName);
-    if (!newName) return;
-    const newPriceStr = prompt("Шинэ үнэ:", oldPrice.toString());
-    if (!newPriceStr) return;
-    await fetch(`/api/services/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newName, salon_id: salonId }),
-    });
-    fetchServices();
-  };
-
-  const deleteService = async (id: number) => {
+  const deleteService = async (id: string | number) => {
     if (!confirm("Устгах уу?")) return;
-    await fetch(`/api/services/${id}`, { method: "DELETE" });
+
+    await fetch(`/api/services/${Number(id)}`, { method: "DELETE" });
     fetchServices();
   };
 
   return (
     <div className="border p-4 rounded-md mt-4">
       <h3 className="text-lg font-bold mb-2">Үйлчилгээ</h3>
-      <ul>
-        {services.map((s) => (
-          <li key={s.id} className="flex justify-between p-1">
-            {s.name} — {s.price}₮
-            <div className="space-x-2">
-              <button
-                onClick={() => updateService(s.id, s.name, s.price)}
-                className="text-blue-500"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => deleteService(s.id)}
-                className="text-red-500"
-              >
-                Delete
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
 
-      <div className="mt-2 space-y-2">
-        <input
-          className="border px-2 py-1 rounded w-full"
-          placeholder="Үйлчилгээний нэр"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          className="border px-2 py-1 rounded w-full"
-          type="number"
-          placeholder="Үнэ"
-          value={price}
-          onChange={(e) => setPrice(Number(e.target.value))}
-        />
-        <button
-          className="bg-green-500 text-white px-3 py-1 rounded w-full"
-          onClick={addService}
-        >
-          Нэмэх
-        </button>
+      <div className="flex flex-col gap-2">
+        {services.map((s) => (
+          <div
+            key={s.id}
+            className="border p-2 flex justify-between items-center rounded"
+          >
+            <div>
+              <p className="font-semibold">{s.name}</p>
+              <p>{s.price}₮</p>
+              <p className="text-sm text-gray-500">Хүйс: {s.gender ?? "—"}</p>
+            </div>
+
+            <div className="flex gap-2">
+              <Button
+                onClick={() => {
+                  setEditingService(s);
+                  setName(s.name || "");
+                  setPrice(s.price || "");
+                  setGender(s.gender || "male");
+                  setOpen(true);
+                }}
+              >
+                Засах
+              </Button>
+
+              <Button
+                className="bg-red-500"
+                onClick={() => deleteService(s.id)}
+              >
+                Устгах
+              </Button>
+            </div>
+          </div>
+        ))}
       </div>
+
+      <Button
+        className="mt-4"
+        onClick={() => {
+          setEditingService(null);
+          setName("");
+          setPrice("");
+          setGender("male");
+          setOpen(true);
+        }}
+      >
+        Үйлчилгээ нэмэх
+      </Button>
+
+      {/* Dialog */}
+      <Dialog open={open} onOpenChange={() => setOpen(false)}>
+        <DialogContent className="sm:max-w-[400px] flex flex-col gap-3">
+          <DialogHeader>
+            <DialogTitle>
+              {editingService ? "Үйлчилгээ засах" : "Үйлчилгээ нэмэх"}
+            </DialogTitle>
+          </DialogHeader>
+
+          <Label>Нэр</Label>
+          <Input value={name} onChange={(e) => setName(e.target.value)} />
+
+          <Label>Үнэ</Label>
+          <Input
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(Number(e.target.value))}
+          />
+
+          <Label>Хүйс</Label>
+          <select
+            className="border px-2 py-1 rounded"
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+          >
+            <option value="male">Эрэгтэй</option>
+            <option value="female">Эмэгтэй</option>
+          </select>
+
+          <Button className="mt-3 bg-blue-500 text-white" onClick={saveService}>
+            {editingService ? "Шинэчлэх" : "Хадгалах"}
+          </Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

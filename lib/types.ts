@@ -1,10 +1,10 @@
 export interface Service {
-  id: string;
+  id: number | string;
+  salon_id: number | null;
   name: string;
   price: number;
-  gender: string;
+  gender: string | null;
 }
-
 export interface Barber {
   id: string;
   name: string;

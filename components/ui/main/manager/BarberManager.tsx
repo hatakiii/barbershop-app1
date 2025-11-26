@@ -150,6 +150,7 @@ export default function BarberManager({ salonId }: { salonId: number }) {
 
           <Label>Утасны дугаар</Label>
           <Input
+            type="number"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
           />

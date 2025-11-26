@@ -19,6 +19,7 @@ export async function POST(req: Request) {
     data: {
       name: body.name,
       price: body.price,
+      gender: body.gender,
       salon_id: Number(body.salon_id),
     },
   });
