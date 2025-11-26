@@ -1,66 +1,78 @@
-import React, { useEffect, useState } from "react";
+"use client";
+
+import { useState } from "react";
+import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
-import { Barber } from "@/lib/types";
 
-interface Props {
-  barber?: Barber | null;
-  availableTimes?: string[];
-  selectedTime?: string | null;
-  onSelectTime?: (time: string) => void;
-}
+const AVAILABLE_TIMES = [
+  "09:00",
+  "09:30",
+  "10:00",
+  "10:30",
+  "11:00",
+  "11:30",
+  "12:00",
+  "12:30",
+  "13:00",
+  "13:30",
+  "14:00",
+  "14:30",
+  "15:00",
+  "15:30",
+  "16:00",
+  "16:30",
+  "17:00",
+  "17:30",
+];
 
-export default function BarberContainer({
-  barber,
-  availableTimes = [],
-  selectedTime,
-  onSelectTime = () => {},
-}: Props) {
-  const [orders, setOrders] = useState<{ time: string }[]>([]);
-
-  useEffect(() => {
-    if (!barber?.id) return;
-    fetch(`/api/orders?barberId=${barber.id}`)
-      .then((res) => res.json())
-      .then((data) => setOrders(data.orders || []));
-  }, [barber?.id]);
-
-  const blockedTimes = new Set(orders.map((o) => o.time));
+export default function BarberContainer() {
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
   return (
-    <div>
-      <h3 className="text-lg font-medium mb-3">Цаг сонгох</h3>
-
-      <div className="grid grid-cols-3 gap-2 mb-6">
-        {availableTimes.map((time) => {
-          const isBlocked = blockedTimes.has(time);
-          const isSelected = selectedTime === time;
-
-          return (
-            <Button
-              key={time}
-              onClick={() => !isBlocked && onSelectTime?.(time)}
-              disabled={isBlocked}
-              variant={isSelected && !isBlocked ? "default" : "outline"}
-              className={
-                isBlocked
-                  ? "opacity-50 grayscale cursor-not-allowed"
-                  : "hover:bg-blue-50"
-              }
-            >
-              {time}
-            </Button>
-          );
-        })}
+    <div className="flex flex-col gap-6 p-4">
+      {/* Календар */}
+      <div>
+        <h2 className="font-bold text-lg mb-2">Өдөр сонгох</h2>
+        <Calendar
+          mode="single"
+          selected={selectedDate}
+          onSelect={setSelectedDate}
+          className="rounded-md border"
+        />
       </div>
 
-      {orders.length > 0 && (
-        <div className="mt-4 bg-gray-100 p-3 rounded text-sm">
-          <h4 className="font-semibold mb-2">Өнөөдрийн захиалгууд:</h4>
-          <ul className="list-disc pl-4">
-            {orders.map((o, i) => (
-              <li key={i}>{o.time}</li>
+      {/* Хэрвээ өдөр сонгосон бол цагийн list гарна */}
+      {selectedDate && (
+        <div>
+          <h2 className="font-bold text-lg mb-3">Боломжтой цагууд</h2>
+
+          <div className="grid grid-cols-3 gap-2">
+            {AVAILABLE_TIMES.map((time) => (
+              <Button
+                key={time}
+                variant={selectedTime === time ? "default" : "outline"}
+                onClick={() => setSelectedTime(time)}
+                className="text-sm"
+              >
+                {time}
+              </Button>
             ))}
-          </ul>
+          </div>
+        </div>
+      )}
+
+      {/* сонгосон цаг + өдөр харуулах */}
+      {selectedDate && selectedTime && (
+        <div className="p-4 rounded-md border mt-4">
+          <p className="font-semibold">Таны сонголт:</p>
+          <p>
+            <span className="font-medium">Өдөр:</span>{" "}
+            {selectedDate.toLocaleDateString()}
+          </p>
+          <p>
+            <span className="font-medium">Цаг:</span> {selectedTime}
+          </p>
         </div>
       )}
     </div>
