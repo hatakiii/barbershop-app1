@@ -9,7 +9,6 @@ import { Salon, User } from "@/lib/types";
 export default function AdminContainer() {
   const [managers, setManagers] = useState<{ id: string; name: string }[]>([]);
   const [selectedManagerId, setSelectedManagerId] = useState<string>("");
-
   const [salons, setSalons] = useState<Salon[]>([]);
   const [salonImage, setSalonImage] = useState<File | undefined>();
   const [name, setName] = useState<string>("");

@@ -8,7 +8,8 @@ export interface Service {
 export interface Barber {
   id: string;
   name: string;
-  phoneNumber: number;
+  phoneNumber: string;
+  avatarUrl?: string;
   blockedTimes?: string[];
 }
 
