@@ -45,30 +45,30 @@ export default function BookingPage() {
     setIsConfirmed(true);
   };
 
-  // const handlePayment = async () => {
-  //   if (!selectedSalon || !selectedService || !selectedBarber || !selectedTime)
-  //     return alert("Мэдээлэл дутуу байна!");
+  const handlePayment = async () => {
+    if (!selectedSalon || !selectedService || !selectedBarber || !selectedTime)
+      return alert("Мэдээлэл дутуу байна!");
 
-  //   const res = await fetch("/api/orders", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({
-  //       salonId: selectedSalon.id,
-  //       serviceId: selectedService.id,
-  //       barberId: selectedBarber.id,
-  //       time: selectedTime,
-  //       total: selectedService.price,
-  //     }),
-  //   });
+    const res = await fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        salonId: selectedSalon.id,
+        serviceId: selectedService.id,
+        barberId: selectedBarber.id,
+        time: selectedTime,
+        total: selectedService.price,
+      }),
+    });
 
-  //   const data = await res.json();
+    const data = await res.json();
 
-  //   if (data.success) {
-  //     alert("Захиалга амжилттай бүртгэгдлээ!");
-  //   } else {
-  //     alert("Алдаа гарлаа!");
-  //   }
-  // };
+    if (data.success) {
+      alert("Захиалга амжилттай бүртгэгдлээ!");
+    } else {
+      alert("Алдаа гарлаа!");
+    }
+  };
 
   return (
     <div className="p-4 flex gap-6">
@@ -251,7 +251,7 @@ export default function BookingPage() {
 
               <Button
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3"
-                // onClick={handlePayment}
+                onClick={handlePayment}
               >
                 Төлбөр төлсөн
               </Button>
