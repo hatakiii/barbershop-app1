@@ -10,7 +10,6 @@ import { Footer } from "./_components/Footer";
 export default function Home() {
   return (
     <div>
-      Barber Shop Frontend
       <Header />
       <Hero />
       <Services />
