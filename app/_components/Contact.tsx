@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Phone, Clock, Mail } from "lucide-react";
+import Map from "./Map";
 
 export function Contact() {
   return (
@@ -90,13 +91,7 @@ export function Contact() {
           </div>
 
           <div className="bg-gray-100 rounded-lg aspect-video flex items-center justify-center">
-            <div className="text-center text-muted-foreground">
-              <MapPin className="w-12 h-12 mx-auto mb-4" />
-              <p>Interactive Map Coming Soon</p>
-              <p className="text-sm">
-                123 Beauty Boulevard, Downtown, CA 90210
-              </p>
-            </div>
+            <Map />
           </div>
         </div>
       </div>
