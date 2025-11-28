@@ -58,6 +58,7 @@ export default function BookingPage() {
         barberId: selectedBarber.id,
         time: selectedTime,
         total: selectedService.price,
+        avatarUrl: selectedBarber.avatarUrl,
       }),
     });
 
@@ -178,6 +179,11 @@ export default function BookingPage() {
             </p>
             <p className="text-sm text-gray-600 mt-2">Сонгосон үсчин:</p>
             <p className="font-semibold">{selectedBarber.name}</p>
+            <img
+              src={selectedBarber.avatarUrl}
+              alt={selectedBarber.name}
+              className="w-40 h-40 object-cover mt-2 rounded"
+            />
             <p className="text-sm text-gray-600 mt-2">Утасны дугаар:</p>
             <p className="font-semibold">{selectedBarber.phoneNumber}</p>
           </div>

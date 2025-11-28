@@ -5,7 +5,7 @@ import BarberManager from "./manager/BarberManager";
 import ServiceManager from "./manager/ServiceManager";
 
 interface SalonManagerContainerProps {
-  managerId: string; // Manager-ийн id frontend-с ирнэ
+  managerId: string;
 }
 
 export default function SalonManagerContainer({
