@@ -14,6 +14,7 @@ model Salon {
   salonAddress String?   @db.VarChar(500)
   managerId    String?
   barbers      Barber[]
+  orders       orders[]
   services     Service[]
   users        User[]
 
@@ -27,6 +28,7 @@ model Service {
   name         String?        @map("name") @db.VarChar(100)
   price        Int?           @map("price")
   appointments appointments[]
+  orders       orders[]
   salons       Salon?         @relation(fields: [salon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "services_category_id_fkey")
 
   @@map("services")
@@ -40,6 +42,7 @@ model Barber {
   avatarUrl    String?        @map("avatarUrl")
   appointments appointments[]
   salons       Salon?         @relation(fields: [salon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "barbers_category_id_fkey")
+  orders       orders[]
   users        User[]
 
   @@map("barbers")
@@ -71,15 +74,17 @@ model appointments {
   barbers          Barber    @relation(fields: [barber_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_appointments_barber")
   services         Service   @relation(fields: [service_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_appointments_service")
   users            User      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_appointments_user")
-  orders           orders[]
 }
 
 model orders {
-  id             Int          @id @default(autoincrement())
-  appointment_id Int
-  total_price    Int
-  payment_method String?      @default("cash") @db.VarChar(30)
-  payment_status String?      @default("unpaid") @db.VarChar(20)
-  created_at     DateTime?    @default(now()) @db.Timestamp(6)
-  appointments   appointments @relation(fields: [appointment_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_orders_appointment")
+  id           Int      @id @default(autoincrement())
+  salonid      Int?
+  serviceid    Int?
+  barberid     Int?
+  reservedtime String?  @db.VarChar(100)
+  reserveddate String?  @db.VarChar(100)
+  totalprice   Int?
+  barbers      Barber?  @relation(fields: [barberid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  salons       Salon?   @relation(fields: [salonid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  services     Service? @relation(fields: [serviceid], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

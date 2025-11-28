@@ -3,7 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { Service, Barber, Salon } from "@/lib/types";
 import { useState, useEffect } from "react";
-import BarberContainer from "@/components/ui/main/barberContainer";
+import { format } from "date-fns";
+
+import { DatePickerDemo } from "@/components/ui/main/exampleDatePicker";
 
 // Жишээ available times
 const AVAILABLE_TIMES = [
@@ -33,7 +35,10 @@ export default function BookingPage() {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedBarber, setSelectedBarber] = useState<Barber | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [isConfirmed, setIsConfirmed] = useState(false);
+
+  const formatted = selectedDate ? format(selectedDate, "yyyy-MM-dd") : null;
 
   useEffect(() => {
     fetch("/api/salons", { cache: "no-cache" })
@@ -56,9 +61,9 @@ export default function BookingPage() {
         salonId: selectedSalon.id,
         serviceId: selectedService.id,
         barberId: selectedBarber.id,
-        time: selectedTime,
-        total: selectedService.price,
-        avatarUrl: selectedBarber.avatarUrl,
+        reservedTime: selectedTime,
+        reservedDate: formatted,
+        totalPrice: selectedService.price,
       }),
     });
 
@@ -187,6 +192,11 @@ export default function BookingPage() {
             <p className="text-sm text-gray-600 mt-2">Утасны дугаар:</p>
             <p className="font-semibold">{selectedBarber.phoneNumber}</p>
           </div>
+          // Available times
+          <DatePickerDemo
+            dateValue={selectedDate}
+            setDateValue={setSelectedDate}
+          />
           <h3 className="text-lg font-medium mb-3">Цаг сонгох</h3>
           <div className="grid grid-cols-3 gap-2 mb-6">
             {AVAILABLE_TIMES.map((time) => (
@@ -200,7 +210,6 @@ export default function BookingPage() {
               </Button>
             ))}
           </div>
-
           {selectedTime && !isConfirmed && (
             <Button
               onClick={handleConfirm}
@@ -228,6 +237,12 @@ export default function BookingPage() {
                   <div className="flex justify-between">
                     <span className="text-gray-600">Цаг:</span>
                     <span className="font-semibold">{selectedTime}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Өдөр:</span>
+                    <span className="font-semibold">
+                      {selectedDate && format(selectedDate, "yyyy-MM-dd")}
+                    </span>
                   </div>
                   <div className="flex justify-between border-t pt-2 mt-2">
                     <span className="text-gray-600">Төлбөр:</span>

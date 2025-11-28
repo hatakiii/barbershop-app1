@@ -5,35 +5,51 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { salonId, serviceId, barberId, time, total } = body;
+    const {
+      salonId,
+      serviceId,
+      barberId,
+      reservedTime,
+      reservedDate,
+      totalPrice,
+    } = body;
 
     console.log(
       "Body dotorh ni zov irj bny",
       salonId,
       serviceId,
       barberId,
-      time,
-      total
+      reservedTime,
+      reservedDate,
+      totalPrice
     );
 
-    if (!salonId || !serviceId || !barberId || !time || !total) {
+    if (
+      !salonId ||
+      !serviceId ||
+      !barberId ||
+      !reservedTime ||
+      !reservedDate ||
+      !totalPrice
+    ) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    // const order = await prisma.orders.create({
-    //   data: {
-    //     salonId,
-    //     serviceId,
-    //     barberId,
-    //     time,
-    //     total,
-    //   },
-    // });
+    const order = await prisma.orders.create({
+      data: {
+        salonid: salonId,
+        serviceid: serviceId,
+        barberid: barberId,
+        reservedtime: reservedTime,
+        reserveddate: reservedDate,
+        totalprice: totalPrice,
+      },
+    });
 
-    // return NextResponse.json({ success: true, order });
+    return NextResponse.json({ success: true, order });
   } catch (e) {
     console.log("ORDER ERROR", e);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
