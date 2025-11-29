@@ -7,6 +7,7 @@ export async function GET() {
     const salons = await prisma.salon.findMany({
       include: { services: true, barbers: true },
     });
+    console.log("salons", salons);
 
     return NextResponse.json(salons, { status: 200 });
   } catch (err) {

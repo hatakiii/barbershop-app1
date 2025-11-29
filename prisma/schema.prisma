@@ -22,58 +22,42 @@ model Salon {
 }
 
 model Service {
-  id           Int            @id @default(autoincrement()) @map("id")
-  salon_id     Int?
-  gender       String?        @map("gender") @db.VarChar(10)
-  name         String?        @map("name") @db.VarChar(100)
-  price        Int?           @map("price")
-  appointments appointments[]
-  orders       orders[]
-  salons       Salon?         @relation(fields: [salon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "services_category_id_fkey")
+  id       Int      @id @default(autoincrement()) @map("id")
+  salon_id Int?
+  gender   String?  @map("gender") @db.VarChar(10)
+  name     String?  @map("name") @db.VarChar(100)
+  price    Int?     @map("price")
+  orders   orders[]
+  salons   Salon?   @relation(fields: [salon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "services_category_id_fkey")
 
   @@map("services")
 }
 
 model Barber {
-  id           Int            @id @default(autoincrement()) @map("id")
-  salon_id     Int?
-  name         String?        @map("name") @db.VarChar(100)
-  phoneNumber  String?
-  avatarUrl    String?        @map("avatarUrl")
-  appointments appointments[]
-  salons       Salon?         @relation(fields: [salon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "barbers_category_id_fkey")
-  orders       orders[]
-  users        User[]
+  id          Int      @id @default(autoincrement()) @map("id")
+  salon_id    Int?
+  name        String?  @map("name") @db.VarChar(100)
+  phoneNumber String?
+  avatarUrl   String?  @map("avatarUrl")
+  salons      Salon?   @relation(fields: [salon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "barbers_category_id_fkey")
+  orders      orders[]
+  users       User[]
 
   @@map("barbers")
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  password     String         @unique
-  email        String         @unique @db.VarChar(50)
-  name         String?        @db.VarChar(59)
-  role         String?        @db.VarChar
-  salon_id     Int?
-  barberId     Int?           @map("barberid")
-  appointments appointments[]
-  barber       Barber?        @relation(fields: [barberId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  salons       Salon?         @relation(fields: [salon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_categoryid_fkey")
+  id       Int     @id @default(autoincrement())
+  password String  @unique
+  email    String  @unique @db.VarChar(50)
+  name     String? @db.VarChar(59)
+  role     String? @db.VarChar
+  salon_id Int?
+  barberId Int?    @map("barberid")
+  barber   Barber? @relation(fields: [barberId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  salons   Salon?  @relation(fields: [salon_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_categoryid_fkey")
 
   @@map("users")
-}
-
-model appointments {
-  id               Int       @id @default(autoincrement())
-  user_id          Int
-  barber_id        Int
-  service_id       Int
-  appointment_time DateTime  @db.Timestamptz(6)
-  status           String?   @default("pending") @db.VarChar(50)
-  created_at       DateTime? @default(now()) @db.Timestamptz(6)
-  barbers          Barber    @relation(fields: [barber_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_appointments_barber")
-  services         Service   @relation(fields: [service_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_appointments_service")
-  users            User      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_appointments_user")
 }
 
 model orders {
