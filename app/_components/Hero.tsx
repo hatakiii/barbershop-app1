@@ -7,8 +7,8 @@ export function Hero() {
     <section id="home" className="relative min-h-[80vh] flex items-center">
       <div className="absolute inset-0 z-0">
         <Image
-          src="https://images.unsplash.com/photo-1600948836101-f9ffda59d250?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYWlyJTIwc2Fsb24lMjBpbnRlcmlvciUyMG1vZGVybnxlbnwxfHx8fDE3NTU0MTk5MDZ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-          alt="Modern hair salon interior"
+          src="https://images.squarespace-cdn.com/content/v1/62c60263720ba005c9d695df/cd9f5c19-db5e-49d4-b5f0-8d896b6da98d/2D00EAD1-922A-47E6-8255-B30ADBE27EE8.jpeg?format=2500w"
+          alt=""
           className="w-full h-full object-cover"
           fill
         />

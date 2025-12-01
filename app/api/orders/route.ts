@@ -12,6 +12,7 @@ export async function POST(req: Request) {
       reservedTime,
       reservedDate,
       totalPrice,
+      phoneNumber,
     } = body;
 
     console.log(
@@ -21,7 +22,8 @@ export async function POST(req: Request) {
       barberId,
       reservedTime,
       reservedDate,
-      totalPrice
+      totalPrice,
+      phoneNumber
     );
 
     if (
@@ -30,22 +32,24 @@ export async function POST(req: Request) {
       !barberId ||
       !reservedTime ||
       !reservedDate ||
-      !totalPrice
+      !totalPrice ||
+      !phoneNumber
     ) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
+    const reservedDateTime = new Date(`${reservedDate}T${reservedTime}:00`);
 
     const order = await prisma.orders.create({
       data: {
         salonid: salonId,
         serviceid: serviceId,
         barberid: barberId,
-        reservedtime: reservedTime,
-        reserveddate: reservedDate,
+        reserveddatetime: reservedDateTime,
         totalprice: totalPrice,
+        phonenumber: phoneNumber,
       },
     });
 

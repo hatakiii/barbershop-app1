@@ -36,6 +36,7 @@ export default function BookingPage() {
   const [selectedBarber, setSelectedBarber] = useState<Barber | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [isConfirmed, setIsConfirmed] = useState(false);
 
   const formatted = selectedDate ? format(selectedDate, "yyyy-MM-dd") : null;
@@ -51,7 +52,13 @@ export default function BookingPage() {
   };
 
   const handlePayment = async () => {
-    if (!selectedSalon || !selectedService || !selectedBarber || !selectedTime)
+    if (
+      !selectedSalon ||
+      !selectedService ||
+      !selectedBarber ||
+      !selectedTime ||
+      !phoneNumber
+    )
       return alert("Мэдээлэл дутуу байна!");
 
     const res = await fetch("/api/orders", {
@@ -64,6 +71,7 @@ export default function BookingPage() {
         reservedTime: selectedTime,
         reservedDate: formatted,
         totalPrice: selectedService.price,
+        phoneNumber: Number(phoneNumber),
       }),
     });
 
@@ -197,6 +205,13 @@ export default function BookingPage() {
             dateValue={selectedDate}
             setDateValue={setSelectedDate}
           />
+          <input
+            type="tel"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            className="w-full border p-3 rounded mt-4 mb-6"
+            placeholder="Phone number"
+          />
           <h3 className="text-lg font-medium mb-3">Цаг сонгох</h3>
           <div className="grid grid-cols-3 gap-2 mb-6">
             {AVAILABLE_TIMES.map((time) => (
@@ -237,6 +252,10 @@ export default function BookingPage() {
                   <div className="flex justify-between">
                     <span className="text-gray-600">Цаг:</span>
                     <span className="font-semibold">{selectedTime}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Phone:</span>
+                    <span className="font-semibold">{phoneNumber}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Өдөр:</span>

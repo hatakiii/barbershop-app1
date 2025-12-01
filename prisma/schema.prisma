@@ -61,14 +61,16 @@ model User {
 }
 
 model orders {
-  id           Int      @id @default(autoincrement())
-  salonid      Int?
-  serviceid    Int?
-  barberid     Int?
-  reservedtime String?  @db.VarChar(100)
-  reserveddate String?  @db.VarChar(100)
-  totalprice   Int?
-  barbers      Barber?  @relation(fields: [barberid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  salons       Salon?   @relation(fields: [salonid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  services     Service? @relation(fields: [serviceid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id               Int      @id @default(autoincrement())
+  salonid          Int
+  serviceid        Int
+  barberid         Int
+  reserveddatetime DateTime @db.Timestamptz(6)
+  totalprice       Int
+  phonenumber      Int
+  barbers          Barber   @relation(fields: [barberid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  salons           Salon    @relation(fields: [salonid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  services         Service  @relation(fields: [serviceid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([barberid, reserveddatetime], map: "unique_slot")
 }
