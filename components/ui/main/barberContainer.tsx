@@ -1,85 +1,122 @@
 "use client";
 
-import { useState } from "react";
-import { Calendar } from "@/components/ui/calendar";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { BusyTime } from "@/lib/types";
 
-const AVAILABLE_TIMES = [
-  "09:00",
-  "09:30",
-  "10:00",
-  "10:30",
-  "11:00",
-  "11:30",
-  "12:00",
-  "12:30",
-  "13:00",
-  "13:30",
-  "14:00",
-  "14:30",
-  "15:00",
-  "15:30",
-  "16:00",
-  "16:30",
-  "17:00",
-  "17:30",
-];
-
-export default function BarberContainer({
-  salonId,
-  barberId,
-}: {
-  salonId: string | number;
+interface BarberContainerProps {
+  salonId: string;
   barberId: string;
-}) {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  console.log("salonid, barberid", salonId, barberId); //2 3 гэдэг тоо харуулж байна.
+}
+
+export default function BarberContainer({}: BarberContainerProps) {
+  const [salons, setSalons] = useState<any[]>([]);
+  const [barbers, setBarbers] = useState<any[]>([]);
+  const [selectedSalon, setSelectedSalon] = useState<string | null>(null);
+  const [selectedBarber, setSelectedBarber] = useState<string | null>(null);
+  const [busyTimes, setBusyTimes] = useState<BusyTime[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [freeTimes, setFreeTimes] = useState<string[]>([]);
+
+  // 1. Салонууд авах
+  useEffect(() => {
+    fetch("/api/salons")
+      .then((res) => res.json())
+      .then((data) => setSalons(data));
+  }, []);
+
+  // 2. Салон сонгоход Barber-ууд авах
+  useEffect(() => {
+    if (!selectedSalon) return;
+    fetch(`/api/barbers?salonId=${selectedSalon}`)
+      .then((res) => res.json())
+      .then((data) => setBarbers(data));
+  }, [selectedSalon]);
+
+  // 3. Өдөр сонгоход — тухайн Barber-ийн захиалга авах
+  useEffect(() => {
+    if (!selectedBarber || !selectedDate) return;
+
+    const isoDate = selectedDate.toISOString().split("T")[0];
+
+    fetch(`/api/orders/barber?barberId=${selectedBarber}&date=${isoDate}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setBusyTimes(data.busyTimes);
+        setFreeTimes(data.freeTimes);
+      });
+  }, [selectedBarber, selectedDate]);
 
   return (
-    <div className="flex flex-col gap-6 p-4">
-      {/* Календар */}
-      <div>
-        <h2 className="font-bold text-lg mb-2">Өдөр сонгох</h2>
-        <Calendar
-          mode="single"
-          selected={selectedDate}
-          onSelect={setSelectedDate}
-          className="rounded-md border"
-        />
-      </div>
+    <div>
+      <h1 className="text-2xl font-bold mb-4">Barber Calendar</h1>
 
-      {/* Хэрвээ өдөр сонгосон бол цагийн list гарна */}
-      {selectedDate && (
-        <div>
-          <h2 className="font-bold text-lg mb-3">Боломжтой цагууд</h2>
+      {/* All Salons */}
+      <h2 className="font-semibold mb-2">Салон сонгох</h2>
+      <select
+        className="border p-2 rounded mb-4"
+        onChange={(e) => setSelectedSalon(e.target.value)}
+      >
+        <option value="">Сонгоно уу</option>
+        {salons.map((salon) => (
+          <option key={salon.id} value={salon.id}>
+            {salon.name}
+          </option>
+        ))}
+      </select>
 
-          <div className="grid grid-cols-3 gap-2">
-            {AVAILABLE_TIMES.map((time) => (
-              <Button
-                key={time}
-                variant={selectedTime === time ? "default" : "outline"}
-                onClick={() => setSelectedTime(time)}
-                className="text-sm"
-              >
-                {time}
-              </Button>
+      {/* Barbers of the selected salon */}
+      {barbers.length > 0 && (
+        <>
+          <h2 className="font-semibold mb-2 mt-4">Барбер сонгох</h2>
+          <select
+            className="border p-2 rounded mb-4"
+            onChange={(e) => setSelectedBarber(e.target.value)}
+          >
+            <option value="">Сонгоно уу</option>
+            {barbers.map((barber) => (
+              <option key={barber.id} value={barber.id}>
+                {barber.name}
+              </option>
             ))}
-          </div>
-        </div>
+          </select>
+        </>
       )}
 
-      {/* сонгосон цаг + өдөр харуулах */}
-      {selectedDate && selectedTime && (
-        <div className="p-4 rounded-md border mt-4">
-          <p className="font-semibold">Таны сонголт:</p>
-          <p>
-            <span className="font-medium">Өдөр:</span>{" "}
-            {selectedDate.toLocaleDateString()}
-          </p>
-          <p>
-            <span className="font-medium">Цаг:</span> {selectedTime}
-          </p>
+      {/* Calendar */}
+      {selectedBarber && (
+        <>
+          <h2 className="font-semibold mb-2 mt-4">Огноо сонгох</h2>
+          <input
+            type="date"
+            className="border p-2"
+            onChange={(e) => setSelectedDate(new Date(e.target.value))}
+          />
+        </>
+      )}
+
+      {/* Busy and empty times */}
+      {selectedDate && (
+        <div className="mt-6">
+          <h3 className="font-semibold mb-2">Захиалгатай цагууд:</h3>{" "}
+          <div className="flex gap-2 flex-wrap">
+            {" "}
+            {busyTimes.map((b) => (
+              <div key={b.time} className="px-3 py-1 bg-red-300 rounded">
+                <p className="font-medium">{b.time}</p>
+                <p className="text-xs">Үйлчилгээ: {b.serviceName}</p>
+                <p className="text-xs">Дугаар: {b.phonenumber}</p>
+                <p className="text-xs">Нийт: {b.totalprice}₮</p>
+              </div>
+            ))}{" "}
+          </div>
+          <h3 className="font-semibold mt-4 mb-2">Сул цагууд:</h3>
+          <div className="flex gap-2 flex-wrap">
+            {freeTimes.map((t) => (
+              <span key={t} className="px-3 py-1 bg-green-300 rounded">
+                {t}
+              </span>
+            ))}
+          </div>
         </div>
       )}
     </div>

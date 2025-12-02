@@ -31,3 +31,9 @@ export interface User {
   updatedat?: Date;
   role?: string;
 }
+export interface BusyTime {
+  time: string;
+  serviceName: string;
+  phonenumber: string;
+  totalprice: number;
+}
