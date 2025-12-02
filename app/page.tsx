@@ -6,12 +6,14 @@ import { Team } from "./_components/Team";
 import { Gallery } from "./_components/Gallery";
 import { Contact } from "./_components/Contact";
 import { Footer } from "./_components/Footer";
+import { HairstyleGallery } from "./_components/HairStyleGallery";
 
 export default function Home() {
   return (
     <div>
       <Header />
       <Hero />
+      <HairstyleGallery />
       <Services />
       <Team />
       <Gallery />
