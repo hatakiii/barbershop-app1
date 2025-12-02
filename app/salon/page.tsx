@@ -5,6 +5,15 @@ import { useEffect, useState } from "react";
 import { Salon } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const SalonPage = () => {
   const [salons, setSalons] = useState<Salon[]>([]);
@@ -15,24 +24,29 @@ const SalonPage = () => {
       .then((res) => res.json())
       .then((data) => setSalons(data));
   }, []);
+  console.log("salons", salons);
 
   return (
-    <div className="flex">
+    <div className="flex gap-2">
       {salons.map((salon) => (
-        <div
+        <Card
           key={salon.id}
           onClick={() => router.push(`/salon/${salon.id}`)}
           className="cursor-pointer border rounded-xl p-4"
         >
-          <Image
-            src={salon.salonImage || ""}
-            alt={salon.name}
-            width={30}
-            height={30}
-          />
-          <h2 className="text-xl/7 font-semibold mt-3">{salon.name}</h2>
-          <p className="text-gray-600">{salon.salonAddress}</p>
-        </div>
+          <CardHeader>
+            <CardTitle>{salon.name}</CardTitle>
+            <CardDescription>{salon.salonAddress}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Image
+              src={salon.salonImage || ""}
+              alt={salon.name}
+              width={100}
+              height={100}
+            />
+          </CardContent>
+        </Card>
       ))}
     </div>
   );

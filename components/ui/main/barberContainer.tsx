@@ -25,9 +25,16 @@ const AVAILABLE_TIMES = [
   "17:30",
 ];
 
-export default function BarberContainer() {
+export default function BarberContainer({
+  salonId,
+  barberId,
+}: {
+  salonId: string | number;
+  barberId: string;
+}) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  console.log("salonid, barberid", salonId, barberId); //2 3 гэдэг тоо харуулж байна.
 
   return (
     <div className="flex flex-col gap-6 p-4">
