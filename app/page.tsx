@@ -7,6 +7,7 @@ import { Gallery } from "./_components/Gallery";
 import { Contact } from "./_components/Contact";
 import { Footer } from "./_components/Footer";
 import { HairstyleGallery } from "./_components/HairStyleGallery";
+import { GeminiChat } from "./_components/GeminiChat";
 
 export default function Home() {
   return (
@@ -19,6 +20,9 @@ export default function Home() {
       <Gallery />
       <Contact />
       <Footer />
+      <div className="absolute right-9 bottom-9">
+        <GeminiChat />
+      </div>
     </div>
   );
 }
