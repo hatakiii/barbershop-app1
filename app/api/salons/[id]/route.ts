@@ -75,3 +75,32 @@ export async function PUT(
     );
   }
 }
+
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = await params;
+
+  console.log({ id });
+
+  if (!id || isNaN(Number(id))) {
+    return NextResponse.json({ error: "Invalid salon id" }, { status: 400 });
+  }
+
+  try {
+    const salon = await prisma.salon.findUnique({
+      where: { id: Number(id) },
+      include: { services: true, barbers: true },
+    });
+
+    if (!salon) {
+      return NextResponse.json({ error: "Salon not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(salon);
+  } catch (err) {
+    console.error("Fetch salon error:", err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
+}
