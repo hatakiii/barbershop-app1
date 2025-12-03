@@ -8,9 +8,7 @@ export function Footer() {
           <div className="col-span-2">
             <h3 className="text-2xl font-bold mb-4">Luxe Hair Studio</h3>
             <p className="text-gray-300 mb-4">
-              Your premier destination for professional hair care. We combine
-              artistry with expertise to create stunning looks that reflect your
-              unique style.
+             Aжилтны бүтээлч ур чадвараар үйлчилгээний стандартыг хүргэж, хэрэглэгчдэд давтагдашгүй сэтгэл ханамжийг бэлэглэнэ
             </p>
             <div className="flex space-x-4">
               <a href="#" className="hover:text-accent transition-colors">
@@ -26,19 +24,19 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
+            <h4 className="font-semibold mb-4"></h4>
             <ul className="space-y-2 text-gray-300">
               <li>
                 <a
                   href="#services"
                   className="hover:text-white transition-colors"
                 >
-                  Services
+                  Үйлчилгээ
                 </a>
               </li>
               <li>
                 <a href="#team" className="hover:text-white transition-colors">
-                  Our Team
+                  Бид
                 </a>
               </li>
               <li>
@@ -46,7 +44,7 @@ export function Footer() {
                   href="#gallery"
                   className="hover:text-white transition-colors"
                 >
-                  Gallery
+                  Блог
                 </a>
               </li>
               <li>
@@ -54,25 +52,25 @@ export function Footer() {
                   href="#contact"
                   className="hover:text-white transition-colors"
                 >
-                  Contact
+                  Холбогдох
                 </a>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4">Services</h4>
+            <h4 className="font-semibold mb-4">Үйлчилгээ</h4>
             <ul className="space-y-2 text-gray-300">
-              <li>Hair Cuts & Styling</li>
-              <li>Hair Coloring</li>
-              <li>Hair Treatments</li>
-              <li>Special Occasions</li>
+              <li>ТАЙРАЛТ</li>
+              <li>БУДАГ</li>
+              <li>ХИМИ</li>
+              <li>ХЭЛБЭРЖҮҮЛЭЛТ</li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-300">
-          <p>&copy; 2024 Luxe Hair Studio. All rights reserved.</p>
+          <p>&copy; Luxe Hair Studio 1991 - 2025. Зохиогчийн эрх хамгаалагдсан.</p>
         </div>
       </div>
     </footer>

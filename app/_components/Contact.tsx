@@ -8,10 +8,9 @@ export function Contact() {
     <section id="contact" className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Visit Our Salon</h2>
+          <h2 className="text-4xl font-bold mb-4">Холбоо барих</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Located in the heart of downtown, we're here to make you look and
-            feel your best.
+  
           </p>
         </div>
 
@@ -22,12 +21,12 @@ export function Contact() {
                 <CardContent className="pt-6">
                   <div className="flex items-center space-x-3 mb-3">
                     <MapPin className="w-5 h-5 text-primary" />
-                    <h3 className="font-semibold">Address</h3>
+                    <h3 className="font-semibold">Хаяг:</h3>
                   </div>
                   <p className="text-muted-foreground">
-                    123 Beauty Boulevard
+                Салбар 1: Шангри-Ла Худалдааны төв, 2 давхар, Ulemj Grease салон
                     <br />
-                    Downtown, CA 90210
+                  Салбар 2: Шангри-Ла Худалдааны төв, B1 давхар, Good Price дэлгүүр дотор
                   </p>
                 </CardContent>
               </Card>
@@ -36,9 +35,9 @@ export function Contact() {
                 <CardContent className="pt-6">
                   <div className="flex items-center space-x-3 mb-3">
                     <Phone className="w-5 h-5 text-primary" />
-                    <h3 className="font-semibold">Phone</h3>
+                    <h3 className="font-semibold">Утас: </h3>
                   </div>
-                  <p className="text-muted-foreground">(555) 123-4567</p>
+                  <p className="text-muted-foreground">77779999</p>
                 </CardContent>
               </Card>
             </div>
@@ -48,7 +47,7 @@ export function Contact() {
                 <CardContent className="pt-6">
                   <div className="flex items-center space-x-3 mb-3">
                     <Clock className="w-5 h-5 text-primary" />
-                    <h3 className="font-semibold">Hours</h3>
+                    <h3 className="font-semibold">Цаг</h3>
                   </div>
                   <div className="text-muted-foreground space-y-1">
                     <p>Mon-Fri: 9AM - 8PM</p>
@@ -62,7 +61,7 @@ export function Contact() {
                 <CardContent className="pt-6">
                   <div className="flex items-center space-x-3 mb-3">
                     <Mail className="w-5 h-5 text-primary" />
-                    <h3 className="font-semibold">Email</h3>
+                    <h3 className="font-semibold">И-мэйл хаяг: </h3>
                   </div>
                   <p className="text-muted-foreground">
                     info@luxehairstudio.com
@@ -73,18 +72,18 @@ export function Contact() {
 
             <div className="space-y-4">
               <h3 className="text-2xl font-semibold">
-                Ready to Transform Your Look?
+            Харилцагч, хамтран ажиллагч танд баярлалаа
               </h3>
               <p className="text-muted-foreground">
-                Book your appointment today and let our expert stylists create
-                the perfect look for you.
+               Бид үйл ажиллагаа явуулж буй салбар бүртээ
+манлайлагч нь байна.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="flex-1">
-                  Book Online
+                 Цагаа цахимаар захиалаарай
                 </Button>
                 <Button variant="outline" size="lg" className="flex-1">
-                  Call Now
+                Холбоо барих
                 </Button>
               </div>
             </div>

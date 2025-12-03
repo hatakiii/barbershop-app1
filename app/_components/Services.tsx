@@ -4,31 +4,31 @@ import { Scissors, Palette, Sparkles, Crown } from "lucide-react";
 const services = [
   {
     icon: Scissors,
-    title: "Hair Cuts & Styling",
+    title: "ТАЙРАЛТ",
     description:
-      "Professional cuts and styling for all hair types. From classic to trendy, we create the perfect look for you.",
-    price: "Starting at $65",
+      "Өөрийн төрх, толгой нүүрний хэлбэрт тохирсон болон хүсэл сонирхолдоо тулгуурлан стиль имижээ бүрдүүлэн хүссэн тайралтаа хийлгээрэй Мөн та хэдийгээр үсээ ургуулж байгаа ч гэсэн 3 сард тутамд тайралт хийлгэж үсээ сэргээж байх шаардлагатай.",
+   
   },
   {
     icon: Palette,
-    title: "Hair Coloring",
+    title: "БУДАГ",
     description:
-      "Expert color services including highlights, balayage, ombre, and full color transformations.",
-    price: "Starting at $120",
+      "Бүсгүйчүүдийн хувьд үс бол гоо сайхны гол зэвсэг гэж хэлж болно. Үсээ будуулах нь өнөө үед хотын соёлын томоохон хэсэг болсон зүйл. Ялангуяа үсний өнгө царай төрх, төрөлхийн гоо сайхныг тодотгоход чухал үүрэгтэй.",
+
   },
   {
     icon: Sparkles,
-    title: "Hair Treatments",
+    title: "ХИМИ",
     description:
-      "Nourishing treatments to restore health and shine. Deep conditioning, keratin, and protein treatments.",
-    price: "Starting at $85",
+      "Эмчилгээний хими нь үсний бүтцийг гэмтээхгүй,  гарын аясаар хэлбэржүүлж болох хамгийн зөөлөн хими бөгөөд угаахад хүссэн хэлбэрээ авдаг дэгжин сонголт юм Чөлөөт стильтэй хүмүүст илүү тохиромжтой ба үсийг өтгөн харагдуулдаг онцлогтой.",
+ 
   },
   {
     icon: Crown,
-    title: "Special Occasions",
+    title: "ХЭЛБЭРЖҮҮЛЭЛТ",
     description:
-      "Bridal hair, updos, and styling for special events. Make your day memorable with our expertise.",
-    price: "Starting at $150",
+      "Баяр наадам, хүлээн авалтанд оролцохын өмнө ямар үс засалт өөрийг тань эрхэмсэг, сайхан харагдуулах талаар төсөөлж эхэлдэг. Үс сайхан бол зүс сайхан гэдэгчлэн охид бүсгүйчүүдий маань эрхэмсэг харагдуулахад хамгийн чухал зүйл бол үс билээ.",
+
   },
 ];
 
@@ -37,10 +37,13 @@ export function Services() {
     <section id="services" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Our Services</h2>
+          <h2 className="text-4xl font-bold mb-4">Үйлчилгээ</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Discover our comprehensive range of professional hair services,
-            tailored to enhance your natural beauty.
+          Манай салон үйлчлүүлэгч нартаа үнийн хөнгөлөлт, урамшуулал тогтмол санал болгон ажиллаж байгаа бөгөөд үнэнч үйлчлүүлэгчдээ гишүүнчлэлийн карт олгон ажиллаж байна.
+
+
+
+
           </p>
         </div>
 
@@ -58,7 +61,7 @@ export function Services() {
                 <p className="text-muted-foreground mb-4">
                   {service.description}
                 </p>
-                <p className="font-semibold text-primary">{service.price}</p>
+             
               </CardContent>
             </Card>
           ))}

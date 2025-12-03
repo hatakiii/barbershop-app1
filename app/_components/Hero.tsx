@@ -18,12 +18,11 @@ export function Hero() {
       <div className="relative z-10 container mx-auto px-4">
         <div className="max-w-2xl text-white">
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            Your Hair, <br />
-            <span className="text-accent">Our Passion</span>
+            Шилдэг, <br />
+            <span className="text-accent">шинэлэг шийдлийг зөвхөн танд</span>
           </h1>
           <p className="text-xl mb-8 text-gray-200">
-            Experience luxury hair care with our expert stylists. From cuts to
-            color, we bring your vision to life in our modern, welcoming salon.
+       Aжилтны бүтээлч ур чадвараар үйлчилгээний стандартыг хүргэж, хэрэглэгчдэд давтагдашгүй сэтгэл ханамжийг бэлэглэнэ
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link href="/booking">
@@ -31,7 +30,7 @@ export function Hero() {
                 size="lg"
                 className="bg-white text-black hover:bg-gray-100"
               >
-                Booking
+            Цаг захиалах
               </Button>
             </Link>
 
@@ -40,7 +39,7 @@ export function Hero() {
               variant="outline"
               className="border-white text-white hover:bg-white hover:text-black"
             >
-              View Services
+         Үйлчилгээ
             </Button>
           </div>
         </div>

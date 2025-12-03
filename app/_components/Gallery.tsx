@@ -2,32 +2,32 @@ import Image from "next/image";
 
 const galleryImages = [
   {
-    src: "https://images.unsplash.com/photo-1653241625670-3a1e643464ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiZWF1dGlmdWwlMjBoYWlyJTIwY29sb3IlMjB0cmFuc2Zvcm1hdGlvbnxlbnwxfHx8fDE3NTU0MTk5NDd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    src: "https://i.pinimg.com/736x/f1/f0/f8/f1f0f865a56728766d8ed6f9408da16a.jpg",
     alt: "Beautiful hair color transformation",
     category: "Color",
   },
   {
-    src: "https://images.unsplash.com/photo-1493775379751-a6c3940f3cbc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdHlsaXNoJTIwaGFpcmN1dCUyMHdvbWFufGVufDF8fHx8MTc1NTQxOTk0OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    src: "https://i.pinimg.com/736x/bc/8a/94/bc8a94d8bee5d9fddb3653ce4d80e562.jpg",
     alt: "Stylish haircut",
     category: "Cut & Style",
   },
   {
-    src: "https://images.unsplash.com/photo-1594039284778-b6443907408b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYWlyJTIwc3R5bGluZyUyMHdlZGRpbmclMjB1cGRvfGVufDF8fHx8MTc1NTQxOTk0OHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    src: "https://i.pinimg.com/1200x/b0/fb/e0/b0fbe056648858fd4d3b74d8b63cf38d.jpg",
     alt: "Wedding updo styling",
     category: "Special Events",
   },
   {
-    src: "https://images.unsplash.com/photo-1629136627594-428799f827e4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBoYWlyJTIwc2Fsb24lMjBlcXVpcG1lbnR8ZW58MXx8fHwxNzU1NDE5OTQ4fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    src: "https://i.pinimg.com/1200x/d1/28/8a/d1288abb082dce2bed8c1e8319fb7ba4.jpg",
     alt: "Modern salon equipment",
     category: "Our Salon",
   },
   {
-    src: "https://images.unsplash.com/photo-1511920593290-3cb2deb1ce1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYWlyc3R5bGlzdCUyMGN1dHRpbmclMjBoYWlyfGVufDF8fHx8MTc1NTQxNjU2Mnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    src: "https://i.pinimg.com/736x/d2/12/17/d21217563aa2857fc8a7b0c5c2c5a6ba.jpg",
     alt: "Professional hair service",
     category: "Our Work",
   },
   {
-    src: "https://images.unsplash.com/photo-1647462741268-e5724e5886c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYWlyJTIwc2Fsb24lMjBzZXJ2aWNlcyUyMHN0eWxpbmd8ZW58MXx8fHwxNzU1NDE5OTA3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    src: "https://i.pinimg.com/736x/c3/5e/dc/c35edc36c573b991985958349a8efd26.jpg",
     alt: "Hair salon services",
     category: "Styling",
   },
@@ -38,10 +38,9 @@ export function Gallery() {
     <section id="gallery" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Our Work</h2>
+          <h2 className="text-4xl font-bold mb-4">Амжилтууд</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            See the transformations and artistry that make our clients feel
-            beautiful and confident.
+        “Монголын үсчин гоо сайханчдын холбоо”-ноос “Шилдэг менежменттэй” салон.
           </p>
         </div>
 

@@ -14,31 +14,31 @@ export function Header() {
 
           <nav className="hidden md:flex items-center space-x-8">
             <a href="#home" className="hover:text-primary transition-colors">
-              Home
+              Нүүр
             </a>
             <a
               href="#services"
               className="hover:text-primary transition-colors"
             >
-              Services
+              Үйлчилгээ
             </a>
             <a href="#team" className="hover:text-primary transition-colors">
-              Our Team
+              Бид
             </a>
             <a href="#gallery" className="hover:text-primary transition-colors">
-              Gallery
+              Блог
             </a>
             <a href="#contact" className="hover:text-primary transition-colors">
-              Contact
+              Холбогдох
             </a>
           </nav>
 
           <div className="hidden lg:flex items-center space-x-4">
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
               <Phone className="w-4 h-4" />
-              <span>(555) 123-4567</span>
+              <span>77779999</span>
             </div>
-            <Button>Book Now</Button>
+            <Button>Цагаа цахимаар захиалаарай</Button>
           </div>
 
           <Button variant="ghost" size="sm" className="md:hidden">
