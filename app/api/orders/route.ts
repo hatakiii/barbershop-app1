@@ -1,75 +1,59 @@
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-
     const {
       salonId,
       serviceId,
       barberId,
-      reservedTime,
       reservedDate,
+      reservedTime,
       totalPrice,
       phoneNumber,
-    } = body;
-
-    console.log(
-      "Body dotorh ni zov irj bny",
-      salonId,
-      serviceId,
-      barberId,
-      reservedTime,
-      reservedDate,
-      totalPrice,
-      phoneNumber
-    );
+    } = await req.json();
 
     if (
       !salonId ||
       !serviceId ||
       !barberId ||
-      !reservedTime ||
       !reservedDate ||
+      !reservedTime ||
       !totalPrice ||
       !phoneNumber
     ) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { success: false, error: "Мэдээлэл дутуу байна" },
         { status: 400 }
       );
     }
-    const reservedDateTime = new Date(`${reservedDate}T${reservedTime}:00`);
 
+    // Захиалгын datetime үүсгэх
+    const reservedDatetime = new Date(`${reservedDate}T${reservedTime}:00Z`);
+
+    // Prisma create ашиглах
     const order = await prisma.orders.create({
       data: {
-        salonid: salonId,
-        serviceid: serviceId,
-        barberid: barberId,
-        reserveddatetime: reservedDateTime,
+        serviceId: serviceId, // ✅ camelCase
+        barberId: barberId, // ✅ camelCase
+        reservedDatetime: reservedDatetime, // ✅ camelCase
         totalprice: totalPrice,
-        phonenumber: phoneNumber,
+        phonenumber: Number(phoneNumber),
       },
     });
 
     return NextResponse.json({ success: true, order });
-  } catch (e) {
-    console.log("ORDER ERROR", e);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  } catch (err: any) {
+    console.error(err);
+    if (err.code === "P2002") {
+      return NextResponse.json(
+        { success: false, error: "Энэ цаг аль хэдийн захиалагдсан" },
+        { status: 400 }
+      );
+    }
+    return NextResponse.json(
+      { success: false, error: "Server error" },
+      { status: 500 }
+    );
   }
-}
-
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const barberId = searchParams.get("barberId");
-
-  if (!barberId) return NextResponse.json({ orders: [] });
-
-  //   const orders = await prisma.orders.findMany({
-  //     where: { barberId },
-  //     orderBy: { time: "asc" },
-  //   });
-
-  //   return NextResponse.json({ orders });
 }

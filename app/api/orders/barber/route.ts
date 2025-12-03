@@ -1,4 +1,3 @@
-
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
@@ -9,7 +8,10 @@ export async function GET(req: Request) {
     const dateStr = url.searchParams.get("date"); // YYYY-MM-DD
 
     if (!barberId || !dateStr) {
-      return NextResponse.json({ error: "Барбер болон өдөр заавал хэрэгтэй" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Барбер болон өдөр заавал хэрэгтэй" },
+        { status: 400 }
+      );
     }
 
     const startOfDay = new Date(dateStr + "T00:00:00.000Z");
@@ -35,13 +37,29 @@ export async function GET(req: Request) {
       totalprice: o.totalprice,
     }));
 
-   
     const allTimes = [
-      "09:00","09:30","10:00","10:30","11:00","11:30",
-      "12:00","12:30","13:00","13:30","14:00","14:30",
-      "15:00","15:30","16:00","16:30","17:00","17:30"
+      "09:00",
+      "09:30",
+      "10:00",
+      "10:30",
+      "11:00",
+      "11:30",
+      "12:00",
+      "12:30",
+      "13:00",
+      "13:30",
+      "14:00",
+      "14:30",
+      "15:00",
+      "15:30",
+      "16:00",
+      "16:30",
+      "17:00",
+      "17:30",
     ];
-    const freeTimes = allTimes.filter(t => !busyTimes.find(b => b.time === t));
+    const freeTimes = allTimes.filter(
+      (t) => !busyTimes.find((b) => b.time === t)
+    );
 
     return NextResponse.json({ busyTimes, freeTimes });
   } catch (err) {

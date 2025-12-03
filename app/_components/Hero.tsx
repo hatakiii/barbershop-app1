@@ -22,7 +22,8 @@ export function Hero() {
             <span className="text-accent">шинэлэг шийдлийг зөвхөн танд</span>
           </h1>
           <p className="text-xl mb-8 text-gray-200">
-       Aжилтны бүтээлч ур чадвараар үйлчилгээний стандартыг хүргэж, хэрэглэгчдэд давтагдашгүй сэтгэл ханамжийг бэлэглэнэ
+            Aжилтны бүтээлч ур чадвараар үйлчилгээний стандартыг хүргэж,
+            хэрэглэгчдэд давтагдашгүй сэтгэл ханамжийг бэлэглэнэ
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link href="/booking">
@@ -30,16 +31,16 @@ export function Hero() {
                 size="lg"
                 className="bg-white text-black hover:bg-gray-100"
               >
-            Цаг захиалах
+                Цаг захиалах
               </Button>
             </Link>
 
             <Button
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white hover:text-black"
+              className="bg-white text-black hover:bg-gray-100"
             >
-         Үйлчилгээ
+              Үйлчилгээ
             </Button>
           </div>
         </div>

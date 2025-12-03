@@ -62,12 +62,12 @@ model User {
 
 model orders {
   id               Int      @id @default(autoincrement())
-  salonid          Int
-  serviceid        Int
-  barberid         Int
-  reserveddatetime DateTime @db.Timestamptz(6)
-  totalprice       Int
-  phonenumber      Int
+  salonId          Int
+  serviceId        Int
+  barberId         Int
+  reservedDatetime DateTime @db.Timestamptz(6)
+  totalPrice       Int
+  phoneNumber      Int
   barbers          Barber   @relation(fields: [barberid], references: [id], onDelete: NoAction, onUpdate: NoAction)
   salons           Salon    @relation(fields: [salonid], references: [id], onDelete: NoAction, onUpdate: NoAction)
   services         Service  @relation(fields: [serviceid], references: [id], onDelete: NoAction, onUpdate: NoAction)
