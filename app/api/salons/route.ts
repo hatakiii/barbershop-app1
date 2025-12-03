@@ -2,22 +2,31 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { uploadImageToCloudinary } from "@/lib/utils/uploadImage";
 
-export async function GET() {
-  try {
-    const salons = await prisma.salon.findMany({
-      include: { services: true, barbers: true },
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const managerId = searchParams.get("managerId");
+
+  // managerId-гаар салон шүүх
+  if (managerId) {
+    const manager = await prisma.user.findUnique({
+      where: { id: Number(managerId) },
+      select: { salon_id: true },
     });
-    console.log("salons", salons);
 
-    return NextResponse.json(salons, { status: 200 });
-  } catch (err) {
-    console.error("GET /categories ERROR:", err);
+    if (!managerId) {
+      return NextResponse.json([], { status: 200 });
+    }
 
-    return NextResponse.json(
-      { error: "Салонууд татахад алдаа гарлаа!" },
-      { status: 500 }
-    );
+    const salon = await prisma.salon.findUnique({
+      where: { id: Number(managerId) },
+    });
+
+    return NextResponse.json(salon ? [salon] : [], { status: 200 });
   }
+
+  // бүх салон
+  const salons = await prisma.salon.findMany();
+  return NextResponse.json(salons);
 }
 
 export async function POST(req: Request) {
@@ -47,10 +56,14 @@ export async function POST(req: Request) {
         managerId: managerId.toString(),
       },
     });
+    await prisma.user.update({
+      where: { id: Number(managerId) },
+      data: { salon_id: newSalon.id },
+    });
 
     return NextResponse.json(newSalon, { status: 201 });
   } catch (err) {
-    console.error("POST /categories ERROR:", err);
+    console.error("POST /salons ERROR:", err);
 
     return NextResponse.json(
       { error: "Салон нэмэхэд алдаа гарлаа!" },
