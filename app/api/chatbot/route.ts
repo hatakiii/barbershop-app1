@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
           "You are barber shop chatbot assistant. Answer in Mongolian",
       },
     });
-    console.log(response.text);
+    console.log(response.text, "response.text");
 
     return NextResponse.json({ text: response.text });
   } catch (error) {
