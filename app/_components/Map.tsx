@@ -18,6 +18,7 @@ export default function Map({
     { name: "Luxe Hair Studio - Central", coords: [47.9185, 106.917] },
     { name: "Luxe Hair Studio - West", coords: [47.92, 106.905] },
     { name: "Luxe Hair Studio - East", coords: [47.915, 106.93] },
+    { name: "Luxe Hair Studio - North", coords: [47.935, 106.93] },
   ],
   center = [47.9185, 106.917],
   zoom = 13,
