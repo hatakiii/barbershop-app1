@@ -18,21 +18,18 @@ export const GeminiChat = () => {
     if (!input.trim()) return;
 
     setMessages((prev) => [...prev, { role: "user", text: input }]);
-
     const userMessage = input;
     setInput("");
     setLoading(true);
+
     try {
       const response = await fetch("/api/chatbot", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: userMessage }),
       });
 
       const data = await response.json();
-
       if (data?.text) {
         setMessages((prev) => [...prev, { role: "ai", text: data.text }]);
       }
@@ -45,38 +42,49 @@ export const GeminiChat = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
-  console.log("messages", messages);
 
   return (
-    <div className="fixed bottom-6 right-6">
+    <div className="fixed bottom-6 right-6 z-50">
       {!open && (
         <Button
           variant="outline"
           onClick={() => setOpen(true)}
-          className="bg-black w-12 h-12 rounded-full flex items-center justify-center"
+          className="w-14 h-14 rounded-full flex items-center justify-center 
+          bg-black dark:bg-white 
+          text-white dark:text-black 
+          border-2 border-[#D4AF37] shadow-lg hover:scale-105 transition"
         >
-          <LuMessageCircle className="w-4 h-4 text-white" />
+          <LuMessageCircle className="w-6 h-6" />
         </Button>
       )}
 
       {open && (
-        <div className="sm:w-[350px] w-full h-[480px] border-2 border-[#0000001a] rounded-md flex flex-col bg-white shadow-2xs ">
-          <div className="w-full h-12 flex justify-between items-center px-4 border-b">
-            <p className="text-foreground text-base font-medium leading-6">
-              Chat assistant
-            </p>
-            <Button
+        <div
+          className="sm:w-[360px] w-[92vw] h-[480px] rounded-xl 
+          shadow-xl border border-[#D4AF37]
+          bg-white dark:bg-[#111] text-black dark:text-white 
+          flex flex-col"
+        >
+          {/* Header */}
+          <div
+            className="flex justify-between items-center px-4 h-12 
+          bg-[#D4AF37] text-black dark:text-white rounded-t-xl"
+          >
+            <p className="font-semibold">Barber Chat</p>
+            <button
               onClick={() => setOpen(false)}
-              className="w-8 h-8 bg-white hover:bg-white border-[#E4E4E7] border-2"
+              className="p-1 bg-transparent"
             >
-              <IoClose className="text-black" />
-            </Button>
+              <IoClose className="w-6 h-6" />
+            </button>
           </div>
 
-          <div className="flex-1 px-4 py-3 overflow-y-auto space-y-3">
+          {/* Chat Messages */}
+          <div className="flex-1 px-4 py-3 overflow-y-auto space-y-3 scrollbar-thin scrollbar-thumb-[#D4AF37] dark:scrollbar-thumb-[#444]">
             {messages.map((msg, i) => (
               <div
                 key={i}
@@ -85,36 +93,38 @@ export const GeminiChat = () => {
                 }`}
               >
                 <div
-                  className={`px-4 py-2 rounded-lg max-w-[75%] text-sm ${
+                  className={`px-4 py-2 rounded-lg max-w-[75%] text-sm shadow-md 
+                  ${
                     msg.role === "user"
-                      ? "bg-[#f4f4f5cc] text-black"
-                      : "bg-[#18181be6] text-white"
+                      ? "bg-[#D4AF37] text-black"
+                      : "bg-black dark:bg-[#222] text-white"
                   }`}
                 >
                   {msg.text}
                 </div>
               </div>
             ))}
+
             {loading && (
-              <div className="flex items-center space-x-2 text-gray-400">
-                <span className="animate-pulse">AI is typing...</span>
+              <div className="text-[#D4AF37] text-sm animate-pulse">
+                ✂ AI is styling your reply...
               </div>
             )}
 
             <div ref={chatEndRef} />
           </div>
 
-          <div className="w-full flex items-start justify-between px-4 py-2 border-t">
+          {/* Input Area */}
+          <div className="flex items-center gap-2 px-4 py-3 border-t border-[#D4AF37]">
             <input
-              type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message..."
-              className="flex-1 h-10 border border-input rounded-md px-3 text-sm"
+              placeholder="Ask hairstyle suggestions..."
+              className="flex-1 h-10 px-3 rounded-md border border-[#D4AF37] 
+              bg-transparent text-sm placeholder-gray-400 focus:outline-none"
             />
             <Button
-              className="w-10 h-10 rounded-full ml-2"
-              type="submit"
+              className="w-10 h-10 rounded-full bg-[#D4AF37] text-black hover:opacity-90"
               onClick={onSendChat}
               disabled={loading}
             >
