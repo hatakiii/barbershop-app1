@@ -32,12 +32,23 @@ export async function POST(req: NextRequest) {
     const reservedDatetime = new Date(`${reservedDate}T${reservedTime}:00Z`);
 
     // Prisma create ашиглах
+    // const order = await prisma.orders.create({
+    //   data: {
+    //     serviceId: serviceId, // ✅ camelCase
+    //     barberId: barberId, // ✅ camelCase
+    //     reserveddatetime: reservedDatetime, // ✅ camelCase
+    //     totalprice: totalPrice,
+    //     phonenumber: Number(phoneNumber),
+    //   },
+    // });
+
     const order = await prisma.orders.create({
       data: {
-        serviceId: serviceId, // ✅ camelCase
-        barberId: barberId, // ✅ camelCase
-        reservedDatetime: reservedDatetime, // ✅ camelCase
-        totalprice: totalPrice,
+        salonid: Number(salonId),
+        serviceid: Number(serviceId),
+        barberid: Number(barberId),
+        reserveddatetime: reservedDatetime,
+        totalprice: Number(totalPrice),
         phonenumber: Number(phoneNumber),
       },
     });

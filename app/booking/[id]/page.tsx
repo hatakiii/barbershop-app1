@@ -164,7 +164,7 @@ export default function SalonBookingPage() {
             />
             {!isConfirmed && selectedTime && selectedDate && (
               <Button
-                onClick={handleConfirm}
+                onClick={handlePayment}
                 className="w-full mt-4 bg-green-600 text-white hover:bg-green-700 transition-colors"
               >
                 Цаг авах
