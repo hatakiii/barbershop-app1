@@ -102,7 +102,7 @@ export default function SalonBookingPage() {
     });
 
     const data = await res.json();
-    if (data.success) alert("Booking confirmed!");
+    if (data.success) alert("Цаг захиалга амжилттай!");
     else alert("Error!");
   };
 
