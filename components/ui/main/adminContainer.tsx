@@ -137,6 +137,8 @@ export default function AdminContainer() {
       setSalons((p) => p.map((s) => (s.id === id ? data : s)));
       setOpen(false);
     }
+
+    return res.json();
   };
 
   const deleteSalonHandler = async (id: string) => {
