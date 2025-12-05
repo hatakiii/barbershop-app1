@@ -62,6 +62,7 @@ export default function AdminContainer() {
     setEditName(sal.name);
     setEditAddress(sal.salonAddress || "");
     setSelectedManagerId(sal.managerId ? String(sal.managerId) : "");
+    setSalonImage(undefined); // Засах үед сайн зураг сонгож өгөх хүртэл undefined
     setLat(sal.lat || 47.9185);
     setLng(sal.lng || 106.917);
     setOpen(true);
@@ -93,24 +94,49 @@ export default function AdminContainer() {
 
   const updateSalonHandler = async (id: string) => {
     setLoading(true);
-    const res = await fetch(`/api/salons/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: editName,
-        salonAddress: editAddress,
-        managerId: selectedManagerId,
-        lat,
-        lng,
-      }),
-    });
 
-    const data = await res.json();
-    setLoading(false);
+    // Хэрвээ шинэ зураг байвал FormData ашиглах
+    if (salonImage) {
+      const formData = new FormData();
+      formData.append("name", editName);
+      formData.append("salonAddress", editAddress);
+      formData.append("salonImage", salonImage);
+      formData.append("managerId", selectedManagerId);
+      formData.append("lat", String(lat));
+      formData.append("lng", String(lng));
 
-    if (!res.ok) return alert(data.error);
-    setSalons((p) => p.map((s) => (s.id === id ? data : s)));
-    setOpen(false);
+      const res = await fetch(`/api/salons/${id}`, {
+        method: "PUT",
+        body: formData,
+      });
+
+      const data = await res.json();
+      setLoading(false);
+
+      if (!res.ok) return alert(data.error);
+      setSalons((p) => p.map((s) => (s.id === id ? data : s)));
+      setOpen(false);
+    } else {
+      // Зураг өөрчлөхгүй бол JSON ашиглах
+      const res = await fetch(`/api/salons/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: editName,
+          salonAddress: editAddress,
+          managerId: selectedManagerId,
+          lat,
+          lng,
+        }),
+      });
+
+      const data = await res.json();
+      setLoading(false);
+
+      if (!res.ok) return alert(data.error);
+      setSalons((p) => p.map((s) => (s.id === id ? data : s)));
+      setOpen(false);
+    }
   };
 
   const deleteSalonHandler = async (id: string) => {
