@@ -95,7 +95,10 @@ export default function AdminContainer() {
   const updateSalonHandler = async (id: string) => {
     setLoading(true);
 
-    // Хэрвээ шинэ зураг байвал FormData ашиглах
+    let res;
+    let data;
+
+    // Шинэ зураг байвал
     if (salonImage) {
       const formData = new FormData();
       formData.append("name", editName);
@@ -105,20 +108,16 @@ export default function AdminContainer() {
       formData.append("lat", String(lat));
       formData.append("lng", String(lng));
 
-      const res = await fetch(`/api/salons/${id}`, {
+      res = await fetch(`/api/salons/${id}`, {
         method: "PUT",
         body: formData,
       });
 
-      const data = await res.json();
-      setLoading(false);
-
-      if (!res.ok) return alert(data.error);
-      setSalons((p) => p.map((s) => (s.id === id ? data : s)));
-      setOpen(false);
-    } else {
-      // Зураг өөрчлөхгүй бол JSON ашиглах
-      const res = await fetch(`/api/salons/${id}`, {
+      data = await res.json();
+    }
+    // Зураг өөрчлөхгүй бол JSON
+    else {
+      res = await fetch(`/api/salons/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -130,15 +129,21 @@ export default function AdminContainer() {
         }),
       });
 
-      const data = await res.json();
-      setLoading(false);
-
-      if (!res.ok) return alert(data.error);
-      setSalons((p) => p.map((s) => (s.id === id ? data : s)));
-      setOpen(false);
+      data = await res.json();
     }
 
-    return res.json();
+    setLoading(false);
+
+    if (!res.ok) {
+      alert(data.error);
+      return;
+    }
+
+    // UI шинэчлэх
+    setSalons((prev) => prev.map((s) => (s.id === id ? data : s)));
+    setOpen(false);
+
+    // Энд return хийх шаардлагагүй
   };
 
   const deleteSalonHandler = async (id: string) => {

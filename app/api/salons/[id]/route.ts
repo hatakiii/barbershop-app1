@@ -90,7 +90,7 @@ export async function PUT(
     if (lng !== undefined) updateData.lng = parseFloat(lng);
 
     const updatedSalon = await prisma.salon.update({
-      where: { id },
+      where: { id: salonId },
       data: updateData,
     });
 
