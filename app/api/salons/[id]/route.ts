@@ -48,7 +48,7 @@ export async function PUT(
     }
 
     const body = await req.json();
-    const { name, salonAddress, salonImage } = body;
+    const { name, salonAddress, salonImage, lat, lng } = body;
 
     if (!name && !salonAddress && !salonImage) {
       return NextResponse.json(
@@ -63,6 +63,8 @@ export async function PUT(
         name,
         salonAddress,
         salonImage,
+        lat: lat !== undefined ? parseFloat(lat) : undefined,
+        lng: lng !== undefined ? parseFloat(lng) : undefined,
       },
     });
 
