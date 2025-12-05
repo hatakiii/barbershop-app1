@@ -78,26 +78,25 @@ export default function AdminContainer() {
   };
 
   const updateSalonHandler = async (
-    id: string,
-    updatedData: { name?: string; salonAddress?: string; salonImage?: string }
+    id: number,
+    data: { name: string; salonAddress: string; salonImage?: File }
   ) => {
-    try {
-      const res = await fetch(`/api/salons/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedData),
-      });
-      const data = await res.json();
+    const form = new FormData();
+    form.append("name", data.name);
+    form.append("salonAddress", data.salonAddress);
+    if (data.salonImage) form.append("salonImage", data.salonImage);
 
-      if (res.ok) {
-        alert("Салон амжилттай шинэчлэгдлээ");
-        setSalons((prev) => prev.map((cat) => (cat.id === id ? data : cat)));
-      } else {
-        alert(data.error);
-      }
-    } catch (err) {
-      alert("Салон шинэчлэхэд алдаа гарлаа!");
+    const res = await fetch(`/api/salons/${id}`, {
+      method: "PUT",
+      body: form,
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || "Салон шинэчлэхэд алдаа гарлаа");
     }
+
+    return res.json();
   };
 
   const deleteSalonHandler = async (id: string) => {
@@ -254,18 +253,32 @@ export default function AdminContainer() {
               } text-white`}
               onClick={async () => {
                 setLoading(true);
-                if (editingSalon) {
-                  await updateSalonHandler(editingSalon.id, {
-                    name: editName,
-                    salonAddress: editAddress,
-                  });
-                } else {
-                  await addSalonHandler();
+                try {
+                  if (editingSalon) {
+                    await updateSalonHandler(Number(editingSalon.id), {
+                      name: editName,
+                      salonAddress: editAddress,
+                      // Шинэ зураг байгаа бол дамжуулна
+                      salonImage: salonImage,
+                    });
+                  } else {
+                    await addSalonHandler();
+                  }
+                  // state цэвэрлэх
+                  setOpen(false);
+                  setEditingSalon(null);
+                  setSalonImage(undefined);
+
+                  // Шинэ мэдээллийг дахин татах
+                  const res = await fetch("/api/salons", { cache: "no-cache" });
+                  const data = await res.json();
+                  setSalons(data);
+                } catch (err) {
+                  console.error(err);
+                  alert("Салон шинэчлэхэд алдаа гарлаа!");
+                } finally {
+                  setLoading(false);
                 }
-                setOpen(false);
-                setEditingSalon(null);
-                setSalonImage(undefined);
-                setLoading(false);
               }}
             >
               {loading

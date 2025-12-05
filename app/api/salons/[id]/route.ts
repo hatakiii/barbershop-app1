@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { uploadImageToCloudinary } from "@/lib/utils/uploadImage";
 
 interface Params {
   id: string;
@@ -37,40 +38,41 @@ export async function DELETE(
 
 export async function PUT(
   req: Request,
-  { params }: { params: Params | Promise<Params> }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = await params;
-    const id = parseInt(resolvedParams.id);
+    const { id } = await context.params;
+    const salonId = Number(id);
 
-    if (isNaN(id)) {
-      return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+    if (!salonId) {
+      return NextResponse.json({ error: "Invalid salon ID" }, { status: 400 });
     }
 
-    const body = await req.json();
-    const { name, salonAddress, salonImage } = body;
+    const formData = await req.formData();
+    const name = formData.get("name")?.toString();
+    const salonAddress = formData.get("salonAddress")?.toString();
+    const salonImageFile = formData.get("salonImage") as File | null;
 
-    if (!name && !salonAddress && !salonImage) {
-      return NextResponse.json(
-        { error: "At least one field is required to update" },
-        { status: 400 }
-      );
+    let salonImageUrl: string | undefined;
+    if (salonImageFile && salonImageFile.size > 0) {
+      salonImageUrl = await uploadImageToCloudinary(salonImageFile);
+      console.log("Cloudinary link:", salonImageUrl);
     }
 
     const updatedSalon = await prisma.salon.update({
-      where: { id },
+      where: { id: salonId },
       data: {
-        name,
-        salonAddress,
-        salonImage,
+        ...(name ? { name } : {}),
+        ...(salonAddress ? { salonAddress } : {}),
+        ...(salonImageUrl ? { salonImage: salonImageUrl } : {}),
       },
     });
 
-    return NextResponse.json(updatedSalon, { status: 200 });
+    return NextResponse.json(updatedSalon);
   } catch (err) {
-    console.error("PUT /categories/:id ERROR:", err);
+    console.error("PUT /api/salons/[id] ERROR:", err);
     return NextResponse.json(
-      { error: "Failed to update category" },
+      { error: "Салон шинэчлэхэд алдаа гарлаа!" },
       { status: 500 }
     );
   }
