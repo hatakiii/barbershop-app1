@@ -18,6 +18,9 @@ export interface Salon {
   name: string;
   salonImage?: string;
   salonAddress?: string;
+  lat?: number;
+  lng?: number;
+  managerId?: string;
   services: Service[];
   barbers?: Barber[];
 }

@@ -5,289 +5,273 @@ import { Input } from "../input";
 import { Label } from "../label";
 import { Button } from "../button";
 import { Salon, User } from "@/lib/types";
+import MapSelector from "./MapSelector";
 
 export default function AdminContainer() {
   const [managers, setManagers] = useState<{ id: string; name: string }[]>([]);
-  const [selectedManagerId, setSelectedManagerId] = useState<string>("");
+  const [selectedManagerId, setSelectedManagerId] = useState("");
   const [salons, setSalons] = useState<Salon[]>([]);
   const [salonImage, setSalonImage] = useState<File | undefined>();
-  const [name, setName] = useState<string>("");
-  const [salonAddress, setSalonAddress] = useState<string>("");
-  const [editName, setEditName] = useState<string>("");
-  const [editAddress, setEditAddress] = useState<string>("");
+
+  const [name, setName] = useState("");
+  const [salonAddress, setSalonAddress] = useState("");
+
+  const [editName, setEditName] = useState("");
+  const [editAddress, setEditAddress] = useState("");
+
   const [editingSalon, setEditingSalon] = useState<Salon | null>(null);
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  // Координатуудын state нэмсэн, анхны утга нь Улаанбаатар хотын төв
+  const [lat, setLat] = useState<number | null>(47.9185);
+  const [lng, setLng] = useState<number | null>(106.917);
 
   useEffect(() => {
     fetch("/api/salons", { cache: "no-cache" })
       .then((res) => res.json())
-      .then((data) => setSalons(data));
+      .then(setSalons);
   }, []);
+
+  console.log("What's inside salon", salons);
 
   useEffect(() => {
     fetch("/api/users")
       .then((res) => res.json())
-      .then((data: User[]) => {
-        const managerOptions = data
-          .filter((user) => user.role === "Manager")
-          .map((user) => ({
-            id: user.id.toString(), // number -> string
-            name: user.name || "", // undefined бол хоосон string
-          }));
-        setManagers(managerOptions);
-      })
-      .catch((err) => console.error(err));
+      .then((data: User[]) =>
+        setManagers(
+          data
+            .filter((u) => u.role === "Manager")
+            .map((u) => ({ id: String(u.id), name: u.name || "" }))
+        )
+      )
+      .catch(console.error);
   }, []);
 
+  const openAddModal = () => {
+    setEditingSalon(null);
+    setName("");
+    setSalonAddress("");
+    setSalonImage(undefined);
+    setLat(47.9185);
+    setLng(106.917);
+    setOpen(true);
+  };
+
+  const openEditModal = (sal: Salon) => {
+    setEditingSalon(sal);
+    setEditName(sal.name);
+    setEditAddress(sal.salonAddress || "");
+    setSelectedManagerId(sal.managerId ? String(sal.managerId) : "");
+    setSalonImage(undefined); // Засах үед сайн зураг сонгож өгөх хүртэл undefined
+    setLat(sal.lat || 47.9185);
+    setLng(sal.lng || 106.917);
+    setOpen(true);
+  };
+
   const addSalonHandler = async () => {
-    if (!name || !salonImage || !salonAddress) {
-      alert("Бүх талбарыг бөглөнө үү");
-      return;
-    }
+    if (!name || !salonImage || !salonAddress || !lat || !lng)
+      return alert("Бүх талбар + байршил!");
 
     const formData = new FormData();
     formData.append("name", name);
     formData.append("salonAddress", salonAddress);
     formData.append("salonImage", salonImage);
     formData.append("managerId", selectedManagerId);
+    formData.append("lat", String(lat));
+    formData.append("lng", String(lng));
 
-    try {
-      setLoading(true);
-      const res = await fetch("/api/salons", {
-        method: "POST",
+    console.log("what's in formdata", formData);
+
+    setLoading(true);
+    const res = await fetch("/api/salons", { method: "POST", body: formData });
+    const data = await res.json();
+    setLoading(false);
+
+    if (!res.ok) return alert(data.error);
+    setSalons((p) => [...p, data]);
+    setOpen(false);
+  };
+
+  const updateSalonHandler = async (id: string) => {
+    setLoading(true);
+
+    // Хэрвээ шинэ зураг байвал FormData ашиглах
+    if (salonImage) {
+      const formData = new FormData();
+      formData.append("name", editName);
+      formData.append("salonAddress", editAddress);
+      formData.append("salonImage", salonImage);
+      formData.append("managerId", selectedManagerId);
+      formData.append("lat", String(lat));
+      formData.append("lng", String(lng));
+
+      const res = await fetch(`/api/salons/${id}`, {
+        method: "PUT",
         body: formData,
       });
+
       const data = await res.json();
       setLoading(false);
 
-      if (res.ok) {
-        alert("Салон амжилттай нэмэгдлээ!");
-        setOpen(false);
-        setName("");
-        setSalonAddress("");
-        setSalonImage(undefined);
-        setSalons((prev) => [...prev, data]);
-      } else {
-        alert(data.error);
-      }
-    } catch (err) {
-      alert("Салон нэмэхэд алдаа гарлаа!");
+      if (!res.ok) return alert(data.error);
+      setSalons((p) => p.map((s) => (s.id === id ? data : s)));
+      setOpen(false);
+    } else {
+      // Зураг өөрчлөхгүй бол JSON ашиглах
+      const res = await fetch(`/api/salons/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: editName,
+          salonAddress: editAddress,
+          managerId: selectedManagerId,
+          lat,
+          lng,
+        }),
+      });
+
+      const data = await res.json();
       setLoading(false);
-    }
-  };
 
-  const updateSalonHandler = async (
-    id: number,
-    data: { name: string; salonAddress: string; salonImage?: File }
-  ) => {
-    const form = new FormData();
-    form.append("name", data.name);
-    form.append("salonAddress", data.salonAddress);
-    if (data.salonImage) form.append("salonImage", data.salonImage);
-
-    const res = await fetch(`/api/salons/${id}`, {
-      method: "PUT",
-      body: form,
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || "Салон шинэчлэхэд алдаа гарлаа");
+      if (!res.ok) return alert(data.error);
+      setSalons((p) => p.map((s) => (s.id === id ? data : s)));
+      setOpen(false);
     }
 
     return res.json();
   };
 
   const deleteSalonHandler = async (id: string) => {
-    if (!confirm("Та энэ салоныг устгахдаа итгэлтэй байна уу?")) return;
-
-    try {
-      const res = await fetch(`/api/salons/${id}`, {
-        method: "DELETE",
-      });
-      if (res.ok) {
-        alert("Салон амжилттай устлаа");
-        setSalons((prev) => prev.filter((cat) => cat.id !== id));
-      } else {
-        const data = await res.json();
-        alert(data.error || "Салон устгахад алдаа гарлаа!");
-      }
-    } catch (err) {
-      alert("Салон устгахад алдаа гарлаа!");
-    }
-  };
-
-  const fileChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setSalonImage(e.target.files[0]);
-    }
+    if (!confirm("Устгах уу?")) return;
+    await fetch(`/api/salons/${id}`, { method: "DELETE" });
+    setSalons((p) => p.filter((s) => s.id !== id));
   };
 
   return (
     <div className="flex flex-wrap gap-4">
-      {/* Салоны картууд */}
       {salons.map((sal) => (
-        <div
-          key={sal.id}
-          className="w-60 h-95 border-2 rounded-md p-4 flex flex-col"
-        >
+        <div key={sal.id} className="w-60 border p-4 rounded flex flex-col">
           {sal.salonImage && (
-            <img
-              src={sal.salonImage}
-              alt={sal.name}
-              className="w-full h-40 object-cover rounded mb-3"
-            />
+            <img src={sal.salonImage} className="w-full h-32 object-cover" />
           )}
-          <h3 className="text-lg font-semibold">{sal.name}</h3>
-          <p className="text-sm text-gray-600">{sal.salonAddress}</p>
-          <div className="mt-auto flex justify-center flex-col">
-            <Button
-              className="mt-2 bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
-              onClick={() => {
-                setEditingSalon(sal);
-                setEditName(sal.name || "");
-                setEditAddress(sal.salonAddress || "");
-                setSalonImage(undefined);
-                setOpen(true);
-              }}
-            >
-              Засах
-            </Button>
+          <b>{sal.name}</b>
+          <span className="text-xs">{sal.salonAddress}</span>
 
-            <Button
-              className="mt-2 bg-red-400 hover:bg-red-500 text-white cursor-pointer"
-              onClick={() => deleteSalonHandler(sal.id)}
-            >
-              Устгах
-            </Button>
-          </div>
+          <Button
+            className="mt-2 bg-blue-500 text-white"
+            onClick={() => openEditModal(sal)}
+          >
+            Засах
+          </Button>
+
+          <Button
+            className="mt-2 bg-red-500 text-white"
+            onClick={() => deleteSalonHandler(sal.id)}
+          >
+            Устгах
+          </Button>
         </div>
       ))}
 
-      {/* Салон нэмэх карт */}
       <div
-        className="w-60 h-95 border-2 rounded-md border-gray-300 flex flex-col justify-center items-center cursor-pointer hover:shadow-md transition-shadow hover:bg-gray-400 hover:text-white"
-        onClick={() => {
-          setEditingSalon(null);
-          setName("");
-          setSalonAddress("");
-          setSalonImage(undefined);
-          setOpen(true);
-          setSelectedManagerId("");
-        }}
+        className="w-60 h-32 border rounded flex justify-center items-center cursor-pointer hover:bg-gray-200"
+        onClick={openAddModal}
       >
-        <span className="text-center font-bold">Салон нэмэх</span>
+        ➕ Салон нэмэх
       </div>
 
-      {/* Dialog нэмэх/засах */}
-      <Dialog open={open} onOpenChange={() => setOpen(false)}>
-        <DialogContent className="sm:max-w-[425px] flex flex-col gap-4">
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="flex flex-col gap-3 max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {editingSalon ? "Салон засах" : "Салон нэмэх"}
             </DialogTitle>
           </DialogHeader>
 
-          <Label>Салон удирдах менежер</Label>
+          <Label>Менежер</Label>
           <select
             value={selectedManagerId}
             onChange={(e) => setSelectedManagerId(e.target.value)}
             className="border rounded p-2"
           >
             <option value="">Сонгоно уу</option>
-            {managers.map((manager) => (
-              <option key={manager.id} value={manager.id}>
-                {manager.name}
+            {managers.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.name}
               </option>
             ))}
           </select>
 
-          <div className="grid gap-4">
-            <Label>Салон нэр</Label>
-            <Input
-              value={editingSalon ? editName : name}
-              onChange={(e) =>
-                editingSalon
-                  ? setEditName(e.target.value)
-                  : setName(e.target.value)
-              }
-            />
+          <Label>Салон нэр</Label>
+          <Input
+            value={editingSalon ? editName : name}
+            onChange={(e) =>
+              editingSalon
+                ? setEditName(e.target.value)
+                : setName(e.target.value)
+            }
+          />
 
-            <Label>Салон хаяг</Label>
-            <Input
-              value={editingSalon ? editAddress : salonAddress}
-              onChange={(e) =>
-                editingSalon
-                  ? setEditAddress(e.target.value)
-                  : setSalonAddress(e.target.value)
-              }
-            />
+          <Label>Хаяг</Label>
+          <Input
+            value={editingSalon ? editAddress : salonAddress}
+            onChange={(e) =>
+              editingSalon
+                ? setEditAddress(e.target.value)
+                : setSalonAddress(e.target.value)
+            }
+          />
 
-            <Label>Салон зураг</Label>
-            <Input type="file" onChange={fileChangeHandler} />
+          <Label>Байршил сонгох (газрын зураг дээр дарна уу)</Label>
+          <MapSelector
+            lat={lat}
+            lng={lng}
+            setLat={setLat}
+            setLng={setLng}
+            onLocationSelect={(newLat, newLng) => {
+              setLat(newLat);
+              setLng(newLng);
+            }}
+          />
 
-            {/* Preview зураг */}
-            {editingSalon && !salonImage && editingSalon.salonImage && (
-              <img
-                src={editingSalon.salonImage}
-                alt={editingSalon.name}
-                className="w-full h-40 object-cover rounded mt-2"
-              />
-            )}
-            {salonImage && (
-              <img
-                src={URL.createObjectURL(salonImage)}
-                alt="Preview"
-                className="w-full h-40 object-cover rounded mt-2"
-              />
-            )}
-
-            <Button
-              type="button"
-              disabled={loading}
-              className={`mt-2 ${
-                loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 hover:bg-blue-600"
-              } text-white`}
-              onClick={async () => {
-                setLoading(true);
-                try {
-                  if (editingSalon) {
-                    await updateSalonHandler(Number(editingSalon.id), {
-                      name: editName,
-                      salonAddress: editAddress,
-                      // Шинэ зураг байгаа бол дамжуулна
-                      salonImage: salonImage,
-                    });
-                  } else {
-                    await addSalonHandler();
-                  }
-                  // state цэвэрлэх
-                  setOpen(false);
-                  setEditingSalon(null);
-                  setSalonImage(undefined);
-
-                  // Шинэ мэдээллийг дахин татах
-                  const res = await fetch("/api/salons", { cache: "no-cache" });
-                  const data = await res.json();
-                  setSalons(data);
-                } catch (err) {
-                  console.error(err);
-                  alert("Салон шинэчлэхэд алдаа гарлаа!");
-                } finally {
-                  setLoading(false);
-                }
-              }}
-            >
-              {loading
-                ? "Уншиж байна..."
-                : editingSalon
-                ? "Шинчлэх"
-                : "Хадгалах"}
-            </Button>
+          <div className="bg-gray-100 p-3 rounded text-sm">
+            <p>
+              <strong>Сонгосон координат:</strong>
+            </p>
+            <p>Өргөрөг: {lat?.toFixed(6)}</p>
+            <p>Уртраг: {lng?.toFixed(6)}</p>
           </div>
+
+          <Label>Зураг</Label>
+          <Input
+            type="file"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              e.target.files?.[0] && setSalonImage(e.target.files[0])
+            }
+          />
+
+          {(salonImage || editingSalon?.salonImage) && (
+            <img
+              src={
+                salonImage
+                  ? URL.createObjectURL(salonImage)
+                  : (editingSalon?.salonImage as string)
+              }
+              className="w-full h-32 object-cover rounded"
+            />
+          )}
+
+          <Button
+            disabled={loading}
+            className="bg-blue-500 text-white"
+            onClick={() =>
+              editingSalon
+                ? updateSalonHandler(editingSalon.id)
+                : addSalonHandler()
+            }
+          >
+            {loading ? "Уншиж..." : editingSalon ? "Шинэчлэх" : "Хадгалах"}
+          </Button>
         </DialogContent>
       </Dialog>
     </div>

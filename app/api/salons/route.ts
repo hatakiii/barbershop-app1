@@ -36,6 +36,8 @@ export async function POST(req: Request) {
     const name = formData.get("name") as string;
     const salonAddress = formData.get("salonAddress") as string;
     const salonImage = formData.get("salonImage") as File;
+    const lat = formData.get("lat") as string;
+    const lng = formData.get("lng") as string;
 
     if (!name || !salonAddress || !salonImage || !managerId) {
       return NextResponse.json(
@@ -54,6 +56,8 @@ export async function POST(req: Request) {
         salonAddress,
         salonImage: imageUrl,
         managerId: managerId.toString(),
+        lat: lat ? parseFloat(lat) : undefined,
+        lng: lng ? parseFloat(lng) : undefined,
       },
     });
     await prisma.user.update({
