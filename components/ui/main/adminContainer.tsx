@@ -37,15 +37,27 @@ export default function AdminContainer() {
   useEffect(() => {
     fetch("/api/users")
       .then((res) => res.json())
-      .then((data: User[]) =>
+      .then((data: User[]) => {
+        const usedManagers = new Set(
+          salons.map((s) => (s.managerId ? String(s.managerId) : ""))
+        );
+
+        const freeManagers = data.filter(
+          (u) =>
+            u.role === "Manager" &&
+            (!usedManagers.has(String(u.id)) ||
+              String(u.id) === editingSalon?.managerId)
+        );
+
         setManagers(
-          data
-            .filter((u) => u.role === "Manager")
-            .map((u) => ({ id: String(u.id), name: u.name || "" }))
-        )
-      )
+          freeManagers.map((u) => ({
+            id: String(u.id),
+            name: u.name || "",
+          }))
+        );
+      })
       .catch(console.error);
-  }, []);
+  }, [JSON.stringify(salons), editingSalon?.managerId]);
 
   const openAddModal = () => {
     setEditingSalon(null);
@@ -69,8 +81,15 @@ export default function AdminContainer() {
   };
 
   const addSalonHandler = async () => {
-    if (!name || !salonImage || !salonAddress || !lat || !lng)
-      return alert("Бүх талбар + байршил!");
+    if (
+      !name ||
+      !salonImage ||
+      !salonAddress ||
+      !lat ||
+      !lng ||
+      !selectedManagerId
+    )
+      return alert("Бүх талбарийг бөглөнө үү + байршил!");
 
     const formData = new FormData();
     formData.append("name", name);
