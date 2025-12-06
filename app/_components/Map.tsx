@@ -32,15 +32,6 @@ export default function Map({
       const L = (await import("leaflet")).default;
       await import("leaflet/dist/leaflet.css");
 
-      // import icons dynamically
-      const iconRetinaUrl = (
-        await import("leaflet/dist/images/marker-icon-2x.png")
-      ).default;
-      const iconUrl = (await import("leaflet/dist/images/marker-icon.png"))
-        .default;
-      const shadowUrl = (await import("leaflet/dist/images/marker-shadow.png"))
-        .default;
-
       // fix icon
       const DefaultIcon = L.icon({
         iconRetinaUrl:

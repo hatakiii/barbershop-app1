@@ -106,9 +106,11 @@ export async function PUT(
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Params | Promise<Params> }
 ) {
-  const { id } = await params;
+  // params may be a Promise (depending on Next.js internals), so await it
+  const resolvedParams = await params;
+  const id = resolvedParams.id;
 
   console.log({ id });
 
