@@ -167,7 +167,18 @@ export default function AdminContainer() {
 
   const deleteSalonHandler = async (id: string) => {
     if (!confirm("Устгах уу?")) return;
-    await fetch(`/api/salons/${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/salons/${id}`, { method: "DELETE" });
+    if (res.status === 409 || !res.ok) {
+      const body = await res.json();
+      const { users = [], barbers = [], services = [] } = body.relations;
+      return alert(
+        `${body.error}\n` +
+          `👤 Хэрэглэгчид: ${users.length}\n` +
+          `💈 Үсчин: ${barbers.length}\n` +
+          `✂️ Үйлчилгээ: ${services.length}`
+      );
+    }
+    alert("Амжилттай устлаа");
     setSalons((p) => p.filter((s) => s.id !== id));
   };
 

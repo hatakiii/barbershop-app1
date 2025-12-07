@@ -11,26 +11,66 @@ export async function DELETE(
   { params }: { params: Params | Promise<Params> }
 ) {
   try {
-    // params нь promise байж магадгүй тул await хийх
     const resolvedParams = await params;
     const id = parseInt(resolvedParams.id);
 
     if (isNaN(id)) {
-      return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
     }
 
-    await prisma.salon.delete({
-      where: { id },
+    // 1️⃣ Холбоотой өгөгдөл шалгах
+    const relatedUsers = await prisma.user.findMany({
+      where: { salon_id: id },
+      select: { id: true, name: true, email: true },
     });
 
+    const relatedBarbers = await prisma.barber.findMany({
+      where: { salon_id: id },
+      select: { id: true, name: true },
+    });
+
+    const relatedServices = await prisma.service.findMany({
+      where: { salon_id: id },
+      select: { id: true, name: true },
+    });
+
+    console.log(
+      "relatedBarbers, relatedServices, relatedUsers",
+      relatedBarbers,
+      relatedServices,
+      relatedUsers
+    );
+
+    // 2️⃣ Хэрэв ямар нэгэн хамаарал байвал буцаах
+    if (
+      relatedUsers.length > 0 ||
+      relatedBarbers.length > 0 ||
+      relatedServices.length > 0
+    ) {
+      return NextResponse.json(
+        {
+          error: "Энэ салон дараах өгөгдлүүдтэй холбоотой тул устгах боломжгүй",
+          relations: {
+            users: relatedUsers,
+            barbers: relatedBarbers,
+            services: relatedServices,
+          },
+        },
+        { status: 409 }
+      );
+    }
+
+    // 3️⃣ Хэрэв хамаарал байхгүй бол устгана
+    await prisma.salon.delete({ where: { id } });
+
     return NextResponse.json(
-      { message: "Category deleted successfully" },
+      { message: "Salon deleted successfully" },
       { status: 200 }
     );
   } catch (err) {
-    console.error("DELETE /categories/:id ERROR:", err);
+    console.error("Delete Salon Error:", err);
     return NextResponse.json(
-      { error: "Failed to delete category" },
+      { error: "Something went wrong" },
       { status: 500 }
     );
   }
