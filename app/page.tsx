@@ -9,12 +9,14 @@ import { Footer } from "./_components/Footer";
 import { HairstyleGallery } from "./_components/HairStyleGallery";
 import { GeminiChat } from "./_components/GeminiChat";
 import { HaircutWheel } from "./_components/HaircutWheel";
+import { SalonContainer } from "./_components/SalonContainer";
 
 export default function Home() {
   return (
     <div>
       <Header />
       <Hero />
+      <SalonContainer />
 
       <HairstyleGallery />
       <Services />

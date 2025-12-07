@@ -24,6 +24,8 @@ export interface Salon {
   managerId?: string | null;
   barbers: Barber[];
   services: Service[];
+  lat?: number;
+  lng?: number;
 }
 
 export interface Order {

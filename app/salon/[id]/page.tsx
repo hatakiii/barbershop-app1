@@ -1,3 +1,4 @@
+import MapView from "@/app/_components/MapView";
 import prisma from "@/lib/prisma";
 
 interface Props {
@@ -26,6 +27,11 @@ export default async function SalonDetailPage({ params }: Props) {
 
       <h1 className="text-3xl font-bold mt-4">{salon.name}</h1>
       <p>{salon.salonAddress}</p>
+      {salon.lat == null || salon.lng == null ? (
+        <div className="text-sm text-gray-500">Location not available</div>
+      ) : (
+        <MapView lat={salon.lat} lng={salon.lng} />
+      )}
 
       <h2 className="text-2xl font-semibold mt-6">Үйлчилгээ</h2>
       <ul>
