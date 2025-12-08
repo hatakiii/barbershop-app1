@@ -14,7 +14,7 @@ import { SalonContainer } from "./_components/SalonContainer";
 export default function Home() {
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <Hero />
       <SalonContainer />
 
