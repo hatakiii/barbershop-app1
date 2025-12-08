@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { LuLayoutDashboard, LuScissors } from "react-icons/lu";
 import { LiaUsersSolid } from "react-icons/lia";
+import { AiOutlineHistory } from "react-icons/ai";
 import Link from "next/link";
 
 export const SideBar = () => {
@@ -57,6 +58,16 @@ export const SideBar = () => {
           <Link href="/booking">
             <LiaUsersSolid className="size-[22px]" />
             <p className="w-[85px] text-left">Bookings</p>
+          </Link>
+        </Button>
+
+        <Button
+          asChild
+          className="rounded-full gap-2.5 has-[>svg]:px-6 py-2.5 h-10"
+        >
+          <Link href="/orderHistory">
+            <AiOutlineHistory className="size-[22px]" />
+            <p className="w-[85px] text-left">Orders History</p>
           </Link>
         </Button>
       </div>
