@@ -1,16 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Menu, Phone, MapPin } from "lucide-react";
+import Link from "next/link";
 
 export function Header() {
   return (
     <header className="bg-white/95 backdrop-blur-sm border-b sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-4">
-          <div className="flex items-center space-x-2">
-            <h1 className="text-2xl font-bold text-primary">
-              Luxe Hair Studio
-            </h1>
-          </div>
+          <Link href={"/"}>
+            <div className="flex items-center space-x-2">
+              <h1 className="text-2xl font-bold text-primary">
+                Luxe Hair Studio
+              </h1>
+            </div>
+          </Link>
 
           <nav className="hidden md:flex items-center space-x-8">
             <a href="#home" className="hover:text-primary transition-colors">
