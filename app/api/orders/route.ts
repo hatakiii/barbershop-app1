@@ -68,3 +68,33 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function GET(req: NextRequest) {
+  try {
+    const phone = req.nextUrl.searchParams.get("phone");
+    if (!phone) {
+      return NextResponse.json(
+        { success: false, error: "Phone number required" },
+        { status: 400 }
+      );
+    }
+
+    const history = await prisma.orders.findMany({
+      where: { phonenumber: Number(phone) },
+      include: {
+        services: true,
+        barbers: true,
+        salons: true,
+      },
+      orderBy: { reserveddatetime: "desc" },
+    });
+
+    return NextResponse.json({ success: true, history });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json(
+      { success: false, error: "Server error" },
+      { status: 500 }
+    );
+  }
+}
