@@ -1,35 +1,31 @@
-"use client";
-
-import { Button } from "@/components/ui/button";
-
-type TimeSelectorProps = {
-  ALL_TIMES: string[];
-  selectedTime: string | null;
-  setSelectedTime: (time: string) => void;
-};
-
 export default function TimeSelector({
   ALL_TIMES,
   selectedTime,
   setSelectedTime,
-}: TimeSelectorProps) {
+  bookedTimes = [],
+}: {
+  ALL_TIMES: string[];
+  selectedTime: string | null;
+  setSelectedTime: (t: string) => void;
+  bookedTimes?: string[];
+}) {
   return (
-    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 p-3">
+    <div className="grid grid-cols-3 gap-2">
       {ALL_TIMES.map((time) => {
-        const isSelected = selectedTime === time;
+        const isBooked = bookedTimes.includes(time);
 
         return (
           <button
             key={time}
-            onClick={() => setSelectedTime(time)} // toggle-г ашиглахгүй
-            className={`
-          w-full py-3 rounded-xl text-sm sm:text-base font-medium transition-all duration-200
-          ${
-            isSelected
-              ? "bg-blue-600 text-white shadow-lg scale-105"
-              : "bg-white text-gray-800 border border-gray-300 hover:bg-blue-50 hover:scale-105"
-          }
-        `}
+            disabled={isBooked}
+            onClick={() => !isBooked && setSelectedTime(time)}
+            className={`p-2 rounded-lg border transition ${
+              isBooked
+                ? "bg-red-200 text-red-800 cursor-not-allowed"
+                : selectedTime === time
+                ? "bg-green-500 text-white"
+                : "bg-gray-100 hover:bg-gray-200"
+            }`}
           >
             {time}
           </button>
