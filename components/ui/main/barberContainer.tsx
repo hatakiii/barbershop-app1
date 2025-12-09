@@ -107,7 +107,7 @@ export default function BarberContainer({}: BarberContainerProps) {
   }, [selectedBarber, selectedDate]);
 
   return (
-    <div className="text-black">
+    <div>
       <div className="mb-4">
         <div className="inline-flex rounded-md bg-muted p-1">
           <button

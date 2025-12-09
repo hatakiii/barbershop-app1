@@ -13,7 +13,7 @@ import { SalonContainer } from "./_components/SalonContainer";
 
 export default function Home() {
   return (
-    <div className="text-black">
+    <div>
       {/* <Header /> */}
       <Header />
       <Hero />

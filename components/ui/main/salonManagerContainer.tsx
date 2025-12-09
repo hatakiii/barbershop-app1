@@ -33,7 +33,7 @@ export default function SalonManagerContainer({
   }
 
   return (
-    <div className="p-4 border rounded-md space-y-6 text-black">
+    <div className="p-4 border rounded-md space-y-6">
       {/* Салон мэдээлэл */}
       <div>
         <h2 className="text-xl font-bold">{salon.name}</h2>
