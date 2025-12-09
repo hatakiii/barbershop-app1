@@ -26,8 +26,8 @@ export default function StepBooking({
   ALL_TIMES,
 }: StepBookingProps) {
   const times = ALL_TIMES || [];
-  const now = new Date();
-  if (!selectedDate) selectedDate = now;
+  // const now = new Date();
+  // if (!selectedDate) selectedDate = now;
 
   // 2 хуваалттай цаг
   const morningTimes = times.filter((t) => {
@@ -49,9 +49,10 @@ export default function StepBooking({
         {Array.from({ length: 30 }, (_, i) => {
           const date = new Date();
           date.setDate(date.getDate() + i);
-          const isToday = date.toDateString() === now.toDateString();
+          const today = new Date();
+          const isToday = date.toDateString() === today.toDateString();
           const weekend = isWeekend(date);
-          const isPast = date < now;
+          const isPast = date < today;
 
           return (
             <button
@@ -98,27 +99,35 @@ export default function StepBooking({
 
       {/* Time grid */}
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-        {(activeTab === "morning" ? morningTimes : eveningTimes).map((time) => {
-          const isBooked = bookedTimes.includes(time);
-          const isSelected = selectedTime === time;
+        {selectedDate ? (
+          (activeTab === "morning" ? morningTimes : eveningTimes).map(
+            (time) => {
+              const isBooked = bookedTimes.includes(time);
+              const isSelected = selectedTime === time;
 
-          return (
-            <button
-              key={time}
-              onClick={() => !isBooked && setSelectedTime(time)}
-              disabled={isBooked}
-              className={`p-3 rounded-lg text-center font-medium transition transform hover:scale-105 ${
-                isBooked
-                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  : isSelected
-                  ? "bg-blue-500 text-white shadow-lg"
-                  : "bg-blue-100 hover:bg-blue-200"
-              }`}
-            >
-              {time}
-            </button>
-          );
-        })}
+              return (
+                <button
+                  key={time}
+                  onClick={() => !isBooked && setSelectedTime(time)}
+                  disabled={isBooked}
+                  className={`p-3 rounded-lg text-center font-medium transition transform hover:scale-105 ${
+                    isBooked
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : isSelected
+                      ? "bg-blue-500 text-white shadow-lg"
+                      : "bg-blue-100 hover:bg-blue-200"
+                  }`}
+                >
+                  {time}
+                </button>
+              );
+            }
+          )
+        ) : (
+          <p className="text-gray-400 col-span-3 text-center">
+            Өдөр сонгосноор цагнууд гарна
+          </p>
+        )}
       </div>
 
       {/* Phone input */}
