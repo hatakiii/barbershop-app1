@@ -141,13 +141,6 @@ const OrderHistoryPage = () => {
                             {order.services.name}
                           </p>
 
-                          <p className="text-sm text-gray-500 mb-1">
-                            Нэг үйлчилгээтний үнэ
-                          </p>
-                          <p className="font-semibold mb-4">
-                            {order.services.price.toLocaleString()} ₮
-                          </p>
-
                           <p className="text-sm text-gray-500 mb-1">Нийт үнэ</p>
                           <p className="font-bold text-lg text-green-600">
                             {order.totalprice.toLocaleString()} ₮
