@@ -1,5 +1,3 @@
-//app/salon/page.tsx
-
 "use client";
 import { useEffect, useState } from "react";
 import { Salon } from "@/lib/types";
@@ -24,7 +22,6 @@ const SalonPage = () => {
       .then((res) => res.json())
       .then((data) => setSalons(data));
   }, []);
-  console.log("salons", salons);
 
   return (
     <div className="flex gap-2">

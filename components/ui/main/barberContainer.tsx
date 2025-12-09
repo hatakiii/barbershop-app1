@@ -107,7 +107,7 @@ export default function BarberContainer({}: BarberContainerProps) {
   }, [selectedBarber, selectedDate]);
 
   return (
-    <>
+    <div className="text-black">
       <div className="mb-4">
         <div className="inline-flex rounded-md bg-muted p-1">
           <button
@@ -137,10 +137,10 @@ export default function BarberContainer({}: BarberContainerProps) {
       <div>
         {activeTab === "calendar" && (
           <div>
-            <h1 className="text-2xl font-bold mb-4">Barber Calendar</h1>
+            <h1 className="text-2xl font-bold mb-4 ">Barber Calendar</h1>
 
             {/* All Salons */}
-            <h2 className="font-semibold mb-2">Салон сонгох</h2>
+            <h2 className="font-semibold mb-2 ">Салон сонгох</h2>
             <select
               className="border p-2 rounded mb-4"
               onChange={(e) => setSelectedSalon(e.target.value)}
@@ -282,6 +282,6 @@ export default function BarberContainer({}: BarberContainerProps) {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

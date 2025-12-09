@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Salon } from "@/lib/types";
+import { Header } from "../_components/Header";
 
 export default function BookingHomePage() {
   const router = useRouter();
@@ -26,7 +27,6 @@ export default function BookingHomePage() {
           </h1>
         </div>
       </header>
-
       <main className="flex-1 flex justify-center p-6">
         <div className="w-full max-w-5xl">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
