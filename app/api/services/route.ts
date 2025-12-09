@@ -1,28 +1,38 @@
-import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const salonId = Number(searchParams.get("salonId"));
+  const salonid = Number(searchParams.get("salonId"));
 
-  const services = await prisma.service.findMany({
-    where: { salon_id: salonId },
+  if (!salonid) return NextResponse.json([]);
+
+  const salonServices = await prisma.salon_services.findMany({
+    where: { salonid },
+    include: { service: true },
   });
 
-  return NextResponse.json(services);
+  return NextResponse.json(salonServices);
 }
 
 export async function POST(req: Request) {
-  const body = await req.json();
+  try {
+    const body = await req.json();
 
-  const newService = await prisma.service.create({
-    data: {
-      name: body.name,
-      price: body.price,
-      gender: body.gender,
-      salon_id: Number(body.salon_id),
-    },
-  });
+    const newSalonService = await prisma.salon_services.create({
+      data: {
+        salonid: Number(body.salonId),
+        serviceid: Number(body.serviceId),
+        price: Number(body.price),
+      },
+    });
 
-  return NextResponse.json(newService);
+    return NextResponse.json(newSalonService);
+  } catch (err) {
+    console.error("ERROR /api/salons/services POST:", err);
+    return NextResponse.json(
+      { error: "Failed to create salon service" },
+      { status: 500 }
+    );
+  }
 }

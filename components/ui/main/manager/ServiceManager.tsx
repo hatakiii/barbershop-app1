@@ -1,79 +1,115 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { Button } from "../../button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../dialog";
 import { Label } from "../../label";
 import { Input } from "../../input";
-import { Service } from "@/lib/types";
+
+interface Service {
+  id: number;
+  name: string;
+  price?: number;
+}
+
+interface SalonService {
+  id: number;
+  price: number;
+  services: Service;
+}
 
 export default function ServiceManager({ salonId }: { salonId: number }) {
-  const [services, setServices] = useState<Service[]>([]);
-
+  const [services, setServices] = useState<SalonService[]>([]);
+  const [allServices, setAllServices] = useState<Service[]>([]);
   const [open, setOpen] = useState(false);
-  const [editingService, setEditingService] = useState<Service | null>(null);
-
-  const [name, setName] = useState("");
+  const [editingService, setEditingService] = useState<SalonService | null>(
+    null
+  );
+  const [serviceId, setServiceId] = useState<number | "">("");
   const [price, setPrice] = useState<number | "">("");
-  const [gender, setGender] = useState("male");
 
+  // Салонд нэмэгдсэн service-уудыг авах
   const fetchServices = async () => {
-    const res = await fetch(`/api/services?salonId=${salonId}`);
-    const data = await res.json();
-    setServices(data);
+    try {
+      const res = await fetch(`/api/salon_services?salonId=${salonId}`);
+      const data = await res.json();
+      setServices(data);
+    } catch (err) {
+      console.error("Fetch services error:", err);
+    }
+  };
+
+  // Бүх боломжит service-уудыг авах
+  const fetchAllServices = async () => {
+    try {
+      const res = await fetch(`/api/services/all`);
+      const data = await res.json();
+      setAllServices(data);
+    } catch (err) {
+      console.error("Fetch all services error:", err);
+    }
   };
 
   useEffect(() => {
     fetchServices();
+    fetchAllServices();
   }, [salonId]);
 
+  // Dropdown-д аль хэдийн нэмэгдсэн service-г гаргахгүй
+  const availableServices = allServices.filter(
+    (s) => !services.some((added) => added.services.id === s.id)
+  );
+
+  // Service нэмэх / засах
   const saveService = async () => {
-    if (!name || price === "" || !gender) {
-      alert("Бүх мэдээллийг бөглөнө үү");
+    if (!serviceId || price === "") {
+      alert("Service болон үнийг оруулна уу");
       return;
     }
 
-    const body = {
-      name,
-      price: Number(price),
-      gender,
-      salon_id: salonId,
-    };
+    try {
+      if (editingService) {
+        // Update
+        const res = await fetch(`/api/salon_services/${editingService.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ price: Number(price) }),
+        });
+        if (!res.ok) throw new Error("Алдаа гарлаа");
+      } else {
+        // New
+        const res = await fetch(`/api/salon_services`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ salonId, serviceId, price: Number(price) }),
+        });
+        if (!res.ok) throw new Error("Алдаа гарлаа");
+      }
 
-    let res;
-    if (editingService) {
-      // PUT
-      res = await fetch(`/api/services/${Number(editingService.id)}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-    } else {
-      // POST
-      res = await fetch(`/api/services`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-    }
-
-    const data = await res.json();
-    if (res.ok) {
+      fetchServices();
       setOpen(false);
       setEditingService(null);
-      setName("");
+      setServiceId("");
       setPrice("");
-      setGender("male");
-      fetchServices();
-    } else {
-      alert(data.error || "Алдаа гарлаа");
+    } catch (err) {
+      console.error(err);
+      alert("Алдаа гарлаа");
     }
   };
 
-  const deleteService = async (id: string | number) => {
+  // Service устгах
+  const deleteService = async (id: number) => {
     if (!confirm("Устгах уу?")) return;
-
-    await fetch(`/api/services/${Number(id)}`, { method: "DELETE" });
-    fetchServices();
+    try {
+      const res = await fetch(`/api/salon_services/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Алдаа гарлаа");
+      fetchServices();
+    } catch (err) {
+      console.error(err);
+      alert("Алдаа гарлаа");
+    }
   };
 
   return (
@@ -87,24 +123,20 @@ export default function ServiceManager({ salonId }: { salonId: number }) {
             className="border p-2 flex justify-between items-center rounded"
           >
             <div>
-              <p className="font-semibold">{s.name}</p>
+              <p className="font-semibold">{s.services.name}</p>
               <p>{s.price}₮</p>
-              <p className="text-sm text-gray-500">Хүйс: {s.gender ?? "—"}</p>
             </div>
-
             <div className="flex gap-2">
               <Button
                 onClick={() => {
                   setEditingService(s);
-                  setName(s.name || "");
-                  setPrice(s.price || "");
-                  setGender(s.gender || "male");
+                  setServiceId(s.services.id);
+                  setPrice(s.price);
                   setOpen(true);
                 }}
               >
                 Засах
               </Button>
-
               <Button
                 className="bg-red-500"
                 onClick={() => deleteService(s.id)}
@@ -120,16 +152,14 @@ export default function ServiceManager({ salonId }: { salonId: number }) {
         className="mt-4"
         onClick={() => {
           setEditingService(null);
-          setName("");
+          setServiceId("");
           setPrice("");
-          setGender("male");
           setOpen(true);
         }}
       >
         Үйлчилгээ нэмэх
       </Button>
 
-      {/* Dialog */}
       <Dialog open={open} onOpenChange={() => setOpen(false)}>
         <DialogContent className="sm:max-w-[400px] flex flex-col gap-3">
           <DialogHeader>
@@ -139,24 +169,35 @@ export default function ServiceManager({ salonId }: { salonId: number }) {
           </DialogHeader>
 
           <Label>Нэр</Label>
-          <Input value={name} onChange={(e) => setName(e.target.value)} />
+          <select
+            className="border px-2 py-1 rounded"
+            value={serviceId}
+            onChange={(e) => setServiceId(Number(e.target.value))}
+          >
+            <option value="">Сонгох...</option>
+            {editingService &&
+              !availableServices.some(
+                (s) => s.id === editingService.services.id
+              ) && (
+                <option value={editingService.services.id}>
+                  {editingService.services.name}
+                </option>
+              )}
+            {availableServices.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
 
           <Label>Үнэ</Label>
           <Input
             type="number"
             value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
+            onChange={(e) =>
+              setPrice(e.target.value === "" ? "" : Number(e.target.value))
+            }
           />
-
-          <Label>Хүйс</Label>
-          <select
-            className="border px-2 py-1 rounded"
-            value={gender}
-            onChange={(e) => setGender(e.target.value)}
-          >
-            <option value="male">Эрэгтэй</option>
-            <option value="female">Эмэгтэй</option>
-          </select>
 
           <Button className="mt-3 bg-blue-500 text-white" onClick={saveService}>
             {editingService ? "Шинэчлэх" : "Хадгалах"}

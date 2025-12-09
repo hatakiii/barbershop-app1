@@ -21,7 +21,7 @@ export interface Salon {
   lat?: number;
   lng?: number;
   managerId?: string;
-  services: Service[];
+  salon_services: SalonService[];
   barbers?: Barber[];
 }
 
@@ -39,4 +39,10 @@ export interface BusyTime {
   serviceName: string;
   phonenumber: string;
   totalprice: number;
+}
+
+export interface SalonService {
+  id: number;
+  price: number;
+  services: Service;
 }

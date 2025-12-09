@@ -29,9 +29,15 @@ export async function DELETE(
       select: { id: true, name: true },
     });
 
-    const relatedServices = await prisma.service.findMany({
-      where: { salon_id: id },
-      select: { id: true, name: true },
+    const relatedServices = await prisma.salon_services.findMany({
+      where: { salonid: id },
+      select: {
+        id: true,
+        price: true,
+        services: {
+          select: { id: true, name: true },
+        },
+      },
     });
 
     console.log(
@@ -161,7 +167,10 @@ export async function GET(
   try {
     const salon = await prisma.salon.findUnique({
       where: { id: Number(id) },
-      include: { services: true, barbers: true },
+      include: {
+        barbers: true,
+        salon_services: { include: { services: true } },
+      },
     });
 
     if (!salon) {

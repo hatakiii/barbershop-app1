@@ -146,7 +146,10 @@ export default function SalonBookingPage() {
       <div className="bg-white rounded-xl shadow-md p-6 flex flex-col gap-4">
         {step === 1 && (
           <StepService
-            services={salon.services}
+            services={salon.salon_services.map((ss) => ({
+              ...ss.services, // Service object
+              price: ss.price, // Салон тус бүрийн үнэ
+            }))}
             selectedService={selectedService}
             setSelectedService={setSelectedService}
             onNext={nextStep}

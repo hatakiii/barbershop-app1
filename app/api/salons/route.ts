@@ -17,10 +17,18 @@ export async function GET(req: Request) {
       return NextResponse.json([], { status: 200 });
     }
 
-    const salon = await prisma.salon.findUnique({
-      where: { id: Number(managerId) },
-    });
+    const salonId = manager?.salon_id;
+    if (!salonId) {
+      return NextResponse.json([], { status: 200 });
+    }
 
+    const salon = await prisma.salon.findUnique({
+      where: { id: salonId },
+      include: {
+        barbers: true,
+        salon_services: { include: { services: true } },
+      },
+    });
     return NextResponse.json(salon ? [salon] : [], { status: 200 });
   }
 

@@ -1,32 +1,45 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-export async function PUT(req: Request) {
-  const serviceIdStr = req.url.split("/").pop();
-  if (!serviceIdStr)
-    return NextResponse.json({ error: "Service id хэрэгтэй" }, { status: 400 });
-  const serviceId = Number(serviceIdStr);
-
-  const body = await req.json();
-  const updated = await prisma.service.update({
-    where: { id: serviceId },
-    data: {
-      name: body.name,
-      price: body.price,
-      gender: body.gender,
-      salon_id: body.salon_id,
-    },
-  });
-
-  return NextResponse.json(updated);
+interface Params {
+  params: { id: string };
 }
 
-export async function DELETE(req: Request) {
-  const serviceIdStr = req.url.split("/").pop();
-  if (!serviceIdStr)
-    return NextResponse.json({ error: "Service id хэрэгтэй" }, { status: 400 });
-  const serviceId = Number(serviceIdStr);
+export async function PUT(req: Request, { params }: Params) {
+  try {
+    const id = Number(params.id);
+    const body = await req.json(); // { price: number }
 
-  await prisma.service.delete({ where: { id: serviceId } });
-  return NextResponse.json({ message: "Амжилттай устлаа" });
+    const updated = await prisma.salon_services.update({
+      where: { id },
+      data: {
+        price: Number(body.price),
+      },
+    });
+
+    return NextResponse.json(updated);
+  } catch (err) {
+    console.error("ERROR /api/salons/services/[id] PUT:", err);
+    return NextResponse.json(
+      { error: "Failed to update salon service" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: Request, { params }: Params) {
+  try {
+    const id = Number(params.id);
+    await prisma.salon_services.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("ERROR /api/salons/services/[id] DELETE:", err);
+    return NextResponse.json(
+      { error: "Failed to delete salon service" },
+      { status: 500 }
+    );
+  }
 }

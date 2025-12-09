@@ -12,7 +12,10 @@ export default async function SalonDetailPage({ params }: Props) {
 
   const salon = await prisma.salon.findUnique({
     where: { id: Number(id) },
-    include: { barbers: true, services: true },
+    include: {
+      barbers: true,
+      salon_services: { include: { services: true } },
+    },
   });
 
   if (!salon) {
@@ -59,20 +62,14 @@ export default async function SalonDetailPage({ params }: Props) {
       <div>
         <h2 className="text-2xl font-semibold mt-6">Үйлчилгээ</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
-          {salon.services.map((s) => (
+          {salon.salon_services.map((ss) => (
             <div
-              key={s.id}
+              key={ss.id}
               className="border rounded-xl p-4 flex flex-col gap-1 shadow-sm hover:shadow-md transition"
             >
-              <p className="font-semibold">{s.name}</p>
-              <p className="text-gray-700">
-                {s.gender === "male"
-                  ? "Эрэгтэй"
-                  : s.gender === "female"
-                  ? "Эмэгтэй"
-                  : "Бусад"}
-              </p>
-              <p className="font-bold text-green-400">{s.price}₮</p>
+              <p className="font-semibold">{ss.services.name}</p>
+
+              <p className="font-bold text-green-400">{ss.price}₮</p>
             </div>
           ))}
         </div>
