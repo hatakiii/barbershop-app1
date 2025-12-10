@@ -11,6 +11,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import { CustomUser } from "./CustomUser";
+import { ModeToggle } from "./ThemeToggler";
 
 export function Header() {
   return (
@@ -78,6 +79,10 @@ export function Header() {
           <Button variant="ghost" size="sm" className="md:hidden">
             <Menu className="w-5 h-5" />
           </Button>
+
+          <div className="w-9 h-9">
+            <ModeToggle />
+          </div>
         </div>
       </div>
     </header>
