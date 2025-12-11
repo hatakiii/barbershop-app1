@@ -8,14 +8,12 @@ import { Contact } from "./_components/Contact";
 import { Footer } from "./_components/Footer";
 import { HairstyleGallery } from "./_components/HairStyleGallery";
 import { GeminiChat } from "./_components/GeminiChat";
-import { HaircutWheel } from "./_components/HaircutWheel";
+
 import { SalonContainer } from "./_components/SalonContainer";
 
 export default function Home() {
   return (
     <div>
-      {/* <Header /> */}
-      <Header />
       <Hero />
       <SalonContainer />
 
@@ -24,7 +22,7 @@ export default function Home() {
       <Team />
       <Gallery />
       <Contact />
-      <HaircutWheel />
+
       <Footer />
       <div className="absolute right-9 bottom-9">
         <GeminiChat />

@@ -9,7 +9,7 @@ import Link from "next/link";
 
 export const SideBar = () => {
   return (
-    <div className="w-[205px] h-screen py-9 px-5">
+    <div className="w-[205px] h-screen py-9 px-5 dark:bg-gray-900 bg-white border-r border-gray-200 dark:border-gray-700 flex flex-col">
       <div className="w-full flex gap-2 items-center mb-10">
         {/* Salon Logo Placeholder */}
         <svg
@@ -26,7 +26,9 @@ export const SideBar = () => {
         </svg>
 
         <div className="flex-1">
-          <p className="text-lg font-semibold text-foreground">Luxe Salon</p>
+          <p className="text-lg font-semibold text-foreground dark:text-white">
+            Luxe Salon
+          </p>
           <p className="text-xs text-muted-foreground">Beauty & Style</p>
         </div>
       </div>
@@ -34,7 +36,7 @@ export const SideBar = () => {
       <div className="flex flex-col gap-6">
         <Button
           asChild
-          className="rounded-full gap-2.5 has-[>svg]:px-6 py-2.5 h-10"
+          className="rounded-full gap-2.5 has-[>svg]:px-6 py-2.5 h-10 dark:bg-white/10 "
         >
           <Link href="/">
             <LuLayoutDashboard className="size-[22px]" />
@@ -44,7 +46,7 @@ export const SideBar = () => {
 
         <Button
           asChild
-          className="rounded-full gap-2.5 has-[>svg]:px-6 py-2.5 h-10"
+          className="rounded-full gap-2.5 has-[>svg]:px-6 py-2.5 h-10  dark:bg-white/10 "
         >
           <Link href="/admin">
             <LuScissors className="size-[22px]" />
@@ -54,7 +56,7 @@ export const SideBar = () => {
 
         <Button
           asChild
-          className="rounded-full gap-2.5 has-[>svg]:px-6 py-2.5 h-10"
+          className="rounded-full gap-2.5 has-[>svg]:px-6 py-2.5 h-10  dark:bg-white/10 "
         >
           <Link href="/booking">
             <LiaUsersSolid className="size-[22px]" />
@@ -64,7 +66,7 @@ export const SideBar = () => {
 
         <Button
           asChild
-          className="rounded-full gap-2.5 has-[>svg]:px-6 py-2.5 h-10"
+          className="rounded-full gap-2.5 has-[>svg]:px-6 py-2.5 h-10  dark:bg-white/10 "
         >
           <Link href="/barbers">
             <FaPeopleGroup className="size-[22px]" />
@@ -74,7 +76,7 @@ export const SideBar = () => {
 
         <Button
           asChild
-          className="rounded-full gap-2.5 has-[>svg]:px-6 py-2.5 h-10"
+          className="rounded-full gap-2.5 has-[>svg]:px-6 py-2.5 h-10  dark:bg-white/10"
         >
           <Link href="/orderHistory">
             <AiOutlineHistory className="size-[22px]" />
