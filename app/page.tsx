@@ -14,9 +14,9 @@ import { SalonContainer } from "./_components/SalonContainer";
 export default function Home() {
   return (
     <div>
+      <Header />
       <Hero />
       <SalonContainer />
-
       <HairstyleGallery />
       <Services />
       <Team />

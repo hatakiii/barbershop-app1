@@ -68,6 +68,7 @@ model orders {
   reserveddatetime DateTime @db.Timestamptz(6)
   totalprice       Int
   phonenumber      Int
+  clerkUserId      String?  @db.VarChar(255)
   barbers          Barber   @relation(fields: [barberid], references: [id], onDelete: NoAction, onUpdate: NoAction)
   salons           Salon    @relation(fields: [salonid], references: [id], onDelete: NoAction, onUpdate: NoAction)
   services         Service  @relation(fields: [serviceid], references: [id], onDelete: NoAction, onUpdate: NoAction)

@@ -1,8 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getAuth } from "@clerk/nextjs/server"; // ← Зөв импорт
 
+// ---------------- POST: Цаг авах ----------------
 export async function POST(req: NextRequest) {
   try {
+    const { userId } = getAuth(req); // Clerk user ID-г авна
+
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, error: "Login required" },
+        { status: 401 }
+      );
+    }
+
     const {
       salonId,
       serviceId,
@@ -28,19 +39,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Захиалгын datetime үүсгэх
     const reservedDatetime = new Date(`${reservedDate}T${reservedTime}:00Z`);
-
-    // Prisma create ашиглах
-    // const order = await prisma.orders.create({
-    //   data: {
-    //     serviceId: serviceId, // ✅ camelCase
-    //     barberId: barberId, // ✅ camelCase
-    //     reserveddatetime: reservedDatetime, // ✅ camelCase
-    //     totalprice: totalPrice,
-    //     phonenumber: Number(phoneNumber),
-    //   },
-    // });
 
     const order = await prisma.orders.create({
       data: {
@@ -50,13 +49,14 @@ export async function POST(req: NextRequest) {
         reserveddatetime: reservedDatetime,
         totalprice: Number(totalPrice),
         phonenumber: Number(phoneNumber),
+        clerkUserId: userId,
       },
     });
 
     return NextResponse.json({ success: true, order });
   } catch (err: any) {
     console.error(err);
-    if (err.code === "P2002") {
+    if (err?.code === "P2002") {
       return NextResponse.json(
         { success: false, error: "Энэ цаг аль хэдийн захиалагдсан" },
         { status: 400 }
@@ -69,18 +69,20 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// ---------------- GET: Захиалга авах ----------------
 export async function GET(req: NextRequest) {
   try {
-    const phone = req.nextUrl.searchParams.get("phone");
-    if (!phone) {
+    const { userId } = getAuth(req);
+
+    if (!userId) {
       return NextResponse.json(
-        { success: false, error: "Phone number required" },
-        { status: 400 }
+        { success: false, error: "Login required" },
+        { status: 401 }
       );
     }
 
-    const history = await prisma.orders.findMany({
-      where: { phonenumber: Number(phone) },
+    const orders = await prisma.orders.findMany({
+      where: { clerkUserId: userId },
       include: {
         services: true,
         barbers: true,
@@ -89,7 +91,7 @@ export async function GET(req: NextRequest) {
       orderBy: { reserveddatetime: "desc" },
     });
 
-    return NextResponse.json({ success: true, history });
+    return NextResponse.json({ success: true, orders });
   } catch (err) {
     console.error(err);
     return NextResponse.json(

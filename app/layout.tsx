@@ -33,10 +33,8 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <AdminLayout>
-              {children}
-              <Toaster position="top-right" reverseOrder={false} />
-            </AdminLayout>
+            {children}
+            <Toaster position="top-right" reverseOrder={false} />
           </ThemeProvider>
         </body>
       </html>
