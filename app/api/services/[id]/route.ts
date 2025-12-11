@@ -1,17 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-interface Params {
-  params: { id: string };
-}
-
-export async function PUT(req: Request, { params }: Params) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const id = Number(params.id);
-    const body = await req.json(); // { price: number }
+    const { id } = await params;
+    const body = await request.json(); // { price: number }
 
     const updated = await prisma.salon_services.update({
-      where: { id },
+      where: { id: Number(id) },
       data: {
         price: Number(body.price),
       },
@@ -19,7 +18,7 @@ export async function PUT(req: Request, { params }: Params) {
 
     return NextResponse.json(updated);
   } catch (err) {
-    console.error("ERROR /api/salons/services/[id] PUT:", err);
+    console.error("ERROR /api/services/[id] PUT:", err);
     return NextResponse.json(
       { error: "Failed to update salon service" },
       { status: 500 }
@@ -27,16 +26,19 @@ export async function PUT(req: Request, { params }: Params) {
   }
 }
 
-export async function DELETE(req: Request, { params }: Params) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const id = Number(params.id);
+    const { id } = await params;
     await prisma.salon_services.delete({
-      where: { id },
+      where: { id: Number(id) },
     });
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("ERROR /api/salons/services/[id] DELETE:", err);
+    console.error("ERROR /api/services/[id] DELETE:", err);
     return NextResponse.json(
       { error: "Failed to delete salon service" },
       { status: 500 }

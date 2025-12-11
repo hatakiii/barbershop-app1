@@ -1,13 +1,13 @@
-//api/barbers/all/[id]/route.ts
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> } // Await params
 ) {
   try {
-    const { id } = await params;
+    const { id } = await context.params; // Await the params
+
     const barber = await prisma.barber.findUnique({
       where: { id: Number(id) },
     });
@@ -21,7 +21,7 @@ export async function GET(
 
     return NextResponse.json(barber, { status: 200 });
   } catch (error) {
-    console.error("GET /barbers/[id] ERROR:", error);
+    console.error("GET /barbers/all/[id] ERROR:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

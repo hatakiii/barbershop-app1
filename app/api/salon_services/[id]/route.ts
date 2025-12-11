@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 // DELETE
 export async function DELETE(
   req: Request,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     // Next.js 14+ дээр params нь Promise байж болно
@@ -30,7 +30,10 @@ export async function DELETE(
 }
 
 // PUT
-export async function PUT(req: Request, context: { params: { id: string } }) {
+export async function PUT(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     const params = await context.params;
     const id = Number(params.id);

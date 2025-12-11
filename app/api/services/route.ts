@@ -9,7 +9,7 @@ export async function GET(req: Request) {
 
   const salonServices = await prisma.salon_services.findMany({
     where: { salonid },
-    include: { service: true },
+    include: { services: true },
   });
 
   return NextResponse.json(salonServices);
