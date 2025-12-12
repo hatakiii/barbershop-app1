@@ -4,49 +4,37 @@ import { Salon } from "@/lib/types";
 import BarberManager from "./manager/BarberManager";
 import ServiceManager from "./manager/ServiceManager";
 
-interface SalonManagerContainerProps {
-  managerId: string;
-}
-
-export default function SalonManagerContainer({
-  managerId,
-}: SalonManagerContainerProps) {
+export default function SalonManagerContainer() {
   const [salon, setSalon] = useState<Salon | null>(null);
+  const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!managerId) return;
+    // ✔ Login хийсэн хэрэглэгчийн local ID авч байна
+    const id = localStorage.getItem("userId");
+    console.log("localStorage userId:", id);
 
-    fetch(`/api/salons?managerId=${managerId}`)
+    if (id) setUserId(Number(id));
+  }, []);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    console.log("API руу илгээж буй userId:", userId);
+
+    fetch(`/api/salons?userId=${userId}`)
       .then((res) => res.json())
       .then((data: Salon[]) => {
-        if (data.length > 0) {
-          setSalon(data[0]);
-        } else {
-          setSalon(null);
-        }
-      })
-      .catch((err) => console.error(err));
-  }, [managerId]);
+        console.log("API-аас ирсэн салон:", data);
+        if (data.length > 0) setSalon(data[0]);
+      });
+  }, [userId]);
 
-  if (!salon) {
-    return <p>Танд хамаарах салон олдсонгүй</p>;
-  }
+  if (!salon) return <p>Танд хамаарах салон олдсонгүй</p>;
 
   return (
     <div className="p-4 border rounded-md space-y-6">
-      {/* Салон мэдээлэл */}
-      <div>
-        <h2 className="text-xl font-bold">{salon.name}</h2>
-        <p>{salon.salonAddress}</p>
-
-        {salon.salonImage && (
-          <img
-            src={salon.salonImage}
-            alt={salon.name}
-            className="w-full h-40 object-cover mt-2 rounded"
-          />
-        )}
-      </div>
+      <h2 className="text-xl font-bold">{salon.name}</h2>
+      <p>{salon.salonAddress}</p>
 
       <BarberManager salonId={Number(salon.id)} />
       <ServiceManager salonId={Number(salon.id)} />
