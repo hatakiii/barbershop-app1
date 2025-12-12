@@ -4,37 +4,37 @@ import { uploadImageToCloudinary } from "@/lib/utils/uploadImage";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const managerId = searchParams.get("managerId");
+  const userId = searchParams.get("userId"); // login user ID frontend-аас дамжуулна
 
-  // managerId-гаар салон шүүх
-  if (managerId) {
-    const manager = await prisma.user.findUnique({
-      where: { id: Number(managerId) },
+  if (userId) {
+    // Login user-ийн салон авах
+    const user = await prisma.user.findUnique({
+      where: { id: Number(userId) },
       select: { salon_id: true },
     });
 
-    if (!managerId) {
-      return NextResponse.json([], { status: 200 });
-    }
-
-    const salonId = manager?.salon_id;
-    if (!salonId) {
-      return NextResponse.json([], { status: 200 });
-    }
+    if (!user?.salon_id) return NextResponse.json([], { status: 200 });
 
     const salon = await prisma.salon.findUnique({
-      where: { id: salonId },
+      where: { id: user.salon_id },
       include: {
         barbers: true,
         salon_services: { include: { services: true } },
       },
     });
+
     return NextResponse.json(salon ? [salon] : [], { status: 200 });
   }
 
-  // бүх салон
-  const salons = await prisma.salon.findMany();
-  return NextResponse.json(salons);
+  // Бүх салон авах (BookingPage)
+  const salons = await prisma.salon.findMany({
+    include: {
+      barbers: true,
+      salon_services: { include: { services: true } },
+    },
+  });
+
+  return NextResponse.json(salons, { status: 200 });
 }
 
 export async function POST(req: Request) {
@@ -63,7 +63,7 @@ export async function POST(req: Request) {
         name,
         salonAddress,
         salonImage: imageUrl,
-        managerId: managerId.toString(),
+        managerId: Number(managerId),
         lat: lat ? parseFloat(lat) : undefined,
         lng: lng ? parseFloat(lng) : undefined,
       },

@@ -38,7 +38,7 @@ export default function AdminLayout({
         setLoading(false);
         return;
       }
-
+      localStorage.setItem("userId", data.id);
       setUserRole(data.role);
       setSalonId(data.salonId);
       setBarberId(data.barberId);
@@ -55,8 +55,8 @@ export default function AdminLayout({
     typeof children === "function"
       ? children
       : children && typeof children === "object"
-        ? (children as any)
-        : children;
+      ? (children as any)
+      : children;
   return (
     <div>
       {step === 1 && (
