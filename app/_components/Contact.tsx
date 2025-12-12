@@ -9,9 +9,7 @@ export function Contact() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4">Холбоо барих</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-  
-          </p>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto"></p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
@@ -24,9 +22,11 @@ export function Contact() {
                     <h3 className="font-semibold">Хаяг:</h3>
                   </div>
                   <p className="text-muted-foreground">
-                Салбар 1: Шангри-Ла Худалдааны төв, 2 давхар, Ulemj Grease салон
+                    Салбар 1: Шангри-Ла Худалдааны төв, 2 давхар, Ulemj Grease
+                    салон
                     <br />
-                  Салбар 2: Шангри-Ла Худалдааны төв, B1 давхар, Good Price дэлгүүр дотор
+                    Салбар 2: Шангри-Ла Худалдааны төв, B1 давхар, Good Price
+                    дэлгүүр дотор
                   </p>
                 </CardContent>
               </Card>
@@ -68,24 +68,6 @@ export function Contact() {
                   </p>
                 </CardContent>
               </Card>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="text-2xl font-semibold">
-            Харилцагч, хамтран ажиллагч танд баярлалаа
-              </h3>
-              <p className="text-muted-foreground">
-               Бид үйл ажиллагаа явуулж буй салбар бүртээ
-манлайлагч нь байна.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="flex-1">
-                 Цагаа цахимаар захиалаарай
-                </Button>
-                <Button variant="outline" size="lg" className="flex-1">
-                Холбоо барих
-                </Button>
-              </div>
             </div>
           </div>
 

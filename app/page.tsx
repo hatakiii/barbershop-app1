@@ -18,11 +18,8 @@ export default function Home() {
       <Hero />
       <SalonContainer />
       <HairstyleGallery />
-      <Services />
       <Team />
-      <Gallery />
       <Contact />
-
       <Footer />
       <div className="absolute right-9 bottom-9">
         <GeminiChat />

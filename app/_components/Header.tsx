@@ -92,9 +92,9 @@ export function Header() {
             <Menu className="w-5 h-5" />
           </Button>
 
-          <div className="w-9 h-9 dark:text-white">
+          {/* <div className="w-9 h-9 dark:text-white">
             <ModeToggle />
-          </div>
+          </div> */}
         </div>
       </div>
     </header>

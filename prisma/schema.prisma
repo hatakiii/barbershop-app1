@@ -12,9 +12,9 @@ model Salon {
   name           String           @map("name") @db.VarChar(100)
   salonImage     String?          @db.VarChar(500)
   salonAddress   String?          @db.VarChar(500)
-  managerId      String?
   lat            Float?
   lng            Float?
+  managerId      Int?
   barbers        Barber[]
   orders         orders[]
   salon_services salon_services[]
