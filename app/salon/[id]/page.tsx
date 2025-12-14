@@ -39,7 +39,7 @@ export default async function SalonDetailPage({ params }: Props) {
             fill
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-foreground/60 via-foreground/40 to-foreground/70" />
+          <div className="absolute inset-0 `bg-gradient-to-b` from-foreground/60 via-foreground/40 to-foreground/70" />
           <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6">
             <p className="text-primary-foreground/80 tracking-[0.3em] uppercase text-sm mb-4 font-sans">
               {salon.salonAddress}
@@ -134,7 +134,7 @@ export default async function SalonDetailPage({ params }: Props) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Map */}
             {salon.lat != null && salon.lng != null ? (
-              <div className="relative aspect-square lg:aspect-[4/3] overflow-hidden border border-border rounded-xl">
+              <div className="relative aspect-square lg:aspect-4/3 overflow-hidden border border-border rounded-xl">
                 <MapView lat={salon.lat} lng={salon.lng} />
               </div>
             ) : (

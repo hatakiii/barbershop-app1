@@ -165,17 +165,6 @@ export function HairstyleGallery() {
                   ⭐ {h.popularity_score}
                 </div>
               </div>
-
-              <div className="mt-3 flex flex-wrap gap-2">
-                {h.tags.slice(0, 3).map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs px-2 py-1 bg-gray-100 rounded-full"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
             </div>
           </article>
         ))}

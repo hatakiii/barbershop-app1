@@ -1,101 +1,114 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Menu, Phone } from "lucide-react";
+import { useState } from "react";
 import Link from "next/link";
-import {
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SignInButton, SignUpButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import { CustomUser } from "./CustomUser";
-import { ModeToggle } from "./ThemeToggler";
+
+const navLinks = [
+  { href: "#home", label: "Нүүр" },
+  { href: "#services", label: "Үйлчилгээ" },
+  { href: "#team", label: "Бид" },
+  { href: "#gallery", label: "Блог" },
+  { href: "#contact", label: "Холбогдох" },
+];
 
 export function Header() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <header className="bg-white/95 backdrop-blur-sm border-b sticky top-0 z-50 dark:bg-gray-900 ">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between py-4">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-secondary/50 backdrop-blur-sm border-b dark:bg-gray-900/90">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href={"/"}>
-            <div className="flex items-center space-x-2">
-              <h1 className="text-2xl font-bold text-primary dark:text-white">
-                Luxe Hair Studio
-              </h1>
-            </div>
+          <Link
+            href="/"
+            className="text-xl font-semibold tracking-tight text-foreground dark:text-white"
+          >
+            Luxe Hair Studio
           </Link>
 
-          {/* Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <a
-              href="#home"
-              className="hover:text-primary transition-colors dark:text-white"
-            >
-              Нүүр
-            </a>
-            <a
-              href="#services"
-              className="hover:text-primary transition-colors dark:text-white"
-            >
-              Үйлчилгээ
-            </a>
-            <a
-              href="#team"
-              className="hover:text-primary transition-colors dark:text-white"
-            >
-              Бид
-            </a>
-            <a
-              href="#gallery"
-              className="hover:text-primary transition-colors dark:text-white"
-            >
-              Блог
-            </a>
-            <a
-              href="#contact"
-              className="hover:text-primary transition-colors dark:text-white"
-            >
-              Холбогдох
-            </a>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-sm text-muted-foreground hover:text-foreground dark:hover:text-white transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
           </nav>
 
-          <div className="hidden lg:flex items-center space-x-4">
-            {/* <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <Phone className="w-4 h-4" />
-              <span>77779999</span>
-            </div> */}
+          {/* Desktop Auth */}
+          <div className="hidden md:flex items-center gap-2">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <Button variant="ghost" size="sm">
+                  Нэвтрэх
+                </Button>
+              </SignInButton>
 
-            <div className="flex items-center space-x-2 dark:text-white">
-              <SignedOut>
-                <SignInButton mode="modal">
-                  <Button variant="ghost" size="sm">
-                    Нэвтрэх
-                  </Button>
-                </SignInButton>
+              <SignUpButton mode="modal">
+                <Button size="sm">Бүртгүүлэх</Button>
+              </SignUpButton>
+            </SignedOut>
 
-                <SignUpButton mode="modal">
-                  <Button variant="ghost" size="sm">
-                    Бүртгүүлэх
-                  </Button>
-                </SignUpButton>
-              </SignedOut>
-
-              <SignedIn>
-                <CustomUser />
-              </SignedIn>
-            </div>
+            <SignedIn>
+              <CustomUser />
+            </SignedIn>
           </div>
 
-          <Button variant="ghost" size="sm" className="md:hidden">
-            <Menu className="w-5 h-5" />
-          </Button>
-
-          {/* <div className="w-9 h-9 dark:text-white">
-            <ModeToggle />
-          </div> */}
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
+
+        {/* Mobile Navigation */}
+        {isOpen && (
+          <nav className="md:hidden py-4 border-t">
+            <div className="flex flex-col gap-3">
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm text-muted-foreground hover:text-foreground dark:hover:text-white transition-colors py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ))}
+
+              <div className="pt-2">
+                <SignedOut>
+                  <div className="flex flex-col gap-2">
+                    <SignInButton mode="modal">
+                      <Button variant="ghost" size="sm">
+                        Нэвтрэх
+                      </Button>
+                    </SignInButton>
+
+                    <SignUpButton mode="modal">
+                      <Button size="sm">Бүртгүүлэх</Button>
+                    </SignUpButton>
+                  </div>
+                </SignedOut>
+
+                <SignedIn>
+                  <CustomUser />
+                </SignedIn>
+              </div>
+            </div>
+          </nav>
+        )}
       </div>
     </header>
   );

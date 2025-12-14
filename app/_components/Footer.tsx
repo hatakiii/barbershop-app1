@@ -2,7 +2,7 @@ import { Instagram, Facebook, Twitter } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-12">
+    <footer className="bg-foreground text-white py-12">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
           <div className="col-span-2">
@@ -18,13 +18,10 @@ export function Footer() {
               <a href="#" className="hover:text-accent transition-colors">
                 <Facebook className="w-6 h-6" />
               </a>
-              <a href="#" className="hover:text-accent transition-colors">
-                <Twitter className="w-6 h-6" />
-              </a>
             </div>
           </div>
 
-          <div>
+          {/* <div>
             <h4 className="font-semibold mb-4"></h4>
             <ul className="space-y-2 text-gray-300">
               <li>
@@ -57,7 +54,7 @@ export function Footer() {
                 </a>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-300">

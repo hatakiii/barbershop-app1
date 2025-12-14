@@ -1,18 +1,12 @@
 "use client";
+
 import { useEffect, useState } from "react";
-import { Salon } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Star, MapPin } from "lucide-react";
+import { Salon } from "@/lib/types";
 
-export const SalonContainer = () => {
+export function SalonContainer() {
   const [salons, setSalons] = useState<Salon[]>([]);
   const router = useRouter();
 
@@ -23,43 +17,68 @@ export const SalonContainer = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-6 py-6">
-      <p className="text-center text-xl font-semibold">✨ Топ салонууд ✨</p>
+    <section className="py-24 bg-secondary/50">
+      <div className="max-w-6xl mx-auto px-6">
+        {/* Header */}
+        <div className="flex items-end justify-between mb-12">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-semibold text-foreground">
+              Топ салонууд
+            </h2>
+            <p className="text-muted-foreground mt-2">
+              Хэрэглэгчдийн сонголтоор тэргүүлсэн
+            </p>
+          </div>
 
-      <div className="flex flex-wrap justify-center gap-6 px-4">
-        {salons.slice(0, 5).map((salon) => (
-          <motion.div
-            key={salon.id}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
-            transition={{ type: "spring", stiffness: 200, damping: 14 }}
-            onClick={() => router.push(`/salon/${salon.id}`)}
-            className="cursor-pointer"
+          <button
+            onClick={() => router.push("/salon")}
+            className="text-sm text-foreground hover:text-accent transition-colors hidden md:block"
           >
-            <Card className="w-44 h-56 rounded-xl shadow-md hover:shadow-xl bg-white transition">
-              <CardHeader className="text-center p-3">
-                <CardTitle className="text-base font-bold truncate">
-                  {salon.name}
-                </CardTitle>
-                <CardDescription className="text-xs text-gray-500 truncate">
-                  {salon.salonAddress}
-                </CardDescription>
-              </CardHeader>
+            Бүгдийг харах →
+          </button>
+        </div>
 
-              <CardContent className="flex justify-center items-center p-0">
-                <div className="relative w-36 h-28 rounded-lg overflow-hidden border">
-                  <Image
-                    src={salon.salonImage || "/default-salon.jpg"}
-                    alt={salon.name}
-                    fill
-                    className="object-cover"
-                  />
+        {/* Grid */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {salons.slice(0, 6).map((salon) => (
+            <div
+              key={salon.id}
+              onClick={() => router.push(`/salon/${salon.id}`)}
+              className="group cursor-pointer"
+            >
+              {/* Image */}
+              <div className="aspect-4/3 rounded-xl overflow-hidden bg-muted mb-4">
+                <Image
+                  src={salon.salonImage || "/default-salon.jpg"}
+                  alt={salon.name}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+
+              {/* Info */}
+              <div className="space-y-2">
+                <h3 className="font-medium text-foreground">{salon.name}</h3>
+
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <MapPin className="w-3.5 h-3.5" />
+                  <span className="truncate">{salon.salonAddress}</span>
                 </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
+
+                {/* <div className="flex items-center gap-2 text-sm">
+                  <Star className="w-3.5 h-3.5 fill-foreground text-foreground" />
+                  <span className="font-medium text-foreground">
+                    {salon.rating ?? "4.8"}
+                  </span>
+                  <span className="text-muted-foreground">
+                    ({salon.reviewCount ?? "120"})
+                  </span>
+                </div> */}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
-};
+}

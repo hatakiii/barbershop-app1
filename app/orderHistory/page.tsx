@@ -28,7 +28,7 @@ const OrderHistoryPage = () => {
     const fetchOrders = async () => {
       setLoading(true);
       try {
-        const res = await fetch("/api/orders"); // API GET: Clerk userId-р filter хийнэ
+        const res = await fetch("/api/orders");
         const data = await res.json();
         if (data.success) setOrders(data.orders);
       } catch (err) {
@@ -41,8 +41,8 @@ const OrderHistoryPage = () => {
     fetchOrders();
   }, [isSignedIn, userId]);
 
-  if (!isSignedIn) return <p className="p-6">Login хийнэ үү</p>;
-  if (loading) return <p className="p-6">Loading...</p>;
+  if (!isSignedIn) return <p className="p-6"></p>;
+  if (loading) return <p className="p-6"></p>;
   if (!orders.length) return <p className="p-6">Захиалга олдсонгүй</p>;
 
   return (

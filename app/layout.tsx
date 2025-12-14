@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import { AdminLayout } from "./_components/AdminLayout";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "./_components/ThemeProvider";
+import { Header } from "./_components/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <Header />
             {children}
             <Toaster position="top-right" reverseOrder={false} />
           </ThemeProvider>
