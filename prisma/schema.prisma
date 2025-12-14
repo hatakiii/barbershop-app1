@@ -84,3 +84,19 @@ model salon_services {
   salons    Salon   @relation(fields: [salonid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_salon")
   services  Service @relation(fields: [serviceid], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_service")
 }
+
+model users_new {
+  id        Int       @id @default(autoincrement())
+  clerk_id  String?   @unique
+  email     String    @unique
+  name      String
+  role      user_role
+  salon_id  Int?
+  barber_id Int?
+}
+
+enum user_role {
+  OWNER
+  MANAGER
+  BARBER
+}
