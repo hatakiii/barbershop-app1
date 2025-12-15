@@ -47,7 +47,7 @@ export function SalonContainer() {
               className="group cursor-pointer"
             >
               {/* Image */}
-              <div className="aspect-4/3 rounded-xl overflow-hidden bg-muted mb-4">
+              <div className="relative aspect-4/3 rounded-xl overflow-hidden bg-muted mb-4">
                 <Image
                   src={salon.salonImage || "/default-salon.jpg"}
                   alt={salon.name}

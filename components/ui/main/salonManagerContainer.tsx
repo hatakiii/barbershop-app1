@@ -9,25 +9,13 @@ export default function SalonManagerContainer() {
   const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
-    // ✔ Login хийсэн хэрэглэгчийн local ID авч байна
-    const id = localStorage.getItem("userId");
-    console.log("localStorage userId:", id);
-
-    if (id) setUserId(Number(id));
-  }, []);
-
-  useEffect(() => {
-    if (!userId) return;
-
-    console.log("API руу илгээж буй userId:", userId);
-
-    fetch(`/api/salons?userId=${userId}`)
+    fetch(`/api/salons`)
       .then((res) => res.json())
       .then((data: Salon[]) => {
         console.log("API-аас ирсэн салон:", data);
         if (data.length > 0) setSalon(data[0]);
       });
-  }, [userId]);
+  }, []);
 
   if (!salon) return <p>Танд хамаарах салон олдсонгүй</p>;
 
