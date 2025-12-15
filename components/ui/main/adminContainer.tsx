@@ -8,8 +8,8 @@ import { Salon, User } from "@/lib/types";
 import MapSelector from "./MapSelector";
 
 export default function AdminContainer() {
-  const [managers, setManagers] = useState<{ id: string; name: string }[]>([]);
-  const [selectedManagerId, setSelectedManagerId] = useState("");
+  // const [managers, setManagers] = useState<{ id: string; name: string }[]>([]);
+  // const [selectedManagerId, setSelectedManagerId] = useState("");
   const [salons, setSalons] = useState<Salon[]>([]);
   const [salonImage, setSalonImage] = useState<File | undefined>();
 
@@ -49,12 +49,12 @@ export default function AdminContainer() {
               String(u.id) === editingSalon?.managerId)
         );
 
-        setManagers(
-          freeManagers.map((u) => ({
-            id: String(u.id),
-            name: u.name || "",
-          }))
-        );
+        // setManagers(
+        //   freeManagers.map((u) => ({
+        //     id: String(u.id),
+        //     name: u.name || "",
+        //   }))
+        // );
       })
       .catch(console.error);
   }, [JSON.stringify(salons), editingSalon?.managerId]);
@@ -73,7 +73,7 @@ export default function AdminContainer() {
     setEditingSalon(sal);
     setEditName(sal.name);
     setEditAddress(sal.salonAddress || "");
-    setSelectedManagerId(sal.managerId ? String(sal.managerId) : "");
+    // setSelectedManagerId(sal.managerId ? String(sal.managerId) : "");
     setSalonImage(undefined); // Засах үед сайн зураг сонгож өгөх хүртэл undefined
     setLat(sal.lat || 47.9185);
     setLng(sal.lng || 106.917);
@@ -81,21 +81,15 @@ export default function AdminContainer() {
   };
 
   const addSalonHandler = async () => {
-    if (
-      !name ||
-      !salonImage ||
-      !salonAddress ||
-      !lat ||
-      !lng ||
-      !selectedManagerId
-    )
+    console.log("irj bnu", name, salonImage, salonAddress, lat, lng);
+    if (!name || !salonImage || !salonAddress || !lat || !lng)
       return alert("Бүх талбарийг бөглөнө үү + байршил!");
 
     const formData = new FormData();
     formData.append("name", name);
     formData.append("salonAddress", salonAddress);
     formData.append("salonImage", salonImage);
-    formData.append("managerId", selectedManagerId);
+    // formData.append("managerId", selectedManagerId);
     formData.append("lat", String(lat));
     formData.append("lng", String(lng));
 
@@ -123,7 +117,7 @@ export default function AdminContainer() {
       formData.append("name", editName);
       formData.append("salonAddress", editAddress);
       formData.append("salonImage", salonImage);
-      formData.append("managerId", selectedManagerId);
+      // formData.append("managerId", selectedManagerId);
       formData.append("lat", String(lat));
       formData.append("lng", String(lng));
 
@@ -142,7 +136,7 @@ export default function AdminContainer() {
         body: JSON.stringify({
           name: editName,
           salonAddress: editAddress,
-          managerId: selectedManagerId,
+          managerId: "",
           lat,
           lng,
         }),
@@ -223,7 +217,7 @@ export default function AdminContainer() {
             </DialogTitle>
           </DialogHeader>
 
-          <Label>Менежер</Label>
+          {/* <Label>Менежер</Label>
           <select
             value={selectedManagerId}
             onChange={(e) => setSelectedManagerId(e.target.value)}
@@ -235,7 +229,7 @@ export default function AdminContainer() {
                 {m.name}
               </option>
             ))}
-          </select>
+          </select> */}
 
           <Label>Салон нэр</Label>
           <Input

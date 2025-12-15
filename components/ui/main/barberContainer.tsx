@@ -7,8 +7,9 @@ interface BarberContainerProps {
   salonId: string;
   barberId: string;
 }
+//{}: BarberContainerProps
 
-export default function BarberContainer({}: BarberContainerProps) {
+export default function BarberContainer() {
   const [activeTab, setActiveTab] = useState<"calendar" | "history">(
     "calendar"
   );

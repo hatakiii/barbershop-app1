@@ -6,25 +6,25 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const userId = searchParams.get("userId"); // login user ID frontend-аас дамжуулна
 
-  if (userId) {
-    // Login user-ийн салон авах
-    const user = await prisma.user.findUnique({
-      where: { id: Number(userId) },
-      select: { salon_id: true },
-    });
+  // if (userId) {
+  //   // Login user-ийн салон авах
+  //   const user = await prisma.user.findUnique({
+  //     where: { id: Number(userId) },
+  //     select: { salon_id: true },
+  //   });
 
-    if (!user?.salon_id) return NextResponse.json([], { status: 200 });
+  //   if (!user?.salon_id) return NextResponse.json([], { status: 200 });
 
-    const salon = await prisma.salon.findUnique({
-      where: { id: user.salon_id },
-      include: {
-        barbers: true,
-        salon_services: { include: { services: true } },
-      },
-    });
+  //   const salon = await prisma.salon.findUnique({
+  //     where: { id: user.salon_id },
+  //     include: {
+  //       barbers: true,
+  //       salon_services: { include: { services: true } },
+  //     },
+  //   });
 
-    return NextResponse.json(salon ? [salon] : [], { status: 200 });
-  }
+  //   return NextResponse.json(salon ? [salon] : [], { status: 200 });
+  // }
 
   // Бүх салон авах (BookingPage)
   const salons = await prisma.salon.findMany({
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     const lat = formData.get("lat") as string;
     const lng = formData.get("lng") as string;
 
-    if (!name || !salonAddress || !salonImage || !managerId) {
+    if (!name || !salonAddress || !salonImage || !lat || !lng) {
       return NextResponse.json(
         { error: "Бүх талбарыг бөглөнө үү" },
         { status: 400 }
@@ -63,15 +63,15 @@ export async function POST(req: Request) {
         name,
         salonAddress,
         salonImage: imageUrl,
-        managerId: Number(managerId),
+
         lat: lat ? parseFloat(lat) : undefined,
         lng: lng ? parseFloat(lng) : undefined,
       },
     });
-    await prisma.user.update({
-      where: { id: Number(managerId) },
-      data: { salon_id: newSalon.id },
-    });
+    // await prisma.user.update({
+    //   where: { id: Number(managerId) },
+    //   data: { salon_id: newSalon.id },
+    // });
 
     return NextResponse.json(newSalon, { status: 201 });
   } catch (err) {

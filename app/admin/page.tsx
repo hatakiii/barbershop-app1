@@ -46,16 +46,17 @@ export default function AdminPage() {
       case "manager":
         if (!salonId)
           return <p className="text-red-500">Салоны мэдээлэл олдсонгүй</p>;
-        return <SalonManagerContainer managerId={salonId.toString()} />;
+      // return <SalonManagerContainer  />; managerId={salonId.toString()}
       case "barber":
         if (!salonId || !barberId)
           return <p className="text-red-500">Мэдээлэл дутуу байна</p>;
-        return (
-          <BarberContainer
-            salonId={salonId.toString()}
-            barberId={barberId.toString()}
-          />
-        );
+        return;
+      // (
+      //   <BarberContainer
+      //     salonId={salonId.toString()}
+      //     barberId={barberId.toString()}
+      //   />
+      // );
       default:
         return (
           <div className="text-center py-8 text-gray-500">
