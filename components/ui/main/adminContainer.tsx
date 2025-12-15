@@ -34,30 +34,30 @@ export default function AdminContainer() {
 
   console.log("What's inside salon", salons);
 
-  useEffect(() => {
-    fetch("/api/users")
-      .then((res) => res.json())
-      .then((data: User[]) => {
-        const usedManagers = new Set(
-          salons.map((s) => (s.managerId ? String(s.managerId) : ""))
-        );
+  // useEffect(() => {
+  //   fetch("/api/users")
+  //     .then((res) => res.json())
+  //     .then((data: User[]) => {
+  //       const usedManagers = new Set(
+  //         salons.map((s) => (s.managerId ? String(s.managerId) : ""))
+  //       );
 
-        const freeManagers = data.filter(
-          (u) =>
-            u.role === "Manager" &&
-            (!usedManagers.has(String(u.id)) ||
-              String(u.id) === editingSalon?.managerId)
-        );
+  //       const freeManagers = data.filter(
+  //         (u) =>
+  //           u.role === "Manager" &&
+  //           (!usedManagers.has(String(u.id)) ||
+  //             String(u.id) === editingSalon?.managerId)
+  //       );
 
-        // setManagers(
-        //   freeManagers.map((u) => ({
-        //     id: String(u.id),
-        //     name: u.name || "",
-        //   }))
-        // );
-      })
-      .catch(console.error);
-  }, [JSON.stringify(salons), editingSalon?.managerId]);
+  //       setManagers(
+  //         freeManagers.map((u) => ({
+  //           id: String(u.id),
+  //           name: u.name || "",
+  //         }))
+  //       );
+  //     })
+  //     .catch(console.error);
+  // }, [JSON.stringify(salons), editingSalon?.managerId]);
 
   const openAddModal = () => {
     setEditingSalon(null);
@@ -81,7 +81,6 @@ export default function AdminContainer() {
   };
 
   const addSalonHandler = async () => {
-    console.log("irj bnu", name, salonImage, salonAddress, lat, lng);
     if (!name || !salonImage || !salonAddress || !lat || !lng)
       return alert("Бүх талбарийг бөглөнө үү + байршил!");
 
