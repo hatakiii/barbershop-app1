@@ -33,11 +33,12 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <Header />
-            {children}
-            <Toaster position="top-right" reverseOrder={false} />
-          </ThemeProvider>
+          <AdminLayout>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              {children}
+              <Toaster position="top-right" reverseOrder={false} />
+            </ThemeProvider>
+          </AdminLayout>
         </body>
       </html>
     </ClerkProvider>

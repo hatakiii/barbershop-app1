@@ -44,36 +44,67 @@ export default function BarberContainer() {
       .finally(() => setSearchLoading(false));
   }, [selectedBarber]);
 
+  // const handleBarberSearch = () => {
+  //   const q = barberSearch.trim();
+  //   if (!q) {
+  //     alert("Үсчний нэр эсвэл id оруулна уу");
+  //     return;
+  //   }
+  //   // If user enters numeric id, use it directly — keep existing flow
+  //   if (/^\d+$/.test(q)) {
+  //     setSearchLoading(true);
+  //     setSelectedBarber(q);
+  //     return;
+  //   }
+
+  //   // Otherwise, call the orders/barber/all endpoint which supports name queries
+  //   setSearchLoading(true);
+  //   fetch(`/api/orders/barber/all?barberId=${encodeURIComponent(q)}`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (!data.success) {
+  //         alert(data.error || "Үсчин олдсонгүй");
+  //         setAllOrders([]);
+  //         setSearchedBarberName(null);
+  //         return;
+  //       }
+  //       setAllOrders(data.orders || []);
+  //       setSearchedBarberName(data.orders?.[0]?.barbers?.name || q);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       alert("Серверийн алдаа");
+  //     })
+  //     .finally(() => setSearchLoading(false));
+  // };
+
   const handleBarberSearch = () => {
     const q = barberSearch.trim();
     if (!q) {
-      alert("Үсчний нэр эсвэл id оруулна уу");
-      return;
-    }
-    // If user enters numeric id, use it directly — keep existing flow
-    if (/^\d+$/.test(q)) {
-      setSearchLoading(true);
-      setSelectedBarber(q);
+      alert("Нэр, ID эсвэл утасны дугаар оруулна уу");
       return;
     }
 
-    // Otherwise, call the orders/barber/all endpoint which supports name queries
     setSearchLoading(true);
-    fetch(`/api/orders/barber/all?barberId=${encodeURIComponent(q)}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (!data.success) {
-          alert(data.error || "Үсчин олдсонгүй");
-          setAllOrders([]);
-          setSearchedBarberName(null);
-          return;
+
+    fetch(`/api/orders/barber/all?q=${encodeURIComponent(q)}`)
+      .then(async (res) => {
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || "Server error");
         }
+
+        return data;
+      })
+      .then((data) => {
         setAllOrders(data.orders || []);
-        setSearchedBarberName(data.orders?.[0]?.barbers?.name || q);
+        setSearchedBarberName(data.barber?.name || q);
       })
       .catch((err) => {
         console.error(err);
-        alert("Серверийн алдаа");
+        // зөвхөн бодит алдаа үед
+        alert("Сервертэй холбогдож чадсангүй");
       })
       .finally(() => setSearchLoading(false));
   };
@@ -221,7 +252,7 @@ export default function BarberContainer() {
                 value={barberSearch}
                 onChange={(e) => setBarberSearch(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleBarberSearch()}
-                placeholder="Үсчний нэр эсвэл ID-ыг оруулна уу"
+                placeholder="Үсчний нэр эсвэл утасны дугаар эсвэл ID-ыг оруулна уу"
                 className="border p-2 rounded flex-1"
               />
               <button
@@ -258,11 +289,8 @@ export default function BarberContainer() {
             <div className="border rounded p-2 mt-2">
               {allOrders.length === 0 ? (
                 <p className="text-gray-500 text-sm">
-                  Үсчин{" "}
-                  {searchedBarberName ||
-                    selectedBarberObj?.name ||
-                    "(сонгогдоогүй)"}{" "}
-                  таньд одоогоор захиалга байхгүй
+                  Үсчин {searchedBarberName || "(тодорхойгүй)"} таньд одоогоор
+                  захиалга байхгүй байна
                 </p>
               ) : (
                 allOrders.map((order) => (

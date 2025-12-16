@@ -1,39 +1,61 @@
-// File: /app/api/orders/barber/all/route.ts
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
-    const barberQuery = url.searchParams.get("barberId")?.trim();
+    const q = url.searchParams.get("q")?.trim();
 
-    // console.log("barberQuery", barberQuery);
+    console.log("q orj irj bnu", q);
 
-    if (!barberQuery) {
+    if (!q) {
       return NextResponse.json(
-        { success: false, error: "Барбер id эсвэл нэр шаардлагатай" },
+        { success: false, error: "Барберийн ID, нэр эсвэл утас шаардлагатай" },
         { status: 400 }
       );
     }
 
-    // Determine if query is numeric id or a name
     let whereClause: any;
-    if (/^\d+$/.test(barberQuery)) {
-      // numeric id
-      whereClause = { barberid: Number(barberQuery) };
-    } else {
-      // treat as name (partial, case-insensitive) -> find matching barber ids
-      const matchingBarbers = await prisma.barber.findMany({
-        where: { name: { contains: barberQuery, mode: "insensitive" } },
+
+    // 1. Numeric → ID эсвэл phoneNumber байж магадгүй
+    if (/^\d+$/.test(q)) {
+      // Эхлээд barberId гэж үзээд захиалга хайна
+      const byId = await prisma.orders.findFirst({
+        where: { barberid: Number(q) },
         select: { id: true },
       });
 
-      if (!matchingBarbers || matchingBarbers.length === 0) {
+      if (byId) {
+        whereClause = { barberid: Number(q) };
+      } else {
+        // ID биш бол phoneNumber гэж үзнэ
+        const barber = await prisma.barber.findFirst({
+          where: { phoneNumber: q },
+          select: { id: true },
+        });
+
+        if (!barber) {
+          return NextResponse.json({ success: true, orders: [] });
+        }
+
+        whereClause = { barberid: barber.id };
+      }
+    } else {
+      // 2. Text → нэрээр хайх
+      const barbers = await prisma.barber.findMany({
+        where: {
+          name: { contains: q, mode: "insensitive" },
+        },
+        select: { id: true },
+      });
+
+      if (barbers.length === 0) {
         return NextResponse.json({ success: true, orders: [] });
       }
 
-      const ids = matchingBarbers.map((b) => b.id);
-      whereClause = { barberid: { in: ids } };
+      whereClause = {
+        barberid: { in: barbers.map((b) => b.id) },
+      };
     }
 
     const orders = await prisma.orders.findMany({
@@ -48,7 +70,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ success: true, orders });
   } catch (error) {
-    console.error(error);
+    console.error("orders/barber/all error:", error);
     return NextResponse.json(
       { success: false, error: "Server error" },
       { status: 500 }
