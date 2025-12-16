@@ -19,10 +19,10 @@ export async function DELETE(
     }
 
     // 1️⃣ Холбоотой өгөгдөл шалгах
-    const relatedUsers = await prisma.user.findMany({
-      where: { salon_id: id },
-      select: { id: true, name: true, email: true },
-    });
+    // const relatedUsers = await prisma.user.findMany({
+    //   where: { salon_id: id },
+    //   select: { id: true, name: true, email: true },
+    // });
 
     const relatedBarbers = await prisma.barber.findMany({
       where: { salon_id: id },
@@ -43,21 +43,15 @@ export async function DELETE(
     console.log(
       "relatedBarbers, relatedServices, relatedUsers",
       relatedBarbers,
-      relatedServices,
-      relatedUsers
+      relatedServices
     );
 
     // 2️⃣ Хэрэв ямар нэгэн хамаарал байвал буцаах
-    if (
-      relatedUsers.length > 0 ||
-      relatedBarbers.length > 0 ||
-      relatedServices.length > 0
-    ) {
+    if (relatedBarbers.length > 0 || relatedServices.length > 0) {
       return NextResponse.json(
         {
           error: "Энэ салон дараах өгөгдлүүдтэй холбоотой тул устгах боломжгүй",
           relations: {
-            users: relatedUsers,
             barbers: relatedBarbers,
             services: relatedServices,
           },
