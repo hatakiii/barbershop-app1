@@ -1,3 +1,5 @@
+//api/services/route.ts
+//Салонд зарагдаж буй үйлчилгээ + үнэ
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
