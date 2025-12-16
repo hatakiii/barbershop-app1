@@ -18,7 +18,11 @@ interface SalonService {
   services: Service;
 }
 
-export default function ServiceManager({ salonId }: { salonId: number }) {
+export default function ServiceManager({
+  salonId,
+}: {
+  salonId: number | string;
+}) {
   const [services, setServices] = useState<SalonService[]>([]);
   const [allServices, setAllServices] = useState<Service[]>([]);
   const [open, setOpen] = useState(false);

@@ -6,7 +6,11 @@ import { Label } from "../../label";
 import { Input } from "../../input";
 import { Barber } from "@/lib/types";
 
-export default function BarberManager({ salonId }: { salonId: number }) {
+export default function BarberManager({
+  salonId,
+}: {
+  salonId: number | string;
+}) {
   const [barbers, setBarbers] = useState<Barber[]>([]);
   const [open, setOpen] = useState(false);
   const [editingBarber, setEditingBarber] = useState<Barber | null>(null);
