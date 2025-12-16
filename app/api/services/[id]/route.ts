@@ -1,12 +1,19 @@
+// app/api/services/[id]/route.ts
+
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const id = Number(params.id);
+  const { id } = await context.params;
+  const serviceId = Number(id);
   const { name } = await req.json();
+
+  if (Number.isNaN(serviceId)) {
+    return NextResponse.json({ error: "Invalid service id" }, { status: 400 });
+  }
 
   if (!name?.trim()) {
     return NextResponse.json(
@@ -16,7 +23,7 @@ export async function PUT(
   }
 
   const updated = await prisma.service.update({
-    where: { id },
+    where: { id: serviceId },
     data: { name: name.trim() },
   });
 
@@ -24,13 +31,18 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _: Request,
-  { params }: { params: { id: string } }
+  _req: Request,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const id = Number(params.id);
+  const { id } = await context.params;
+  const serviceId = Number(id);
+
+  if (Number.isNaN(serviceId)) {
+    return NextResponse.json({ error: "Invalid service id" }, { status: 400 });
+  }
 
   await prisma.service.delete({
-    where: { id },
+    where: { id: serviceId },
   });
 
   return NextResponse.json({ success: true });

@@ -25,8 +25,11 @@ export async function updateService(id: number, name: string) {
 }
 
 export async function deleteService(id: number) {
-  const res = await fetch(`/api/services/${id}`, {
-    method: "DELETE",
-  });
-  if (!res.ok) throw new Error("Failed to delete service");
+  try {
+    const res = await fetch(`/api/services/${id}`, {
+      method: "DELETE",
+    });
+  } catch (error) {
+    throw new Error(`Failed to delete service ${error}`);
+  }
 }
