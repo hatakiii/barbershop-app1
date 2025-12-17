@@ -11,6 +11,7 @@ import StepService from "./_components/StepService";
 import StepBarber from "./_components/StepBarber";
 import StepBooking from "./_components/StepBooking";
 import toast from "react-hot-toast";
+import { MapPin } from "lucide-react";
 
 // ------------------- Step Indicator -------------------
 function StepIndicator({ step }: { step: number }) {
@@ -92,6 +93,8 @@ export default function SalonBookingPage() {
       return toast.error("Утасны дугаар буруу байна!");
 
     try {
+      const localDateTime = `${formatted}T${selectedTime}:00`;
+      const reserveddatetime = new Date(localDateTime + "+08:00").toISOString();
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -99,8 +102,7 @@ export default function SalonBookingPage() {
           salonId: salon.id,
           serviceId: selectedService.id,
           barberId: selectedBarber.id,
-          reservedTime: selectedTime,
-          reservedDate: formatted,
+          reserveddatetime,
           totalPrice: selectedService.price,
           phoneNumber: Number(phoneNumber),
         }),
@@ -125,89 +127,124 @@ export default function SalonBookingPage() {
   if (!salon) return <p className="p-6">Loading...</p>;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 max-w-3xl mx-auto flex flex-col gap-6">
-      {/* Salon Info */}
-      <div className="bg-white rounded-xl shadow-md p-6 flex flex-col gap-4">
-        <h1 className="text-2xl font-bold">{salon.name}</h1>
-        {salon.salonImage && (
-          <img
-            src={salon.salonImage}
-            alt={salon.name}
-            className="w-full h-48 object-cover rounded-lg shadow-sm"
-          />
-        )}
-        <p className="text-gray-500">📍 {salon.salonAddress}</p>
-      </div>
+    <div className="min-h-screen bg-muted/40 py-10 pt-20">
+      <div className="m-auto grid max-w-6xl grid-cols-1 lg:grid-cols-2 gap-25 items-start">
+        {/* LEFT – SALON IMAGE CARD */}
+        <div className="relative">
+          <div className="relative overflow-hidden rounded-3xl p-1.5">
+            {salon.salonImage && (
+              <div className="relative h-[520px] w-full overflow-hidden rounded-2xl">
+                <img
+                  src={salon.salonImage}
+                  alt={salon.name}
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/25" />
 
-      {/* Step Indicator */}
-      <StepIndicator step={step} />
+                {/* Overlay */}
+                <div className="absolute bottom-6 left-6 right-6 text-white">
+                  <h1 className="text-3xl font-serif tracking-wide">
+                    {salon.name}
+                  </h1>
+                  <div className="mt-2 flex items-center gap-2 text-sm opacity-90">
+                    <MapPin className="w-4 h-4" />
+                    {salon.salonAddress}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
 
-      {/* Booking Steps */}
-      <div className="bg-white rounded-xl shadow-md p-6 flex flex-col gap-4">
-        {step === 1 && (
-          <StepService
-            services={salon.salon_services.map((ss) => ({
-              ...ss.services, // Service object
-              price: ss.price, // Салон тус бүрийн үнэ
-            }))}
-            selectedService={selectedService}
-            setSelectedService={setSelectedService}
-            onNext={nextStep}
-          />
-        )}
+        {/* RIGHT – STEPS */}
+        <div className="flex justify-center">
+          <div className="w-full max-w-xl space-y-6">
+            {/* Step Indicator */}
+            <div className="flex items-center gap-4">
+              {["Service", "Barber", "Booking"].map((label, i) => {
+                const active = step === i + 1;
+                return (
+                  <div key={label} className="flex-1 text-center">
+                    <div
+                      className={`mx-auto mb-2 flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium transition
+            ${
+              active
+                ? "bg-neutral-800 text-white"
+                : "bg-neutral-200 text-neutral-500"
+            }
+          `}
+                    >
+                      {i + 1}
+                    </div>
+                    <span
+                      className={`text-xs ${
+                        active
+                          ? "text-foreground font-medium"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      {label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
 
-        {step === 2 && selectedService && (
-          <StepBarber
-            barbers={salon.barbers}
-            selectedBarber={selectedBarber}
-            setSelectedBarber={setSelectedBarber}
-            onNext={nextStep}
-          />
-        )}
+            {/* Step Content */}
+            <div className="rounded-3xl border bg-white shadow-lg p-6 min-h-[420px]">
+              {step === 1 && (
+                <StepService
+                  services={salon.salon_services.map((ss) => ({
+                    ...ss.services,
+                    price: ss.price,
+                  }))}
+                  selectedService={selectedService}
+                  setSelectedService={setSelectedService}
+                  onNext={() => setStep(2)}
+                />
+              )}
 
-        {step === 3 && selectedService && selectedBarber && (
-          <StepBooking
-            selectedBarber={selectedBarber}
-            bookedTimes={bookedTimes}
-            selectedTime={selectedTime}
-            setSelectedTime={setSelectedTime}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            phoneNumber={phoneNumber}
-            setPhoneNumber={setPhoneNumber}
-            ALL_TIMES={ALL_TIMES} // <--- undefined алдааг зассан
-          />
-        )}
+              {step === 2 && selectedService && (
+                <StepBarber
+                  barbers={salon.barbers}
+                  selectedBarber={selectedBarber}
+                  setSelectedBarber={setSelectedBarber}
+                  onNext={() => setStep(3)}
+                />
+              )}
 
-        {/* Navigation Buttons */}
-        <div className="flex justify-between mt-4">
-          {step > 1 && (
-            <Button
-              onClick={prevStep}
-              variant="outline"
-              className="transition hover:scale-105"
-            >
-              Back
-            </Button>
-          )}
-          {step < 3 && (
-            <Button
-              onClick={nextStep}
-              disabled={step === 1 && !selectedService}
-              className="transition hover:scale-105"
-            >
-              Next
-            </Button>
-          )}
-          {step === 3 && selectedTime && selectedDate && (
-            <Button
-              onClick={handlePayment}
-              className="bg-blue-500 hover:bg-blue-600 text-white transition hover:scale-105"
-              disabled={!/^\d{8,10}$/.test(phoneNumber)}
-            >
-              Цаг авах
-            </Button>
-          )}
+              {step === 3 && selectedService && selectedBarber && (
+                <StepBooking
+                  selectedBarber={selectedBarber}
+                  bookedTimes={bookedTimes}
+                  selectedTime={selectedTime}
+                  setSelectedTime={setSelectedTime}
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+                  phoneNumber={phoneNumber}
+                  setPhoneNumber={setPhoneNumber}
+                  ALL_TIMES={ALL_TIMES}
+                />
+              )}
+
+              {/* NAV */}
+              <div className="mt-8 flex justify-between">
+                {step > 1 ? (
+                  <Button variant="outline" onClick={() => setStep(step - 1)}>
+                    Буцах
+                  </Button>
+                ) : (
+                  <div />
+                )}
+
+                {step === 3 && selectedTime && selectedDate && (
+                  <Button className="bg-neutral-900 hover:bg-neutral-800 text-white">
+                    Цаг захиалах
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

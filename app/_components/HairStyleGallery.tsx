@@ -1,174 +1,74 @@
 "use client";
-import React from "react";
 
-const hairstyles = [
-  {
-    id: "hs003",
-    name: "Soft Shag with Layers",
-    description:
-      "70-аад оны эффекттэй, давхарга ихтэй, хөдөлгөөнтэй, salon-д их зарагдах загваруудын нэг.",
-    category: "Shag",
-    length: "Medium-Long",
-    gender: "Female",
-    popularity_score: 90,
-    image_url:
-      "https://i.pinimg.com/736x/b9/18/11/b918114d117ec7e52360b58d460f4082.jpg",
-    tags: ["shag", "layers", "retro"],
-    recommended_face_shapes: ["Oval", "Diamond"],
-    color_variations: ["Copper Red", "Sandy Blonde", "Chestnut"],
-    created_at: "2025-01-20",
-  },
-  {
-    id: "hs004",
-    name: "Modern Mullet (Clean Neck)",
-    description:
-      "Эридийн шинэчлэгдсэн муллет — цэвэр ар тал, урт дээд тал, edgy стильтэй хүмүүсэд тохирно.",
-    category: "Mullet",
-    length: "Medium-Long",
-    gender: "Unisex",
-    popularity_score: 82,
-    image_url:
-      "https://i.pinimg.com/1200x/b2/e3/a4/b2e3a4bbbcee592e196af761830f64b3.jpg",
-    tags: ["mullet", "edgy", "contrast"],
-    recommended_face_shapes: ["Oval", "Long"],
-    color_variations: ["Jet Black", "Ash Blonde"],
-    created_at: "2025-04-10",
-  },
-  {
-    id: "hs005",
-    name: "Skin Fade + Curly Top",
-    description:
-      "Ар тал нь skin fade, дээд тал нь байгалийн чёлк болон үсний текстуртай хослогдсон төрх.",
-    category: "Fade + Curls",
-    length: "Short-Medium",
-    gender: "Male",
-    popularity_score: 88,
-    image_url:
-      "https://i.pinimg.com/1200x/0f/99/4c/0f994c6e04e06d5db68daf86385afc38.jpg",
-    tags: ["skin fade", "curls", "contrast"],
-    recommended_face_shapes: ["Oval", "Square"],
-    color_variations: ["Natural Black", "Dark Brown"],
-    created_at: "2025-05-05",
-  },
-  {
-    id: "hs006",
-    name: "Long Layered Beach Waves",
-    description:
-      "Урт, зөөлөн давхарга, beach-waves текстуртэй — зуны улиралд хамгийн их эрэлттэй.",
-    category: "Waves",
-    length: "Long",
-    gender: "Female",
-    popularity_score: 86,
-    image_url:
-      "https://i.pinimg.com/1200x/38/72/96/3872967848b2e5b6b189fee9249aeb5a.jpg",
-    tags: ["beach waves", "layers", "glossy"],
-    recommended_face_shapes: ["Oval", "Round"],
-    color_variations: ["Caramel Blonde", "Balayage"],
-    created_at: "2025-06-12",
-  },
-  {
-    id: "hs007",
-    name: "Buzz Cut with Skin Design",
-    description:
-      "Классик buzz cut дээр нарийн шугам/пattern оруулсан, minimal гэхдээ statement төрх.",
-    category: "Buzz / Skin",
-    length: "Very Short",
-    gender: "Male",
-    popularity_score: 78,
-    image_url:
-      "https://i.pinimg.com/736x/00/d2/07/00d207b13436175a65813442960e5560.jpg",
-    tags: ["buzz cut", "hair design", "minimal"],
-    recommended_face_shapes: ["Square", "Oval"],
-    color_variations: ["Natural Black"],
-    created_at: "2025-02-28",
-  },
-  {
-    id: "hs008",
-    name: "Curtain Bob",
-    description:
-      "Урт челктэй богино bob — элегант, ажил хэрэгч, social media-д их харагдсан.",
-    category: "Bob",
-    length: "Short-Medium",
-    gender: "Female",
-    popularity_score: 91,
-    image_url:
-      "https://i.pinimg.com/736x/5d/89/9f/5d899f521c45ff12eb9c57a68df76654.jpg",
-    tags: ["bob", "curtain bangs", "chic"],
-    recommended_face_shapes: ["Heart", "Oval"],
-    color_variations: ["Platinum", "Golden Brown"],
-    created_at: "2025-03-30",
-  },
-  {
-    id: "hs009",
-    name: "Disconnected Undercut",
-    description:
-      "Тод контрастатай undercut, дээд тал урт, styling-тай хослуулж хүчтэй эффект өгнө.",
-    category: "Undercut",
-    length: "Short-Medium",
-    gender: "Unisex",
-    popularity_score: 80,
-    image_url:
-      "https://i.pinimg.com/736x/ff/cc/05/ffcc05acc6baa4563479144b826ece3f.jpg",
-    tags: ["undercut", "disconnected", "statement"],
-    recommended_face_shapes: ["Oval", "Long"],
-    color_variations: ["Ash Brown", "Jet Black"],
-    created_at: "2025-04-18",
-  },
-  {
-    id: "hs010",
-    name: "Blunt Lob with Glassy Finish",
-    description:
-      "Нэг хэмжигдсэн blunt cut, shoulder-length, glassy smooth finish — minimal yet polished.",
-    category: "Lob",
-    length: "Medium",
-    gender: "Female",
-    popularity_score: 87,
-    image_url:
-      "https://i.pinimg.com/736x/18/8c/da/188cda90626c38033c97526a3193c7e6.jpg",
-    tags: ["lob", "blunt", "glossy"],
-    recommended_face_shapes: ["Oval", "Round", "Heart"],
-    color_variations: ["Chocolate Brown", "Warm Blonde"],
-    created_at: "2025-05-22",
-  },
-];
+import { hairstyles } from "../../lib/get-data";
 
 export function HairstyleGallery() {
   return (
-    <section className="p-6 max-w-6xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">2025 оны тренд үс засалтууд</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {hairstyles.map((h) => (
-          <article
-            key={h.id}
-            className="bg-white rounded-2xl shadow-md overflow-hidden"
-          >
-            <div className="h-44 md:h-52 bg-gray-100 overflow-hidden">
-              <img
-                src={h.image_url}
-                alt={h.name}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
+    <section className="mx-auto max-w-6xl px-6 py-16">
+      {/* Header */}
+      <div className="mb-10 text-center">
+        <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">
+          Trending · 2025
+        </p>
+        <h2 className="font-serif text-3xl md:text-4xl font-bold">
+          2025 оны тренд үс засалтууд
+        </h2>
+        <p className="mt-3 text-sm text-muted-foreground">
+          Хэрэглэгчдийн сонирхол, салонуудын эрэлтэд тулгуурласан загварууд
+        </p>
+      </div>
 
-            <div className="p-4">
-              <h3 className="font-semibold text-lg">{h.name}</h3>
-              <p className="text-sm text-gray-600 mt-1 line-clamp-3">
-                {h.description}
-              </p>
+      {/* Grid */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {hairstyles
+          .slice()
+          .sort((a, b) => b.popularity_score - a.popularity_score)
+          .slice(0, 6)
+          .map((h) => (
+            <article
+              key={h.id}
+              className="group overflow-hidden rounded-2xl bg-white shadow-sm transition hover:shadow-lg"
+            >
+              {/* Image */}
+              <div className="relative h-44 md:h-52 overflow-hidden bg-gray-100">
+                <img
+                  src={h.image_url}
+                  alt={h.name}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
 
-              <div className="flex items-center justify-between mt-3">
-                <div className="text-xs text-gray-500">
-                  {h.category} · {h.length}
-                </div>
-                <div className="text-xs font-medium text-gray-700">
+                {/* Popularity badge */}
+                <div className="absolute right-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-medium backdrop-blur">
                   ⭐ {h.popularity_score}
                 </div>
               </div>
-            </div>
-          </article>
-        ))}
+
+              {/* Content */}
+              <div className="p-4">
+                <h3 className="font-semibold text-lg leading-tight">
+                  {h.name}
+                </h3>
+
+                <p className="mt-1 text-sm text-gray-600 line-clamp-3">
+                  {h.description}
+                </p>
+
+                <div className="mt-4 flex items-center justify-between text-xs text-gray-500">
+                  <span>
+                    {h.category} · {h.length}
+                  </span>
+                  <span className="italic">Trending</span>
+                </div>
+              </div>
+            </article>
+          ))}
       </div>
+
+      {/* Footer note (dynamic feel) */}
+      <p className="mt-10 text-center text-xs text-muted-foreground">
+        🔄 Трендүүд тогтмол шинэчлэгдэж байна
+      </p>
     </section>
   );
 }

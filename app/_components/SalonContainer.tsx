@@ -1,14 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
-import { Star, MapPin } from "lucide-react";
-import { Salon } from "@/lib/types";
+import { MapPin, Star, ArrowUpRight } from "lucide-react";
+
+interface SalonCardData {
+  id: number;
+  name: string;
+  salonAddress: string;
+  salonImage: string | null;
+  avgRating: number;
+  reviewCount: number;
+}
 
 export function SalonContainer() {
-  const [salons, setSalons] = useState<Salon[]>([]);
-  const router = useRouter();
+  const [salons, setSalons] = useState<SalonCardData[]>([]);
 
   useEffect(() => {
     fetch("/api/salons", { cache: "no-cache" })
@@ -18,7 +25,7 @@ export function SalonContainer() {
 
   return (
     <section className="py-24 bg-secondary/50">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="flex items-end justify-between mb-12">
           <div>
@@ -26,57 +33,77 @@ export function SalonContainer() {
               Топ салонууд
             </h2>
             <p className="text-muted-foreground mt-2">
-              Хэрэглэгчдийн сонголтоор тэргүүлсэн
+              Хэрэглэгчдийн үнэлгээгээр тэргүүлсэн
             </p>
           </div>
 
-          <button
-            onClick={() => router.push("/salon")}
+          <Link
+            href="/salon"
             className="text-sm text-foreground hover:text-accent transition-colors hidden md:block"
           >
             Бүгдийг харах →
-          </button>
+          </Link>
         </div>
 
         {/* Grid */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {salons.slice(0, 6).map((salon) => (
-            <div
-              key={salon.id}
-              onClick={() => router.push(`/salon/${salon.id}`)}
-              className="group cursor-pointer"
-            >
-              {/* Image */}
-              <div className="relative aspect-4/3 rounded-xl overflow-hidden bg-muted mb-4">
-                <Image
-                  src={salon.salonImage || "/default-salon.jpg"}
-                  alt={salon.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {salons
+            .slice()
+            .sort((a, b) => {
+              const reviewDiff =
+                Number(b.reviewCount ?? 0) - Number(a.reviewCount ?? 0);
 
-              {/* Info */}
-              <div className="space-y-2">
-                <h3 className="font-medium text-foreground">{salon.name}</h3>
+              if (reviewDiff !== 0) return reviewDiff;
 
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <MapPin className="w-3.5 h-3.5" />
-                  <span className="truncate">{salon.salonAddress}</span>
-                </div>
+              return Number(b.avgRating ?? 0) - Number(a.avgRating ?? 0);
+            })
+            .slice(0, 4)
+            .map((salon) => (
+              <Link
+                key={salon.id}
+                href={`/salon/${salon.id}`}
+                className="group block h-full"
+              >
+                <article className="h-full flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-accent/30 hover:shadow-lg">
+                  {/* Image */}
+                  <div className="relative aspect-4/3 overflow-hidden bg-muted">
+                    <Image
+                      src={salon.salonImage || "/default-salon.jpg"}
+                      alt={salon.name}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
 
-                {/* <div className="flex items-center gap-2 text-sm">
-                  <Star className="w-3.5 h-3.5 fill-foreground text-foreground" />
-                  <span className="font-medium text-foreground">
-                    {salon.rating ?? "4.8"}
-                  </span>
-                  <span className="text-muted-foreground">
-                    ({salon.reviewCount ?? "120"})
-                  </span>
-                </div> */}
-              </div>
-            </div>
-          ))}
+                    {/* Rating */}
+                    <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-card/95 px-2.5 py-1 text-sm font-medium text-foreground backdrop-blur-sm">
+                      <Star className="h-3.5 w-3.5 fill-yellow-500 text-yellow-500" />
+                      {(salon.avgRating ?? 0).toFixed(1)}
+                    </div>
+
+                    {/* Hover arrow */}
+                    <div className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-accent text-accent-foreground opacity-0 transition-all duration-300 group-hover:opacity-100">
+                      <ArrowUpRight className="h-4 w-4" />
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-4 flex flex-col flex-1">
+                    <h4 className="font-serif text-lg text-foreground transition-colors group-hover:text-accent">
+                      {salon.name}
+                    </h4>
+
+                    <div className="mt-2 flex items-start gap-1.5 text-sm text-muted-foreground">
+                      <MapPin className="mt-0.5 h-3.5 w-3.5 `flex-shrink-0`" />
+                      <span className="line-clamp-2">{salon.salonAddress}</span>
+                    </div>
+
+                    <div className="mt-auto pt-3 text-xs text-muted-foreground">
+                      {salon.reviewCount} үнэлгээ
+                    </div>
+                  </div>
+                </article>
+              </Link>
+            ))}
         </div>
       </div>
     </section>

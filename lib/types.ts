@@ -14,6 +14,7 @@ export interface Barber {
 }
 
 export interface Salon {
+  avgRating: number;
   id: string;
   name: string;
   salonImage?: string;

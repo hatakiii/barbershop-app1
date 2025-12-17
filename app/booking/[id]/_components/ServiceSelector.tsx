@@ -41,7 +41,7 @@ export default function ServiceSelector({
               : "Үл мэдэгдэх"}
           </span>
 
-          <span className="text-green-600 font-semibold text-lg mt-2">
+          <span className="text-gray-900 font-semibold text-lg mt-2">
             {srv.price}₮
           </span>
         </button>

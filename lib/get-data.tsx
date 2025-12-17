@@ -25,3 +25,134 @@ export const ALL_TIMES = [
   "20:30",
   "21:00",
 ];
+
+export const hairstyles = [
+  {
+    id: "hs003",
+    name: "Soft Shag with Layers",
+    description:
+      "70-аад оны эффекттэй, давхарга ихтэй, хөдөлгөөнтэй, salon-д их зарагдах загваруудын нэг.",
+    category: "Shag",
+    length: "Medium-Long",
+    gender: "Female",
+    popularity_score: 90,
+    image_url:
+      "https://i.pinimg.com/736x/b9/18/11/b918114d117ec7e52360b58d460f4082.jpg",
+    tags: ["shag", "layers", "retro"],
+    recommended_face_shapes: ["Oval", "Diamond"],
+    color_variations: ["Copper Red", "Sandy Blonde", "Chestnut"],
+    created_at: "2025-01-20",
+  },
+  {
+    id: "hs004",
+    name: "Modern Mullet (Clean Neck)",
+    description:
+      "Эридийн шинэчлэгдсэн муллет — цэвэр ар тал, урт дээд тал, edgy стильтэй хүмүүсэд тохирно.",
+    category: "Mullet",
+    length: "Medium-Long",
+    gender: "Unisex",
+    popularity_score: 82,
+    image_url:
+      "https://i.pinimg.com/1200x/b2/e3/a4/b2e3a4bbbcee592e196af761830f64b3.jpg",
+    tags: ["mullet", "edgy", "contrast"],
+    recommended_face_shapes: ["Oval", "Long"],
+    color_variations: ["Jet Black", "Ash Blonde"],
+    created_at: "2025-04-10",
+  },
+  {
+    id: "hs005",
+    name: "Skin Fade + Curly Top",
+    description:
+      "Ар тал нь skin fade, дээд тал нь байгалийн чёлк болон үсний текстуртай хослогдсон төрх.",
+    category: "Fade + Curls",
+    length: "Short-Medium",
+    gender: "Male",
+    popularity_score: 88,
+    image_url:
+      "https://i.pinimg.com/1200x/0f/99/4c/0f994c6e04e06d5db68daf86385afc38.jpg",
+    tags: ["skin fade", "curls", "contrast"],
+    recommended_face_shapes: ["Oval", "Square"],
+    color_variations: ["Natural Black", "Dark Brown"],
+    created_at: "2025-05-05",
+  },
+  {
+    id: "hs006",
+    name: "Long Layered Beach Waves",
+    description:
+      "Урт, зөөлөн давхарга, beach-waves текстуртэй — зуны улиралд хамгийн их эрэлттэй.",
+    category: "Waves",
+    length: "Long",
+    gender: "Female",
+    popularity_score: 86,
+    image_url:
+      "https://i.pinimg.com/1200x/38/72/96/3872967848b2e5b6b189fee9249aeb5a.jpg",
+    tags: ["beach waves", "layers", "glossy"],
+    recommended_face_shapes: ["Oval", "Round"],
+    color_variations: ["Caramel Blonde", "Balayage"],
+    created_at: "2025-06-12",
+  },
+  {
+    id: "hs007",
+    name: "Buzz Cut with Skin Design",
+    description:
+      "Классик buzz cut дээр нарийн шугам/пattern оруулсан, minimal гэхдээ statement төрх.",
+    category: "Buzz / Skin",
+    length: "Very Short",
+    gender: "Male",
+    popularity_score: 78,
+    image_url:
+      "https://i.pinimg.com/736x/00/d2/07/00d207b13436175a65813442960e5560.jpg",
+    tags: ["buzz cut", "hair design", "minimal"],
+    recommended_face_shapes: ["Square", "Oval"],
+    color_variations: ["Natural Black"],
+    created_at: "2025-02-28",
+  },
+  {
+    id: "hs008",
+    name: "Curtain Bob",
+    description:
+      "Урт челктэй богино bob — элегант, ажил хэрэгч, social media-д их харагдсан.",
+    category: "Bob",
+    length: "Short-Medium",
+    gender: "Female",
+    popularity_score: 91,
+    image_url:
+      "https://i.pinimg.com/736x/5d/89/9f/5d899f521c45ff12eb9c57a68df76654.jpg",
+    tags: ["bob", "curtain bangs", "chic"],
+    recommended_face_shapes: ["Heart", "Oval"],
+    color_variations: ["Platinum", "Golden Brown"],
+    created_at: "2025-03-30",
+  },
+  {
+    id: "hs009",
+    name: "Disconnected Undercut",
+    description:
+      "Тод контрастатай undercut, дээд тал урт, styling-тай хослуулж хүчтэй эффект өгнө.",
+    category: "Undercut",
+    length: "Short-Medium",
+    gender: "Unisex",
+    popularity_score: 80,
+    image_url:
+      "https://i.pinimg.com/736x/ff/cc/05/ffcc05acc6baa4563479144b826ece3f.jpg",
+    tags: ["undercut", "disconnected", "statement"],
+    recommended_face_shapes: ["Oval", "Long"],
+    color_variations: ["Ash Brown", "Jet Black"],
+    created_at: "2025-04-18",
+  },
+  {
+    id: "hs010",
+    name: "Blunt Lob with Glassy Finish",
+    description:
+      "Нэг хэмжигдсэн blunt cut, shoulder-length, glassy smooth finish — minimal yet polished.",
+    category: "Lob",
+    length: "Medium",
+    gender: "Female",
+    popularity_score: 87,
+    image_url:
+      "https://i.pinimg.com/736x/18/8c/da/188cda90626c38033c97526a3193c7e6.jpg",
+    tags: ["lob", "blunt", "glossy"],
+    recommended_face_shapes: ["Oval", "Round", "Heart"],
+    color_variations: ["Chocolate Brown", "Warm Blonde"],
+    created_at: "2025-05-22",
+  },
+];

@@ -8,6 +8,8 @@ import { MapPin, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Head from "next/head";
 import { Header } from "@/app/_components/Header";
+import ReviewButton from "./_components/ReviewButton";
+import { Star } from "lucide-react";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -21,43 +23,85 @@ export default async function SalonDetailPage({ params }: Props) {
     include: {
       barbers: true,
       salon_services: { include: { services: true } },
+      reviews: true,
     },
   });
 
   if (!salon) {
     return <div className="p-6 text-red-500">Салон олдсонгүй</div>;
   }
+  const reviews = salon.reviews;
+  const avgRating =
+    reviews.length > 0
+      ? (
+          reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        ).toFixed(1)
+      : "0.0";
 
   return (
     <div className="bg-background min-h-screen">
-      {/* Hero Section */}
-      {salon.salonImage && (
-        <div className="relative h-[60vh] md:h-[70vh] w-full">
-          <Image
-            src={salon.salonImage}
-            alt={salon.name || "Salon Image"}
-            fill
-            className="object-cover"
-          />
-          <div className="absolute inset-0 `bg-gradient-to-b` from-foreground/60 via-foreground/40 to-foreground/70" />
-          <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6">
-            <p className="text-primary-foreground/80 tracking-[0.3em] uppercase text-sm mb-4 font-sans">
-              {salon.salonAddress}
-            </p>
-            <h1 className="font-serif text-5xl md:text-7xl text-primary-foreground mb-6 text-balance">
-              {salon.name}
-            </h1>
-            <Link href={`/booking/${salon.id}`}>
-              <Button
-                size="lg"
-                className="bg-green-950 text-primary-foreground hover:bg-primary/90 px-8 py-4 text-lg tracking-wide rounded-[5px]"
-              >
-                Цаг захиалах
-              </Button>
-            </Link>
+      {/* Salon Header – isalon style */}
+      <section className="">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="boverflow-hidden bg-card">
+            {/* Content */}
+            <div className="p-6 md:p-8 flex flex-col gap-4">
+              {/* Name + rating */}
+              <div className="space-y-2">
+                <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+                  {salon.name}
+                </h1>
+                <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+                  {/* Rating */}
+                  <div className="flex items-center gap-2">
+                    <div className="flex">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <Star
+                          key={i}
+                          className={`w-4 h-4 ${
+                            Number(avgRating) >= i
+                              ? "fill-yellow-400 text-yellow-400"
+                              : "text-gray-300"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      {avgRating} ({reviews.length})
+                    </span>
+                  </div>
+
+                  {/* Address */}
+                  <div className="flex items-start gap-2 text-muted-foreground text-sm">
+                    <MapPin className="w-4 h-4 mt-0.5 shrink-0" />
+                    <span>{salon.salonAddress}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-3 pt-2">
+                <Link href={`/booking/${salon.id}`}>
+                  <Button>Цаг захиалах</Button>
+                </Link>
+
+                <ReviewButton salonId={salon.id} />
+              </div>
+
+              {/* Image */}
+              <div className="relative w-full h-[420px] border border-border rounded-xl overflow-hidden mt-4">
+                <Image
+                  src={salon.salonImage || "/placeholder.png"}
+                  alt={salon.name}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </div>
           </div>
         </div>
-      )}
+      </section>
 
       {/* Services Section (client component) */}
       <Service services={salon.salon_services} />

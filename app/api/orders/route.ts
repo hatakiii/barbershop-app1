@@ -5,7 +5,7 @@ import { getAuth } from "@clerk/nextjs/server"; // ← Зөв импорт
 // ---------------- POST: Цаг авах ----------------
 export async function POST(req: NextRequest) {
   try {
-    const { userId } = getAuth(req); // Clerk user ID-г авна
+    const { userId } = getAuth(req);
 
     if (!userId) {
       return NextResponse.json(
@@ -18,8 +18,7 @@ export async function POST(req: NextRequest) {
       salonId,
       serviceId,
       barberId,
-      reservedDate,
-      reservedTime,
+      reserveddatetime,
       totalPrice,
       phoneNumber,
     } = await req.json();
@@ -28,8 +27,7 @@ export async function POST(req: NextRequest) {
       !salonId ||
       !serviceId ||
       !barberId ||
-      !reservedDate ||
-      !reservedTime ||
+      !reserveddatetime ||
       !totalPrice ||
       !phoneNumber
     ) {
@@ -39,14 +37,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const reservedDatetime = new Date(`${reservedDate}T${reservedTime}:00Z`);
-
     const order = await prisma.orders.create({
       data: {
         salonid: Number(salonId),
         serviceid: Number(serviceId),
         barberid: Number(barberId),
-        reserveddatetime: reservedDatetime,
+        reserveddatetime, // 👈 ISO string 그대로
         totalprice: Number(totalPrice),
         phonenumber: Number(phoneNumber),
         clerkUserId: userId,

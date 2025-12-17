@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Salon } from "@/lib/types";
 
-import { Search } from "lucide-react";
+import { Search, Star } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -100,6 +100,7 @@ const SalonPage = () => {
                 onClick={() => router.push(`/salon/${salon.id}`)}
                 className="cursor-pointer overflow-hidden rounded-2xl border bg-card transition hover:shadow-lg"
               >
+                {/* IMAGE */}
                 <div className="relative h-48 w-full">
                   <Image
                     src={salon.salonImage || "/placeholder.jpg"}
@@ -107,9 +108,16 @@ const SalonPage = () => {
                     fill
                     className="object-cover"
                   />
+
+                  {/* ⭐ REVIEW BADGE (баруун дээд буланд) */}
+                  <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-white/90 px-2 py-1 text-xs font-medium text-foreground backdrop-blur">
+                    <Star className="h-3.5 w-3.5 fill-accent text-yellow-500" />
+                    {(salon.avgRating ?? 0).toFixed(1)}
+                  </div>
                 </div>
 
-                <CardHeader>
+                {/* HEADER – padding багасгав (gap арилна) */}
+                <CardHeader className="pb-2">
                   <CardTitle className="line-clamp-1 text-base">
                     {salon.name}
                   </CardTitle>
@@ -118,7 +126,7 @@ const SalonPage = () => {
                   </CardDescription>
                 </CardHeader>
 
-                <CardContent>
+                <CardContent className="pt-0">
                   <span className="text-xs text-muted-foreground">
                     Дэлгэрэнгүй үзэх →
                   </span>

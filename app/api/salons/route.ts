@@ -3,38 +3,34 @@ import prisma from "@/lib/prisma";
 import { uploadImageToCloudinary } from "@/lib/utils/uploadImage";
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const userId = searchParams.get("userId"); // login user ID frontend-аас дамжуулна
-
-  // if (userId) {
-  //   // Login user-ийн салон авах
-  //   const user = await prisma.user.findUnique({
-  //     where: { id: Number(userId) },
-  //     select: { salon_id: true },
-  //   });
-
-  //   if (!user?.salon_id) return NextResponse.json([], { status: 200 });
-
-  //   const salon = await prisma.salon.findUnique({
-  //     where: { id: user.salon_id },
-  //     include: {
-  //       barbers: true,
-  //       salon_services: { include: { services: true } },
-  //     },
-  //   });
-
-  //   return NextResponse.json(salon ? [salon] : [], { status: 200 });
-  // }
-
-  // Бүх салон авах (BookingPage)
   const salons = await prisma.salon.findMany({
     include: {
-      barbers: true,
-      salon_services: { include: { services: true } },
+      reviews: {
+        select: {
+          rating: true,
+        },
+      },
     },
   });
 
-  return NextResponse.json(salons, { status: 200 });
+  // ⭐ avg rating + review count бодож normalize хийнэ
+  const formattedSalons = salons.map((salon) => {
+    const ratings = salon.reviews.map((r) => r.rating);
+    const reviewCount = ratings.length;
+    const avgRating =
+      reviewCount > 0 ? ratings.reduce((a, b) => a + b, 0) / reviewCount : 0;
+
+    return {
+      id: salon.id,
+      name: salon.name,
+      salonAddress: salon.salonAddress,
+      salonImage: salon.salonImage,
+      avgRating,
+      reviewCount,
+    };
+  });
+
+  return NextResponse.json(formattedSalons, { status: 200 });
 }
 
 export async function POST(req: Request) {
