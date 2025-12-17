@@ -149,14 +149,14 @@ const OrderHistoryPage = () => {
             {/* ACTIONS */}
             <div className="flex justify-end gap-3 mt-6">
               <Button
-                variant="ghost"
+                variant="outline"
                 size="sm"
                 onClick={() => {
                   setEditingOrder(order);
                   setNewDateTime(order.reserveddatetime.slice(0, 16));
                 }}
               >
-                Edit
+                Цаг өөрчлөх
               </Button>
 
               <Button
@@ -164,7 +164,7 @@ const OrderHistoryPage = () => {
                 size="sm"
                 onClick={() => handleDelete(order.id)}
               >
-                Delete
+                Цуцлах
               </Button>
             </div>
           </Card>
