@@ -25,7 +25,7 @@ export function Header() {
           {/* Logo */}
           <Link
             href="/"
-            className="text-xl font-semibold tracking-tight text-foreground"
+            className="text-xl font-semibold tracking-tight text-primary"
           >
             Luxe Hair Studio
           </Link>
