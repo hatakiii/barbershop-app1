@@ -19,13 +19,13 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm border-b ">
+    <header className="fixed top-0 left-0 right-0 z-50  backdrop-blur-sm border-b ">
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link
             href="/"
-            className="text-xl font-semibold tracking-tight text-foreground dark:text-white"
+            className="text-xl font-semibold tracking-tight text-foreground"
           >
             Luxe Hair Studio
           </Link>
