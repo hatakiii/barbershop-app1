@@ -8,6 +8,7 @@ import { Salon } from "@/lib/types";
 import { Search, Star } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { SalonImage } from "../_components/SalonContainer";
 
 import {
   Card,
@@ -102,12 +103,12 @@ const SalonPage = () => {
               >
                 {/* IMAGE */}
                 <div className="relative h-48 w-full">
-                  <Image
-                    src={salon.salonImage || "/placeholder.jpg"}
-                    alt={salon.name}
-                    fill
-                    className="object-cover"
-                  />
+                  <div className="rounded-4xl">
+                    <SalonImage
+                      src={salon.salonImage || "/salon_fallback.jpg"}
+                      alt={salon.name}
+                    />
+                  </div>
 
                   {/* ⭐ REVIEW BADGE (баруун дээд буланд) */}
                   <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-white/90 px-2 py-1 text-xs font-medium text-foreground backdrop-blur">

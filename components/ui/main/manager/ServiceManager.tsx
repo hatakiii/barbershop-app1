@@ -161,7 +161,7 @@ export default function ServiceManager({
           setOpen(true);
         }}
       >
-        Үйлчилгээ нэмэх
+        Өөрийн салонд үйлчилгээ нэмэх
       </Button>
 
       <Dialog open={open} onOpenChange={() => setOpen(false)}>

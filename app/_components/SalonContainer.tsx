@@ -67,11 +67,9 @@ export function SalonContainer() {
                 <article className="h-full flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-accent/30 hover:shadow-lg">
                   {/* Image */}
                   <div className="relative aspect-4/3 overflow-hidden bg-muted">
-                    <Image
-                      src={salon.salonImage || "/default-salon.jpg"}
+                    <SalonImage
+                      src={salon.salonImage || "/salon_fallback.jpg"}
                       alt={salon.name}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
 
                     {/* Rating */}
@@ -107,5 +105,19 @@ export function SalonContainer() {
         </div>
       </div>
     </section>
+  );
+}
+
+export function SalonImage({ src, alt }: { src: string; alt: string }) {
+  const [imgSrc, setImgSrc] = useState(src);
+
+  return (
+    <Image
+      src={imgSrc}
+      alt={alt}
+      fill
+      className="object-cover transition-transform duration-500 group-hover:scale-105 "
+      onError={() => setImgSrc("/salon_fallback.jpg")}
+    />
   );
 }

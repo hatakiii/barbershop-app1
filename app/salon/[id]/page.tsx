@@ -10,6 +10,7 @@ import Head from "next/head";
 import { Header } from "@/app/_components/Header";
 import ReviewButton from "./_components/ReviewButton";
 import { Star } from "lucide-react";
+import { SalonImage } from "@/app/_components/SalonContainer";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -90,12 +91,9 @@ export default async function SalonDetailPage({ params }: Props) {
 
               {/* Image */}
               <div className="relative w-full h-[420px] border border-border rounded-xl overflow-hidden mt-4">
-                <Image
-                  src={salon.salonImage || "/placeholder.png"}
+                <SalonImage
+                  src={salon.salonImage || "/salon_fallback.jpg"}
                   alt={salon.name}
-                  fill
-                  className="object-cover"
-                  priority
                 />
               </div>
             </div>

@@ -1,6 +1,7 @@
 // app/workers/layout.tsx
 import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import WorkersDashboard from "./_components/WorkersDashboard";
 
 export default async function WorkersLayout({
   children,
@@ -23,13 +24,7 @@ export default async function WorkersLayout({
     <div className="flex min-h-screen">
       {/* You can add a shared Sidebar or Nav here for all workers */}
       <aside className="w-64 border-r bg-gray-50 p-4">
-        <h2 className="font-bold mb-4">Worker Panel</h2>
-        <nav className="space-y-2">
-          <a href="/workers/admin" className="block p-2 hover:bg-white rounded">
-            Dashboard
-          </a>
-          {/* Add more links here */}
-        </nav>
+        <WorkersDashboard />
       </aside>
 
       <main className="flex-1 p-8">{children}</main>
