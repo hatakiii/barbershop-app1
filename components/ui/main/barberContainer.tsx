@@ -44,40 +44,6 @@ export default function BarberContainer() {
       .finally(() => setSearchLoading(false));
   }, [selectedBarber]);
 
-  // const handleBarberSearch = () => {
-  //   const q = barberSearch.trim();
-  //   if (!q) {
-  //     alert("Үсчний нэр эсвэл id оруулна уу");
-  //     return;
-  //   }
-  //   // If user enters numeric id, use it directly — keep existing flow
-  //   if (/^\d+$/.test(q)) {
-  //     setSearchLoading(true);
-  //     setSelectedBarber(q);
-  //     return;
-  //   }
-
-  //   // Otherwise, call the orders/barber/all endpoint which supports name queries
-  //   setSearchLoading(true);
-  //   fetch(`/api/orders/barber/all?barberId=${encodeURIComponent(q)}`)
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       if (!data.success) {
-  //         alert(data.error || "Үсчин олдсонгүй");
-  //         setAllOrders([]);
-  //         setSearchedBarberName(null);
-  //         return;
-  //       }
-  //       setAllOrders(data.orders || []);
-  //       setSearchedBarberName(data.orders?.[0]?.barbers?.name || q);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //       alert("Серверийн алдаа");
-  //     })
-  //     .finally(() => setSearchLoading(false));
-  // };
-
   const handleBarberSearch = () => {
     const q = barberSearch.trim();
     if (!q) {

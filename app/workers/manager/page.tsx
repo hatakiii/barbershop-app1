@@ -11,7 +11,7 @@ const page = () => {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Үйлчилгээ</h1>
 
-        <Button asChild className="gap-2">
+        <Button asChild className="gap-2 bg-white text-black border-2">
           <Link href="/workers/manager/service">
             <Plus className="h-4 w-4" />
             Салоны үйлчилгээ оруулах
