@@ -8,7 +8,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative overflow-hidden min-h-[90vh] flex items-center justify-center `bg-gradient-to-b` from-[#FAFAF9] via-[#b2bccf] to-[#e8d2c8]"
+      className="relative overflow-hidden min-h-[90vh] flex items-center justify-center bg-linear-to-b from-[#FAFAF9] via-[#b2bccf] to-[#e8d2c8]"
     >
       <div className="pointer-events-none absolute -top-32 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-neutral-300/30 blur-3xl" />
 
