@@ -38,9 +38,9 @@ const SalonPage = () => {
   }, [salons, search]);
 
   return (
-    <>
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-[#FAFAF9] via-[#c9cfdb] to-[#c0b8c6]">
       {/* HERO + SEARCH */}
-      <section className="border-b border-border bg-card">
+      <section className="border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="py-12 md:py-20">
             <p className="mb-3 text-sm uppercase tracking-widest text-muted-foreground">
@@ -48,9 +48,9 @@ const SalonPage = () => {
             </p>
 
             <h2 className="max-w-2xl font-serif text-4xl italic leading-tight text-foreground md:text-5xl lg:text-6xl">
-              Өөрт тохирсон салоноо
-              <br />
+              Өөрт тохирсон салоноо{" "}
               <span className=" text-pink-800">олоорой</span>
+              <br />
             </h2>
 
             <p className="mt-6 max-w-lg text-muted-foreground">
@@ -77,8 +77,6 @@ const SalonPage = () => {
           </div>
         </div>
       </section>
-
-      {/* SALON GRID */}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h3 className="font-serif text-2xl italic text-foreground">
@@ -137,7 +135,7 @@ const SalonPage = () => {
           </div>
         )}
       </section>
-    </>
+    </div>
   );
 };
 

@@ -11,7 +11,9 @@ import StepService from "./_components/StepService";
 import StepBarber from "./_components/StepBarber";
 import StepBooking from "./_components/StepBooking";
 import toast from "react-hot-toast";
-import { MapPin } from "lucide-react";
+import { ArrowLeft, MapPin } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // ------------------- Step Indicator -------------------
 function StepIndicator({ step }: { step: number }) {
@@ -47,6 +49,7 @@ export default function SalonBookingPage() {
   const [bookedTimes, setBookedTimes] = useState<string[]>([]);
 
   const formatted = selectedDate ? format(selectedDate, "yyyy-MM-dd") : null;
+  const router = useRouter();
 
   // Fetch salon info
   useEffect(() => {
@@ -114,7 +117,11 @@ export default function SalonBookingPage() {
         toast.success("Цаг амжилттай бүртгэгдсэн!");
         setBookedTimes((prev) => [...prev, selectedTime]);
         setSelectedTime(null);
-        setPhoneNumber(""); // Хэрэглэгчийн утасны field-ийг цэвэрлэх
+        setPhoneNumber("");
+
+        setTimeout(() => {
+          router.push(`/salon/${salon.id}`);
+        }, 1000);
       } else {
         toast.error(data.message || "Алдаа гарлаа!");
       }
@@ -128,6 +135,15 @@ export default function SalonBookingPage() {
 
   return (
     <div className="min-h-screen bg-muted/40 py-10 pt-20">
+      <div className="absolute top-25 left-12 z-50">
+        <Link
+          href={`/salon/${id}`}
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur shadow hover:bg-white transition"
+        >
+          <ArrowLeft className="h-6 w-6 text-primary" />
+        </Link>
+      </div>
+
       <div className="m-auto grid max-w-6xl grid-cols-1 lg:grid-cols-2 gap-25 items-start">
         {/* LEFT – SALON IMAGE CARD */}
         <div className="relative">

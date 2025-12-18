@@ -1,94 +1,56 @@
 "use client";
 
-import Image from "next/image";
 import { CalendarCheck, Scissors, Star, Sparkles } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 
 export default function WhyChooseLuxe() {
   return (
-    <section className="relative overflow-hidden `bg-gradient-to-br` from-secondary/40 to-background py-24">
+    <section id="bid" className="py-24">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="grid items-center gap-16 lg:grid-cols-2">
-          {/* LEFT CONTENT */}
-          <div>
-            <p className="mb-4 text-sm uppercase tracking-widest text-indigo-800">
-              Яагаад Luxe Hair Studio вэ?
-            </p>
+        {/* Header */}
+        <div className="mb-14 text-center">
+          <p className="mb-3 text-xs uppercase tracking-widest text-muted-foreground">
+            Яагаад Luxe Hair Studio вэ?
+          </p>
+          <h2 className="font-serif text-3xl md:text-4xl font-semibold text-foreground">
+            Таны хэв маягт тохирсон
+            <br />
+            <span className="text-indigo-400">ухаалаг сонголт</span>
+          </h2>
+        </div>
 
-            <h2 className="font-serif text-4xl leading-tight text-foreground md:text-5xl">
-              Таны хэв маягт
-              <br />
-              <span className="text-indigo-300">тохирсон үс засалт</span>
-            </h2>
-            {/* 
-            <p className="mt-6 max-w-xl text-muted-foreground">
-              Luxe Hair Studio нь таны цагийг хэмнэж, хамгийн тохиромжтой
-              үйлчилгээ, мэргэжилтнийг хурдан олоход тусална.
-            </p> */}
+        {/* 4 FEATURES */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <FeatureCard
+            icon={<CalendarCheck className="h-6 w-6" />}
+            title="Хурдан, ойлгомжтой захиалга"
+            text="Цаг захиалах процесс ердөө хэдхэн алхамтай."
+          />
 
-            {/* FEATURES */}
-            <div className="mt-10 space-y-6">
-              <Feature
-                icon={<CalendarCheck className="h-6 w-6 text-indigo-600" />}
-                title="Хурдан, ойлгомжтой захиалга"
-                text="Цаг захиалах процесс ердөө хэдхэн алхамтай."
-              />
-              <Feature
-                icon={<Scissors className="h-6 w-6 text-indigo-600" />}
-                title="Мэргэжлийн шилдэг үсчид"
-                text="Туршлагатай, баталгаатай барбер, стилистууд."
-              />
-              <Feature
-                icon={<Star className="h-6 w-6 text-indigo-600" />}
-                title="Бодит хэрэглэгчдийн үнэлгээ"
-                text="Үнэлгээ, review дээр үндэслэн сонголтоо хийнэ."
-              />
-              <Feature
-                icon={<Sparkles className="h-6 w-6 text-indigo-600" />}
-                title="Тренд үс засалтын санаанууд"
-                text="Орчин үеийн стиль, inspiration gallery."
-              />
-            </div>
+          <FeatureCard
+            icon={<Scissors className="h-6 w-6" />}
+            title="Мэргэжлийн шилдэг үсчид"
+            text="Туршлагатай, баталгаатай барбер, стилистууд."
+          />
 
-            {/* <div className="mt-10 flex gap-4">
-              <Button size="lg">Салонууд үзэх</Button>
-              <Button size="lg" variant="outline">
-                Цаг захиалах
-              </Button>
-            </div> */}
-          </div>
+          <FeatureCard
+            icon={<Star className="h-6 w-6" />}
+            title="Бодит хэрэглэгчдийн үнэлгээ"
+            text="Үнэлгээ, review дээр үндэслэн сонголтоо хийнэ."
+          />
 
-          {/* RIGHT IMAGE */}
-          <div className="relative">
-            <div className="relative aspect-4/3 overflow-hidden rounded-3xl shadow-2xl">
-              <Image
-                src="/why-luxe.jpg"
-                alt="Luxe Hair Studio"
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-
-            {/* Floating badge */}
-            <div className="absolute -bottom-6 -left-6 rounded-2xl bg-card px-6 py-4 shadow-lg">
-              <p className="text-sm text-muted-foreground">
-                Итгэмжлэгдсэн сонголт
-              </p>
-              <p className="text-xl font-semibold text-foreground">
-                1000+ захиалга
-              </p>
-            </div>
-          </div>
+          <FeatureCard
+            icon={<Sparkles className="h-6 w-6" />}
+            title="Тренд үс засалтын санаанууд"
+            text="Орчин үеийн стиль, inspiration gallery."
+          />
         </div>
       </div>
     </section>
   );
 }
 
-/* FEATURE ITEM */
-function Feature({
+/* CARD */
+function FeatureCard({
   icon,
   title,
   text,
@@ -98,14 +60,14 @@ function Feature({
   text: string;
 }) {
   return (
-    <div className="flex items-start gap-4">
-      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent">
+    <div className="group rounded-2xl bg-transparent p-6 shadow-sm transition-all duration-300">
+      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600">
         {icon}
       </div>
-      <div>
-        <h4 className="font-medium text-foreground">{title}</h4>
-        <p className="mt-1 text-sm text-muted-foreground">{text}</p>
-      </div>
+
+      <h4 className="mb-2 font-medium text-foreground">{title}</h4>
+
+      <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
     </div>
   );
 }

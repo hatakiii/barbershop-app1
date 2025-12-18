@@ -9,9 +9,9 @@ import { CustomUser } from "./CustomUser";
 
 const navLinks = [
   { href: "#home", label: "Нүүр" },
-  { href: "#services", label: "Үйлчилгээ" },
-  { href: "#team", label: "Бид" },
-  { href: "#gallery", label: "Блог" },
+  { href: "#salon", label: "Салон" },
+  { href: "#trend", label: "Трэнд" },
+  { href: "#bid", label: "Бид" },
   { href: "#contact", label: "Холбогдох" },
 ];
 

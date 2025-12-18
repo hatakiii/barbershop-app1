@@ -11,6 +11,7 @@ import { Header } from "@/app/_components/Header";
 import ReviewButton from "./_components/ReviewButton";
 import { Star } from "lucide-react";
 import { SalonImage } from "@/app/_components/SalonContainer";
+import { ArrowLeft } from "lucide-react";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -40,11 +41,21 @@ export default async function SalonDetailPage({ params }: Props) {
       : "0.0";
 
   return (
-    <div className="bg-background min-h-screen">
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-[#FAFAF9] via-[#e2e6ec] to-[#f2f1f3]">
       {/* Salon Header – isalon style */}
-      <section className="">
+      {/* Back button */}
+      <div className="absolute top-9 left-12 z-50">
+        <Link
+          href="/salon"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur shadow hover:bg-white transition"
+        >
+          <ArrowLeft className="h-6 w-6 text-primary" />
+        </Link>
+      </div>
+
+      <section className="relative">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="boverflow-hidden bg-card">
+          <div className="boverflow-hidden">
             {/* Content */}
             <div className="p-6 md:p-8 flex flex-col gap-4">
               {/* Name + rating */}
@@ -105,7 +116,7 @@ export default async function SalonDetailPage({ params }: Props) {
       <Service services={salon.salon_services} />
 
       {/* Barbers Section (v0 style, tighter spacing) */}
-      <section className="py-18 md:py-25 bg-secondary">
+      <section className="py-18 md:py-25">
         <div className="max-w-6xl mx-auto px-6">
           {/* Section Header */}
           <div className="text-center mb-15">
@@ -161,7 +172,7 @@ export default async function SalonDetailPage({ params }: Props) {
       </section>
 
       {/* Map Section */}
-      <section className="py-20 md:py-28 px-6 bg-card">
+      <section className="py-20 md:py-28 px-6">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-16">
@@ -234,7 +245,7 @@ export default async function SalonDetailPage({ params }: Props) {
       </section>
 
       {/* Footer */}
-      <footer className="bg-foreground text-background py-16 px-6">
+      <footer className="bg-primary text-background py-16 px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-center md:text-left">
             <h2 className="font-serif text-3xl mb-2">{salon.name}</h2>

@@ -33,13 +33,13 @@ export default function ServiceSelector({
             {srv.name}
           </span>
 
-          <span className="text-blue-400 font-medium mt-1">
+          {/* <span className="text-blue-400 font-medium mt-1">
             {srv.gender === "male"
               ? "Эрэгтэй"
               : srv.gender === "female"
               ? "Эмэгтэй"
               : "Үл мэдэгдэх"}
-          </span>
+          </span> */}
 
           <span className="text-gray-900 font-semibold text-lg mt-2">
             {srv.price}₮

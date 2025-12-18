@@ -24,8 +24,8 @@ export function SalonContainer() {
   }, []);
 
   return (
-    <section className="py-24 bg-secondary/50">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="salon" className="py-24 ">
+      <div className="max-w-7xl mx-auto px-6 ">
         {/* Header */}
         <div className="flex items-end justify-between mb-12">
           <div>
@@ -86,7 +86,7 @@ export function SalonContainer() {
 
                   {/* Content */}
                   <div className="p-4 flex flex-col flex-1">
-                    <h4 className="font-serif text-lg text-foreground transition-colors group-hover:text-accent">
+                    <h4 className="font-serif text-lg text-foreground transition-colors group-hover:text-primary">
                       {salon.name}
                     </h4>
 
