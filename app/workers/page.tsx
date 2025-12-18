@@ -1,35 +1,86 @@
 "use client";
+
 import { CalendarCheck, Scissors, Layers, Clock } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const stats = [
-  { label: "Өнөөдрийн захиалга", value: 12, icon: CalendarCheck },
-  { label: "Идэвхтэй үсчин", value: 4, icon: Scissors },
-  { label: "Үйлчилгээ", value: 8, icon: Layers },
-  { label: "Хүлээгдэж буй", value: 3, icon: Clock },
-];
+type Stats = {
+  todayOrders: number;
+  activeBarbers: number;
+  services: number;
+  pending: number;
+  barbers: number;
+};
 
-// useEffect(() => {
-//   const fetchOrders = async () => {
-//     try {
-//       const res = await fetch("/api/orders");
-//       const data = await res.json();
-//       console.log("data", data);
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
+export default function Page() {
+  const [stats, setStats] = useState<Stats>({
+    todayOrders: 0,
+    activeBarbers: 0,
+    services: 0,
+    pending: 0,
+    barbers: 0,
+  });
 
-//   fetchOrders();
-// }, []);
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await fetch("/api/statistics");
+        const {
+          todayOrders,
+          activeBarbers,
+          services,
+          incomingOrders,
+          barbersCount,
+        } = await res.json();
 
-export default function page() {
+        setStats({
+          todayOrders: todayOrders,
+          activeBarbers: activeBarbers,
+          services: services,
+          pending: incomingOrders,
+          barbers: barbersCount,
+        });
+      } catch (error) {
+        console.error("Stats fetch error:", error);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  const cards = [
+    {
+      label: "Өнөөдрийн захиалга",
+      value: stats.todayOrders,
+      icon: CalendarCheck,
+    },
+    {
+      label: "Идэвхтэй үсчин",
+      value: stats.activeBarbers,
+      icon: Scissors,
+    },
+    {
+      label: "Нийт үйлчилгээний тоо",
+      value: stats.services,
+      icon: Layers,
+    },
+    {
+      label: "Хүлээгдэж буй",
+      value: stats.pending,
+      icon: Clock,
+    },
+    {
+      label: "Бүртгэлтэй нийт үсчиний тоо",
+      value: stats.barbers,
+      icon: Scissors,
+    },
+  ];
+
   return (
     <div className="p-8">
       <h1 className="text-xl font-semibold mb-6">Өнөөдрийн товч тойм</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {stats.map((s) => (
+        {cards.map((s) => (
           <div
             key={s.label}
             className="border rounded-xl p-4 flex items-center gap-4"
