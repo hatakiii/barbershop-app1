@@ -7,19 +7,19 @@ import { motion } from "framer-motion";
 
 const cards = [
   {
-    title: "Admin Dashboard",
+    title: "Админы самбар",
     description: "Салон үүсгэх, удирдах",
     href: "/workers/admin",
     icon: Shield,
   },
   {
-    title: "Manager Dashboard",
+    title: "Менежерийн самбар",
     description: "Салоны үйл ажиллагаа, үйлчилгээ нэмэх",
     href: "/workers/manager",
     icon: Users,
   },
   {
-    title: "Barber Dashboard",
+    title: "Үсчингийн самбар",
     description: "Захиалга, ажлын хуваарь",
     href: "/workers/barber",
     icon: Scissors,
@@ -30,7 +30,7 @@ export default function WorkersDashboard() {
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-5 mt-3">
-        <h1 className="px-3 text-2xl font-semibold">Workers Panel</h1>
+        <h1 className="px-3 text-2xl font-semibold">Удирдлагын самбар</h1>
       </div>
 
       <div className="flex flex-col gap-6 md:grid-cols-3">
