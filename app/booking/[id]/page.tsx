@@ -238,7 +238,10 @@ export default function SalonBookingPage() {
                 )}
 
                 {step === 3 && selectedTime && selectedDate && (
-                  <Button className="bg-neutral-900 hover:bg-neutral-800 text-white">
+                  <Button
+                    onClick={handlePayment}
+                    className="bg-neutral-900 hover:bg-neutral-800 text-white"
+                  >
                     Цаг захиалах
                   </Button>
                 )}
