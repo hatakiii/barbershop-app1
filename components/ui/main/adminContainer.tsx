@@ -8,8 +8,6 @@ import { Salon, User } from "@/lib/types";
 import MapSelector from "./MapSelector";
 
 export default function AdminContainer() {
-  const [managers, setManagers] = useState<{ id: string; name: string }[]>([]);
-  const [selectedManagerId, setSelectedManagerId] = useState("");
   const [salons, setSalons] = useState<Salon[]>([]);
   const [salonImage, setSalonImage] = useState<File | undefined>();
 
@@ -73,7 +71,7 @@ export default function AdminContainer() {
     setEditingSalon(sal);
     setEditName(sal.name);
     setEditAddress(sal.salonAddress || "");
-    setSelectedManagerId(sal.managerId ? String(sal.managerId) : "");
+    // setSelectedManagerId(sal.managerId ? String(sal.managerId) : "");
     setSalonImage(undefined); // Засах үед сайн зураг сонгож өгөх хүртэл undefined
     setLat(sal.lat || 47.9185);
     setLng(sal.lng || 106.917);
@@ -81,21 +79,14 @@ export default function AdminContainer() {
   };
 
   const addSalonHandler = async () => {
-    if (
-      !name ||
-      !salonImage ||
-      !salonAddress ||
-      !lat ||
-      !lng ||
-      !selectedManagerId
-    )
+    if (!name || !salonImage || !salonAddress || !lat || !lng)
       return alert("Бүх талбарийг бөглөнө үү + байршил!");
 
     const formData = new FormData();
     formData.append("name", name);
     formData.append("salonAddress", salonAddress);
     formData.append("salonImage", salonImage);
-    formData.append("managerId", selectedManagerId);
+
     formData.append("lat", String(lat));
     formData.append("lng", String(lng));
 
@@ -123,7 +114,7 @@ export default function AdminContainer() {
       formData.append("name", editName);
       formData.append("salonAddress", editAddress);
       formData.append("salonImage", salonImage);
-      formData.append("managerId", selectedManagerId);
+
       formData.append("lat", String(lat));
       formData.append("lng", String(lng));
 
@@ -142,7 +133,7 @@ export default function AdminContainer() {
         body: JSON.stringify({
           name: editName,
           salonAddress: editAddress,
-          managerId: selectedManagerId,
+
           lat,
           lng,
         }),
@@ -222,20 +213,6 @@ export default function AdminContainer() {
               {editingSalon ? "Салон засах" : "Салон нэмэх"}
             </DialogTitle>
           </DialogHeader>
-
-          <Label>Менежер</Label>
-          <select
-            value={selectedManagerId}
-            onChange={(e) => setSelectedManagerId(e.target.value)}
-            className="border rounded p-2"
-          >
-            <option value="">Сонгоно уу</option>
-            {managers.map((m) => (
-              <option key={m.id} value={m.id}>
-                {m.name}
-              </option>
-            ))}
-          </select>
 
           <Label>Салон нэр</Label>
           <Input
