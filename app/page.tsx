@@ -13,7 +13,7 @@ import WhyChooseLuxe from "./_components/Contact";
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-[#FAFAF9] via-[#c9cfdb] to-[#c0b8c6]">
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-b ">
       <Header />
       <Hero />
       <SalonContainer />

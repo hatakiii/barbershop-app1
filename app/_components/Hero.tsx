@@ -8,11 +8,11 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative overflow-hidden min-h-[90vh] flex items-center justify-center bg-linear-to-b from-[#f9f9fa] via-[#aeb2c2fd] to-[#e2e4e8]"
+      className="relative overflow-hidden min-h-[90vh] flex items-center justify-center bg-linear-to-b"
     >
-      <div className="pointer-events-none absolute -top-32 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-neutral-300/30 blur-3xl" />
+      <div className="pointer-events-none absolute -top-32 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full  blur-3xl" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-24">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-24 bg-red-200 rounded-4xl text-black">
         <div className="max-w-3xl mx-auto text-center space-y-8">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-sm text-muted-foreground">
@@ -21,7 +21,7 @@ export function Hero() {
           </div>
 
           {/* Heading */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight text-foreground text-balance">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight  text-balance text-black">
             Бүх салонууд нэг дороос
           </h1>
 
