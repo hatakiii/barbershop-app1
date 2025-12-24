@@ -12,7 +12,7 @@ export function Hero() {
     >
       <div className="pointer-events-none absolute -top-32 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full  blur-3xl" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-24 bg-red-200 rounded-4xl text-black">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-24  rounded-4xl text-black">
         <div className="max-w-3xl mx-auto text-center space-y-8">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-sm text-muted-foreground">
