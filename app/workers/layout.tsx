@@ -11,7 +11,7 @@ export default async function WorkersLayout({
   const user = await getCurrentUser();
 
   // 1. Check if user exists and has ANY valid worker role
-  // This prevents random customers from seeing the worker dashboard shell
+
   const isWorker = ["admin", "owner", "manager", "barber"].includes(
     user?.role || ""
   );

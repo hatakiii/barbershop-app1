@@ -64,10 +64,6 @@ export async function POST(req: Request) {
         lng: lng ? parseFloat(lng) : undefined,
       },
     });
-    // await prisma.user.update({
-    //   where: { id: Number(managerId) },
-    //   data: { salon_id: newSalon.id },
-    // });
 
     return NextResponse.json(newSalon, { status: 201 });
   } catch (err) {
